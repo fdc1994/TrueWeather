@@ -9,6 +9,12 @@ appcompat = "1.6.1"
 material = "1.11.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+retrofit = "2.9.0"
+retrofit-GSON = "2.3.0"
+rxJava = "2.2.21"
+adapterRxJava = "2.3.0"
+rxAndroid = "2.0.1"
+okhttpLoggingInterceptor = "3.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -19,8 +25,15 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofitGSON = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit-GSON" }
+rxJava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxJava" }
+adapterRxJava = { group = "com.squareup.retrofit2", name = "adapter-rxjava2", version.ref = "adapterRxJava" }
+rxAndroid = { group = "io.reactivex.rxjava2", name = "rxandroid", version.ref = "rxAndroid" }
+okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLoggingInterceptor" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
