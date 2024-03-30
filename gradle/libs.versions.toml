@@ -15,6 +15,7 @@ rxJava = "2.2.21"
 adapterRxJava = "2.3.0"
 rxAndroid = "2.0.1"
 okhttpLoggingInterceptor = "3.9.1"
+hilt = "2.45"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -31,7 +32,8 @@ rxJava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxJav
 adapterRxJava = { group = "com.squareup.retrofit2", name = "adapter-rxjava2", version.ref = "adapterRxJava" }
 rxAndroid = { group = "io.reactivex.rxjava2", name = "rxandroid", version.ref = "rxAndroid" }
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLoggingInterceptor" }
-
+hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

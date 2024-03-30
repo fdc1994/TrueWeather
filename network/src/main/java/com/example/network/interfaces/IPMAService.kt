@@ -5,7 +5,7 @@ import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface WeatherApiService {
+interface IPMAService {
     @GET("forecast/meteorology/cities/daily/{globalIdLocal}.json")
     fun getWeatherData(@Path("globalIdLocal") globalIdLocal: Int): Single<WeatherDataDTO>
 }
