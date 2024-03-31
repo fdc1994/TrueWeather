@@ -1,22 +1,22 @@
 package com.example.domain.data
 
-data class WeatherData(
+data class WeatherForecast(
     val owner: String,
     val country: String,
-    val data: List<DailyWeather>,
+    val data: List<WeatherData>,
     val globalIdLocal: Int,
     val dataUpdate: String
 )
 
-data class DailyWeather(
+data class WeatherData(
     val precipitaProb: String,
-    val tMin: Double,
-    val tMax: Double,
+    val tMin: String,
+    val tMax: String,
     val predWindDir: String,
     val idWeatherType: Int,
     val classWindSpeed: Int,
-    val classPrecInt: Int? = null,
-    val longitude: Double,
+    val classPrecInt: Int?,
+    val longitude: String,
     val forecastDate: String,
-    val latitude: Double
+    val latitude: String
 )

@@ -1,21 +1,21 @@
 package com.example.network.data
 
-data class WeatherDataDTO(
+data class WeatherForecastDTO(
     val owner: String,
     val country: String,
-    val data: List<DailyWeatherDTO>,
+    val data: List<WeatherDataDTO>,
     val globalIdLocal: Int,
     val dataUpdate: String
 )
 
-data class DailyWeatherDTO(
+data class WeatherDataDTO(
     val precipitaProb: String,
     val tMin: String,
     val tMax: String,
     val predWindDir: String,
     val idWeatherType: Int,
     val classWindSpeed: Int,
-    val classPrecInt: Int? = null,
+    val classPrecInt: Int?,
     val longitude: String,
     val forecastDate: String,
     val latitude: String

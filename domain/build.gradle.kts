@@ -41,4 +41,6 @@ dependencies {
     implementation(libs.rxJava)
     implementation(libs.adapterRxJava)
     implementation(libs.rxAndroid)
+    implementation(libs.hiltAndroid)
+    implementation(libs.hiltCompiler)
 }

@@ -1,37 +1,21 @@
 package com.example.domain.data.managers
 
-import com.example.network.data.DailyWeatherDTO
-import com.example.network.data.WeatherDataDTO
+import com.example.domain.data.WeatherForecast
+import com.example.domain.data.mappers.WeatherMappers
+import com.example.network.interfaces.IPMAService
 import io.reactivex.Single
-import
+import javax.inject.Inject
 
 interface IpmaRepository {
-    fun getWeatherForecast(globalIdLocal: String): Single<List<WeatherDataDTO>>
+    fun getWeatherForecast(globalIdLocal: String): Single<WeatherForecast>
 }
 
-class IpmaNetworkManagerImpl(private val ipmaApiService: IpmaRepository) {
+class IpmaNetworkManagerImpl @Inject constructor(
+    private val ipmaService: IPMAService,
+    private val weatherMappers: WeatherMappers
+) : IpmaRepository {
 
-    fun getWeatherForecast(globalIdLocal: String): Single<List<DailyWeatherDTO>> {
-        return ipmaApiService.getWeatherForecast(globalIdLocal)
-            .map { ipmaResponse ->
-                ipmaResponse.data.map { forecastDto ->
-                    mapToWeatherForecast(forecastDto)
-                }
-            }
-    }
-
-    private fun mapToWeatherForecast(forecastDto: IpmaForecastDTO): WeatherForecast {
-        return WeatherForecast(
-            forecastDto.forecastDate,
-            forecastDto.tMin,
-            forecastDto.tMax,
-            forecastDto.predWindDir,
-            forecastDto.idWeatherType,
-            forecastDto.classWindSpeed,
-            forecastDto.probPrecipita,
-            forecastDto.classPrecInt,
-            forecastDto.latitude,
-            forecastDto.longitude
-        )
+    override fun getWeatherForecast(globalIdLocal: String): Single<WeatherForecast> {
+        return weatherMappers.mapWeatherResponse(ipmaService.getWeatherData(globalIdLocal))
     }
 }
