@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hiltLibrary)
+    kotlin("kapt")
 }
 
 android {
@@ -43,4 +45,11 @@ dependencies {
     implementation(libs.adapterRxJava)
     implementation(libs.rxAndroid)
     implementation(libs.okhttpLoggingInterceptor)
+    implementation(libs.hiltAndroid)
+    kapt(libs.hiltCompiler)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

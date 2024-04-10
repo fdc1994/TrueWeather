@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.hiltLibrary)
+    kotlin("kapt")
 }
 
 android {
@@ -39,9 +41,21 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(project(":domain"))
+    implementation(project(":network"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.hiltAndroid)
-    implementation(libs.hiltCompiler)
+    kapt(libs.hiltCompiler)
+    implementation(libs.retrofit)
+    implementation(libs.retrofitGSON)
+    implementation(libs.rxJava)
+    implementation(libs.adapterRxJava)
+    implementation(libs.rxAndroid)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

@@ -5,6 +5,7 @@ import com.example.network.data.WeatherForecastDTO
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
+import javax.inject.Inject
 
 interface IPMAService {
     @GET("forecast/meteorology/cities/daily/{globalIdLocal}.json")

@@ -6,14 +6,14 @@ import com.example.network.interfaces.IPMAService
 import io.reactivex.Single
 import javax.inject.Inject
 
-interface IpmaRepository {
+interface IpmaNetworkManager {
     fun getWeatherForecast(globalIdLocal: String): Single<WeatherForecast>
 }
 
 class IpmaNetworkManagerImpl @Inject constructor(
     private val ipmaService: IPMAService,
     private val weatherMappers: WeatherMappers
-) : IpmaRepository {
+) : IpmaNetworkManager {
 
     override fun getWeatherForecast(globalIdLocal: String): Single<WeatherForecast> {
         return weatherMappers.mapWeatherResponse(ipmaService.getWeatherData(globalIdLocal))
