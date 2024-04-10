@@ -1,4 +1,4 @@
-package com.example.trueweather.di
+package com.example.network.di
 
 import com.example.network.interfaces.IPMAService
 import com.google.gson.Gson

@@ -27,7 +27,11 @@ class MainActivity: AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         textView = findViewById(R.id.main_text_view)
-        textView.text = "this is a test"
+
+        ipmaRepository.getWeatherForecast("3434").subscribe { success ->
+
+            textView.text = success.data.count().toString()
+        }
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)

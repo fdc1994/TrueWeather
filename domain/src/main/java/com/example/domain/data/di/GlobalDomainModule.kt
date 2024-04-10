@@ -1,4 +1,4 @@
-package com.example.trueweather.di
+package com.example.domain.data.di
 
 import com.example.domain.data.managers.IpmaNetworkManager
 import com.example.domain.data.managers.IpmaNetworkManagerImpl
