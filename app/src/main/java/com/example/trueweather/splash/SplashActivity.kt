@@ -1,5 +1,6 @@
 package com.example.trueweather.splash
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -11,41 +12,31 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.trueweather.R
 import com.example.trueweather.main.MainActivity
+import com.example.trueweather.platform.BaseTrueWeatherActivity
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
+@SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseTrueWeatherActivity() {
 
-    private val compositeDisposable by lazy {
-        CompositeDisposable()
-    }
     private val fakeTimer: Observable<Long> = Observable.timer(2, TimeUnit.SECONDS, Schedulers.io())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_splash)
 
         val startIntent = Intent(this, MainActivity::class.java)
-        compositeDisposable.add(
+        showProgress()
+        subscribeDisposable {
             fakeTimer.doOnNext {
                 startActivity(startIntent)
                 finish()
             }.subscribe()
-        )
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
         }
-    }
 
-    override fun onDestroy() {
-        compositeDisposable.dispose()
-        super.onDestroy()
+
     }
 }

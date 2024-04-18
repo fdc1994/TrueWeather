@@ -6,4 +6,12 @@
     </style>
 
     <style name="Theme.TrueWeather" parent="Base.Theme.TrueWeather" />
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Other theme configurations -->
+        <!-- Add an overlay to make the app bar appear above the content -->
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
 </resources>
