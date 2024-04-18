@@ -25,13 +25,13 @@ data class WeatherDataDTO(
 
 //DISTRICTS IDENTIFIERS
 
-data class WeatherLocation(
+data class WeatherLocationDTO(
     val owner: String,
     val country: String,
-    val data: List<LocationData>
+    val data: List<LocationDataDTO>
 )
 
-data class LocationData(
+data class LocationDataDTO(
     val idRegiao: Int,
     val idAreaAviso: String,
     val idConcelho: Int,
