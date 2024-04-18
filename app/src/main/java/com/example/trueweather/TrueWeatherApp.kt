@@ -5,4 +5,9 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class TrueWeatherApp : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        AppContextProvider.initialize(this)
+    }
 }

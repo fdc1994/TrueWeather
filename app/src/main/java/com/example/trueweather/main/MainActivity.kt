@@ -1,20 +1,12 @@
 package com.example.trueweather.main
 
-import android.content.Context
 import android.os.Bundle
-import android.util.AttributeSet
-import android.view.View
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import com.example.domain.data.WeatherForecast
 import com.example.domain.data.managers.IpmaNetworkManager
+import com.example.trueweather.utils.NetworkConnectivityManager
 import com.example.trueweather.R
 import com.example.trueweather.platform.BaseTrueWeatherActivity
 import com.example.trueweather.utils.lazyFindViewById
@@ -29,6 +21,8 @@ class MainActivity: BaseTrueWeatherActivity() {
 
     @Inject
     lateinit var ipmaNetworkManager: IpmaNetworkManager
+
+    private var networkConnectivityManager: NetworkConnectivityManager = NetworkConnectivityManager()
 
     private val textView by lazyFindViewById<TextView>(R.id.main_view)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +61,7 @@ class MainActivity: BaseTrueWeatherActivity() {
                         // Handle the success case
                         textView.text = weatherForecast.data.toString()
                         hideProgress()
+                        textView.text = networkConnectivityManager.hasInternetConnection().toString()
                     },
                     { throwable ->
                         // Handle the error case
