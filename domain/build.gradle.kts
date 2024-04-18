@@ -36,7 +36,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(project(":network"))
+    implementation(project(":data"))
     implementation(libs.retrofit)
     implementation(libs.retrofitGSON)
     implementation(libs.rxJava)

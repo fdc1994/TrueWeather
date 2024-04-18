@@ -7,5 +7,5 @@ import retrofit2.http.Path
 
 interface IPMAService {
     @GET("open-data/forecast/meteorology/cities/daily/{globalIdLocal}.json")
-    fun getWeatherData(@Path("globalIdLocal") globalIdLocal: String): Single<WeatherForecastDTO>
+    fun getWeatherData(@Path("globalIdLocal") globalIdLocal: String? = null): Single<WeatherForecastDTO>
 }

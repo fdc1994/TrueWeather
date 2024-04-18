@@ -8,14 +8,12 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 interface WeatherMappers {
-    fun mapWeatherResponse(weatherForecast: Single<WeatherForecastDTO>): Single<WeatherForecast>
+    fun mapWeatherResponse(weatherForecast: WeatherForecastDTO): WeatherForecast
 }
 
 class WeatherMappersImpl @Inject constructor() : WeatherMappers {
-    override fun mapWeatherResponse(weatherForecast: Single<WeatherForecastDTO>): Single<WeatherForecast> {
-        return weatherForecast.map {
-            it.toWeatherForecast()
-        }
+    override fun mapWeatherResponse(weatherForecast: WeatherForecastDTO): WeatherForecast {
+        return weatherForecast.toWeatherForecast()
     }
 
     private fun mapWeatherData(dataList: List<WeatherDataDTO>): List<WeatherData> {
