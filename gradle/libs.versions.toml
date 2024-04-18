@@ -17,6 +17,7 @@ adapterRxJava = "2.3.0"
 rxAndroid = "2.0.1"
 okhttpLoggingInterceptor = "3.9.1"
 hilt = "2.48"
+datastoreCore = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,8 @@ rxAndroid = { group = "io.reactivex.rxjava2", name = "rxandroid", version.ref = 
 okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttpLoggingInterceptor" }
 hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

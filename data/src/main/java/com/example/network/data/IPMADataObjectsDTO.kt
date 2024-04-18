@@ -1,5 +1,7 @@
 package com.example.network.data
 
+
+//WEATHER RESPONSE 5 DAYS
 data class WeatherForecastDTO(
     val owner: String,
     val country: String,
@@ -20,3 +22,24 @@ data class WeatherDataDTO(
     val forecastDate: String,
     val latitude: String
 )
+
+//DISTRICTS IDENTIFIERS
+
+data class WeatherLocation(
+    val owner: String,
+    val country: String,
+    val data: List<LocationData>
+)
+
+data class LocationData(
+    val idRegiao: Int,
+    val idAreaAviso: String,
+    val idConcelho: Int,
+    val globalIdLocal: Int,
+    val latitude: String,
+    val idDistrito: Int,
+    val local: String,
+    val longitude: String
+)
+
+
