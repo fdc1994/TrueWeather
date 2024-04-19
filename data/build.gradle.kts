@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.rxJava2support)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -48,6 +49,7 @@ dependencies {
     implementation(libs.rxAndroid)
     implementation(libs.okhttpLoggingInterceptor)
     implementation(libs.hiltAndroid)
+    implementation(libs.joda.datetime)
     kapt(libs.hiltCompiler)
 }
 
