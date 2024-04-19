@@ -10,11 +10,12 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainActivityPresenter @Inject constructor(
-    private val ipmaRepository: IpmaRepository
+    private val ipmaRepository: IpmaRepository,
+    private val networkConnectivityManager: NetworkConnectivityManager
 ) : MainActivityMVP.Presenter, BaseTrueWeatherPresenter() {
     private val hasValidConnection: Boolean
         get() {
-            return NetworkConnectivityManager.hasInternetConnection()
+            return networkConnectivityManager.hasInternetConnection()
         }
 
     private var view: MainActivityMVP.View? = null
