@@ -23,7 +23,7 @@ import javax.inject.Inject
 interface DistrictIdentifiersDataStore {
 
     fun isValid(): Single<Boolean>
-    fun getDistrictIdentifiers(): Single<WeatherLocationDTO?>?
+    fun getDistrictIdentifiers(): Single<WeatherLocationDTO?>
     fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Single<Boolean>
     fun clear(): Completable
 }

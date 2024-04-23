@@ -4,6 +4,7 @@ import com.example.domain.data.WeatherLocation
 import com.example.domain.data.mappers.DistrictIdentifiersMappers
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.RxResult
+import com.example.network.data.WeatherLocationDTO
 import com.example.network.interfaces.IPMAService
 import com.example.network.persistence.DistrictIdentifiersDataStore
 import io.reactivex.Single
@@ -20,23 +21,32 @@ class DistrictIdentifiersRepositoryImpl @Inject constructor(
 ) : DistrictIdentifiersRepository {
 
     override fun getDistrictIdentifiersList(): Single<RxResult<WeatherLocation?>> {
-        return ipmaService.getDistrictIdentifiers()
-            .flatMap { districtIdentifiers ->
-                districtIdentifiersDataStore.saveDistrictIdentifiers(districtIdentifiers)
-                    .flatMap { resultSuccessful ->
-                        if (resultSuccessful) {
-                            districtIdentifiersDataStore.getDistrictIdentifiers()
-                                ?.map { data ->
-                                    val mappedData = districtIdentifiersMappers.mapDistrictIdentifiersResponse(data)
-                                    RxResult.Success(mappedData)
+        return districtIdentifiersDataStore.getDistrictIdentifiers().flatMap {
+            if (it.data.isEmpty()) {
+                ipmaService.getDistrictIdentifiers()
+                    .flatMap { districtIdentifiers ->
+                        districtIdentifiersDataStore.saveDistrictIdentifiers(districtIdentifiers)
+                            .flatMap { resultSuccessful ->
+                                if (resultSuccessful) {
+                                    districtIdentifiersDataStore.getDistrictIdentifiers()
+                                        .map { data ->
+                                            RxResult.Success(mapData(data))
+                                        }
+                                } else {
+                                    Single.just(RxResult.Error(ErrorType.GENERIC_ERROR))
                                 }
-                        } else {
-                            Single.just(RxResult.Error(ErrorType.GENERIC_ERROR))
-                        }
+                            }
+                            .onErrorReturn {
+                                RxResult.Error(ErrorType.GENERIC_ERROR)
+                            }
                     }
-                    .onErrorReturn {
-                        RxResult.Error(ErrorType.GENERIC_ERROR)
-                    }
+            } else {
+                return@flatMap Single.just(RxResult.Success(mapData(it)))
             }
+        }
+    }
+
+    private fun mapData(it: WeatherLocationDTO): WeatherLocation {
+        return districtIdentifiersMappers.mapDistrictIdentifiersResponse(it)
     }
 }
