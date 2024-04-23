@@ -1,7 +1,7 @@
 package com.example.trueweather.main
 
 import com.example.domain.data.WeatherForecast
-import com.example.domain.data.managers.IpmaRepository
+import com.example.domain.data.managers.WeatherForecastRepository
 import com.example.trueweather.platform.BaseTrueWeatherPresenter
 import com.example.trueweather.utils.NetworkConnectivityManager
 import io.reactivex.Single
@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class MainActivityPresenter @Inject constructor(
-    private val ipmaRepository: IpmaRepository,
+    private val weatherForecastRepository: WeatherForecastRepository,
     private val networkConnectivityManager: NetworkConnectivityManager
 ) : MainActivityMVP.Presenter, BaseTrueWeatherPresenter() {
     private val hasValidConnection: Boolean
@@ -39,7 +39,7 @@ class MainActivityPresenter @Inject constructor(
     }
 
     private fun setupData(): Single<List<WeatherForecast>> {
-        return ipmaRepository.getWeatherForecast(globalIdLocal = "1010500", hasValidInternetConnection = hasValidConnection).subscribeOn(Schedulers.io())
+        return weatherForecastRepository.getWeatherForecast(globalIdLocal = "1010500", hasValidInternetConnection = hasValidConnection).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext {
                 Single.just(

@@ -5,8 +5,7 @@ import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.domain.data.WeatherForecast
-import com.example.domain.data.managers.IpmaRepository
-import com.example.trueweather.utils.NetworkConnectivityManager
+import com.example.domain.data.managers.WeatherForecastRepository
 import com.example.trueweather.R
 import com.example.trueweather.platform.BaseTrueWeatherActivity
 import com.example.trueweather.utils.lazyFindViewById
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
 
     @Inject
-    lateinit var ipmaRepository: IpmaRepository
+    lateinit var weatherForecastRepository: WeatherForecastRepository
 
 
     @Inject

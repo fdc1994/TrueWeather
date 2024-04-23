@@ -1,7 +1,7 @@
 package com.example.domain.data.di
 
-import com.example.domain.data.managers.IpmaRepository
-import com.example.domain.data.managers.IpmaRepositoryImpl
+import com.example.domain.data.managers.WeatherForecastRepository
+import com.example.domain.data.managers.WeatherForecastRepositoryImpl
 import com.example.domain.data.mappers.WeatherMappers
 import com.example.domain.data.mappers.WeatherMappersImpl
 import dagger.Binds
@@ -15,7 +15,7 @@ import javax.inject.Singleton
 interface GlobalDomainModule {
     @Binds
     @Singleton
-    fun bindIpmaNetworkManager(impl: IpmaRepositoryImpl): IpmaRepository
+    fun bindIpmaNetworkManager(impl: WeatherForecastRepositoryImpl): WeatherForecastRepository
     // You might have other bindings here
 
     @Binds
