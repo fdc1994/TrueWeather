@@ -10,6 +10,6 @@ interface IPMAService {
     @GET("open-data/forecast/meteorology/cities/daily/{globalIdLocal}.json")
     fun getWeatherData(@Path("globalIdLocal") globalIdLocal: String? = null): Single<WeatherForecastDTO>
 
-    @GET("open-data/forecast/meteorology/cities/daily/distrits-islands.json")
-    fun getWeatherData(): Single<WeatherLocationDTO>
+    @GET("open-data/distrits-islands.json")
+    fun getDistrictIdentifiers(): Single<WeatherLocationDTO>
 }
