@@ -62,14 +62,14 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
             .map { preferences ->
                 val listString = preferences[PREFS_IDENTIFIERS_LIST]
                 if (listString.isNullOrEmpty()) {
-                    // If the identifiers list is empty or null, return null
-                    return@map null
+                    null // If the identifiers list is empty or null, return null
                 } else {
                     val weatherLocation = gson.fromJson(listString, WeatherLocationDTO::class.java)
-                    if(weatherLocation.data.isEmpty()) preferences.toMutablePreferences().clear()
-                    return@map weatherLocation
+                    if (weatherLocation.data.isEmpty()) preferences.toMutablePreferences().clear()
+                    weatherLocation
                 }
-            }.onErrorReturnItem(WeatherLocationDTO("", "", mutableListOf()))
+            }
+            .onErrorReturnItem(WeatherLocationDTO("", "", mutableListOf()))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

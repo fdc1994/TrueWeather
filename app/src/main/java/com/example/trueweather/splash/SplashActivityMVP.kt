@@ -1,7 +1,6 @@
 package com.example.trueweather.splash
 
-import com.example.domain.data.WeatherForecast
-import com.example.trueweather.utils.RxResult
+import com.example.domain.data.utils.RxResult
 
 interface SplashActivityMVP {
     interface View {

@@ -1,9 +1,13 @@
 package com.example.domain.data.di
 
+import com.example.domain.data.managers.DistrictIdentifiersRepository
+import com.example.domain.data.managers.DistrictIdentifiersRepositoryImpl
 import com.example.domain.data.managers.WeatherForecastRepository
 import com.example.domain.data.managers.WeatherForecastRepositoryImpl
-import com.example.domain.data.mappers.WeatherMappers
-import com.example.domain.data.mappers.WeatherMappersImpl
+import com.example.domain.data.mappers.DistrictIdentifiersMappers
+import com.example.domain.data.mappers.DistrictIdentifiersMappersImpl
+import com.example.domain.data.mappers.WeatherForecastMappers
+import com.example.domain.data.mappers.WeatherForecastMappersImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,9 +19,17 @@ import javax.inject.Singleton
 interface GlobalDomainModule {
     @Binds
     @Singleton
-    fun bindIpmaNetworkManager(impl: WeatherForecastRepositoryImpl): WeatherForecastRepository
-    // You might have other bindings here
+    fun bindWeatherForecastRepository(impl: WeatherForecastRepositoryImpl): WeatherForecastRepository
 
     @Binds
-    fun bindWeatherMappers(impl: WeatherMappersImpl): WeatherMappers
+    @Singleton
+    fun bindWeatherForecastMappers(impl: WeatherForecastMappersImpl): WeatherForecastMappers
+
+    @Binds
+    @Singleton
+    fun bindDistrictIdentifiersRepository(impl: DistrictIdentifiersRepositoryImpl): DistrictIdentifiersRepository
+
+    @Binds
+    @Singleton
+    fun bindDistrictIdentifierMappers(impl: DistrictIdentifiersMappersImpl): DistrictIdentifiersMappers
 }

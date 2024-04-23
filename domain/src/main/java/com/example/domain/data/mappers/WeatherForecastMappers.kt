@@ -4,14 +4,13 @@ import com.example.domain.data.WeatherData
 import com.example.domain.data.WeatherForecast
 import com.example.network.data.WeatherDataDTO
 import com.example.network.data.WeatherForecastDTO
-import io.reactivex.Single
 import javax.inject.Inject
 
-interface WeatherMappers {
+interface WeatherForecastMappers {
     fun mapWeatherResponse(weatherForecast: WeatherForecastDTO): WeatherForecast
 }
 
-class WeatherMappersImpl @Inject constructor() : WeatherMappers {
+class WeatherForecastMappersImpl @Inject constructor() : WeatherForecastMappers {
     override fun mapWeatherResponse(weatherForecast: WeatherForecastDTO): WeatherForecast {
         return weatherForecast.toWeatherForecast()
     }

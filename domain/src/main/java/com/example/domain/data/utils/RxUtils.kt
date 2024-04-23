@@ -1,4 +1,4 @@
-package com.example.trueweather.utils
+package com.example.domain.data.utils
 
 sealed class RxResult<out T> {
     data class Success<out T>(val data: T) : RxResult<T>()
