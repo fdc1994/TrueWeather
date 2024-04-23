@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class TimestampUtil @Inject constructor() {
 
-    val currentTimeMillis: Long
+    private val currentTimeMillis: Long
         get() = DateTime.now().millis
 
     fun exceedsTimestamp(timestamp: Long, period: Long): Boolean {
