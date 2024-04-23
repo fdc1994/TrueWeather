@@ -2,8 +2,10 @@ package com.example.network.di
 
 import com.example.network.interfaces.IPMAService
 import com.example.network.interfaces.OsmService
+import com.example.network.utils.TimestampUtil
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,6 +46,12 @@ object NetworkModule {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
             .create(OsmService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTimeStampUtil(): TimestampUtil {
+        return TimestampUtil()
     }
 }
 
