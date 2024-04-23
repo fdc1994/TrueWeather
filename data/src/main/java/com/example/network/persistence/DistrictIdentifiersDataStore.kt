@@ -1,6 +1,10 @@
 package com.example.network.persistence
 
+import android.R.attr.id
+import android.R.attr.value
 import android.content.Context
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder
@@ -19,15 +23,10 @@ import javax.inject.Inject
 interface DistrictIdentifiersDataStore {
 
     fun isValid(): Single<Boolean>
-    fun getDistrictIdentifiers(): Single<WeatherLocationDTO?>
-    fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Completable
+    fun getDistrictIdentifiers(): Single<WeatherLocationDTO?>?
+    fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Single<Boolean>
     fun clear(): Completable
 }
-
-data class RequestInfo(
-    val paymentProvider: String,
-    val variant: String
-)
 
 class DistrictIdentifiersDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -39,12 +38,10 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
         .registerTypeAdapter(DateTime::class.java, DateTimeDeserializer())
         .create()
 
-    private val dataStore by lazy {
-        RxPreferenceDataStoreBuilder(
-            context,
-            DATASTORE_NAME
-        ).build()
-    }
+    private val dataStore = RxPreferenceDataStoreBuilder(
+        context,
+        DATASTORE_NAME
+    ).build()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun isValid(): Single<Boolean> {
@@ -61,8 +58,7 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getDistrictIdentifiers(): Single<WeatherLocationDTO?> {
-        return dataStore.data()
-            .first(null)
+        return dataStore.data().firstOrError()
             .map { preferences ->
                 val listString = preferences[PREFS_IDENTIFIERS_LIST]
                 if (listString.isNullOrEmpty()) {
@@ -73,17 +69,19 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
                     if(weatherLocation.data.isEmpty()) preferences.toMutablePreferences().clear()
                     return@map weatherLocation
                 }
-            }.onErrorReturnItem(null)
+            }.onErrorReturnItem(WeatherLocationDTO("", "", mutableListOf()))
     }
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Completable {
-        return dataStore.data()
-            .first(null)
-            .flatMapCompletable { preferences ->
-                Completable.fromAction { preferences.toMutablePreferences()[PREFS_IDENTIFIERS_LIST] = identifiers.toString() }
-            }
+    override fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Single<Boolean> {
+        var returnvalue = false
+        val updateResult: Single<Preferences> = dataStore.updateDataAsync { prefsIn ->
+            val mutablePreferences: MutablePreferences = prefsIn.toMutablePreferences()
+            mutablePreferences.set(PREFS_IDENTIFIERS_LIST, gson.toJson(identifiers))
+            Single.just(mutablePreferences)
+        }
+        returnvalue = updateResult.blockingGet() !== null
+        return Single.just(returnvalue)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
