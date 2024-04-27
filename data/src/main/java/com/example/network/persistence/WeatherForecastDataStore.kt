@@ -31,10 +31,8 @@ class WeatherForecastDataStoreImpl @Inject constructor(
     private val timestampUtil: TimestampUtil
 ) : WeatherForecastDataStore {
 
-    private val ttl = TimeUnit.DAYS.toMillis(30)
-    private val gson = GsonBuilder()
-        .registerTypeAdapter(DateTime::class.java, DateTimeDeserializer())
-        .create()
+    private val ttl = TimeUnit.DAYS.toMillis(5)
+    private val gson = GsonBuilder().create()
 
     private val dataStore = RxPreferenceDataStoreBuilder(
         context,
@@ -72,7 +70,7 @@ class WeatherForecastDataStoreImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun saveWeatherForecast(weatherForecast: WeatherForecastDTO): Single<Boolean> {
-        var returnvalue = false
+        val returnvalue: Boolean
         val updateResult: Single<Preferences> = dataStore.updateDataAsync { prefsIn ->
             val mutablePreferences: MutablePreferences = prefsIn.toMutablePreferences()
             mutablePreferences.set(PREFS_WEATHER_FORECAST_LIST, gson.toJson(weatherForecast))
@@ -92,7 +90,7 @@ class WeatherForecastDataStoreImpl @Inject constructor(
     }
 
     companion object {
-        private const val DATASTORE_NAME = "weather_forecast_data_store"
+        const val DATASTORE_NAME = "weather_forecast_data_store"
         private val PREFS_LAST_TIMESTAMP = longPreferencesKey("last_timestamp_weather_forecast_data_store")
         private val PREFS_WEATHER_FORECAST_LIST = stringPreferencesKey("prefs_weather_forecast_list")
     }
