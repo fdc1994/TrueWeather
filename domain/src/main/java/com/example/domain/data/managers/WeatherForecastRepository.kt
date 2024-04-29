@@ -69,7 +69,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
                 filteredList.mapNotNull {
                     weatherForecastMappers.mapWeatherResponse(it).takeIf { weatherResponse ->
                         weatherResponse.data.filter {
-                            timestampUtil.exceedsTimestamp(it.forecastDate.toSimpleDate(), DateTime.now().millis)
+                            !timestampUtil.exceedsTimestamp(DateTime.parse(it.forecastDate).millis, DateTime.now().plusDays(5).millis)
                         }.isNotEmpty()
                     }
                 }
@@ -77,12 +77,4 @@ class WeatherForecastRepositoryImpl @Inject constructor(
         }
     }
 
-
-    private fun String.toSimpleDate(): Long {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val date = LocalDate.parse(this, formatter)
-        val dateTime = date.atStartOfDay()
-        val zoneId = ZoneId.of("Europe/London")
-        return dateTime.atZone(zoneId).toEpochSecond() * 1000
-    }
 }
