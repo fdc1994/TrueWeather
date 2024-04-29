@@ -29,9 +29,11 @@ class MainActivityPresenter @Inject constructor(
         subscribeDisposable {
             setupData().doOnSubscribe {
                 view?.showLoading()
-            }.subscribe({ weatherForecast ->
+            }.subscribe({ weatherForecastList ->
                             view?.hideLoading()
-                            view?.showWeather(weatherForecast)
+                            if (weatherForecastList.isNotEmpty()) {
+                                view?.showWeather(weatherForecastList)
+                            }
                         }, { throwable ->
                             view?.hideLoading()
                         })
@@ -39,7 +41,7 @@ class MainActivityPresenter @Inject constructor(
     }
 
     private fun setupData(): Single<List<WeatherForecast>> {
-        return weatherForecastRepository.getWeatherForecast(globalIdLocal = "1010500", hasValidInternetConnection = hasValidConnection).subscribeOn(Schedulers.io())
+        return weatherForecastRepository.getWeatherForecast(hasValidInternetConnection = hasValidConnection).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .onErrorResumeNext {
                 Single.just(

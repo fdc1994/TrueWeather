@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.adapterRxJava)
     implementation(libs.rxAndroid)
     implementation(libs.hiltAndroid)
+    implementation(libs.joda.datetime)
     kapt(libs.hiltCompiler)
 }
 
