@@ -1,6 +1,6 @@
 package com.example.trueweather.main
 
-import com.example.domain.data.WeatherForecast
+import com.example.domain.data.objects.WeatherForecast
 
 interface MainActivityMVP {
 

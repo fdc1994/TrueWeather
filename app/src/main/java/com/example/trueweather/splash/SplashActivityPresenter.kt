@@ -1,6 +1,6 @@
 package com.example.trueweather.splash
 
-import com.example.domain.data.managers.DistrictIdentifiersRepository
+import com.example.domain.data.repositories.DistrictIdentifiersRepository
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.RxResult
 import com.example.trueweather.platform.BaseTrueWeatherPresenter

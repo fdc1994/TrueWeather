@@ -1,7 +1,7 @@
 package com.example.domain.data.mappers
 
-import com.example.domain.data.WeatherData
-import com.example.domain.data.WeatherForecast
+import com.example.domain.data.objects.WeatherData
+import com.example.domain.data.objects.WeatherForecast
 import com.example.network.data.WeatherDataDTO
 import com.example.network.data.WeatherForecastDTO
 import javax.inject.Inject

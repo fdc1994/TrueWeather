@@ -1,6 +1,6 @@
-package com.example.domain.data.managers
+package com.example.domain.data.repositories
 
-import com.example.domain.data.WeatherForecast
+import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.mappers.WeatherForecastMappers
 import com.example.network.data.WeatherForecastDTO
 import com.example.network.interfaces.IPMAService
@@ -8,9 +8,6 @@ import com.example.network.persistence.UserPreferencesDataStore
 import com.example.network.persistence.WeatherForecastDataStore
 import com.example.network.utils.TimestampUtil
 import io.reactivex.Single
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import org.joda.time.DateTime
 import javax.inject.Inject
 

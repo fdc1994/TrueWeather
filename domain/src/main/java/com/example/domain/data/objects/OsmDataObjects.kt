@@ -1,8 +1,8 @@
-package com.example.network.data
+package com.example.domain.data.objects
 
 import com.google.gson.annotations.SerializedName
 
-data class OsmAddressDTO(
+data class OsmAddress(
     @SerializedName("road") val road: String?,
     @SerializedName("city") val city: String?,
     @SerializedName("state") val state: String?,
@@ -10,9 +10,15 @@ data class OsmAddressDTO(
     @SerializedName("postcode") val postcode: String?
 )
 
-data class OsmResponseDTO(
+data class OsmResult(
+    @SerializedName("address") val address: OsmAddress?,
+    @SerializedName("lat") val latitude: Double?,
+    @SerializedName("lon") val longitude: Double?
+)
+
+data class OsmResponse(
     @SerializedName("lat") val latitude: Double?,
     @SerializedName("lon") val longitude: Double?,
     @SerializedName("display_name") val displayName: String?,
-    @SerializedName("address") val address: OsmAddressDTO?
+    @SerializedName("address") val address: OsmAddress?
 )

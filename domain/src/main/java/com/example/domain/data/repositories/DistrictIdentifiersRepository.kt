@@ -1,6 +1,6 @@
-package com.example.domain.data.managers
+package com.example.domain.data.repositories
 
-import com.example.domain.data.WeatherLocation
+import com.example.domain.data.objects.WeatherLocation
 import com.example.domain.data.mappers.DistrictIdentifiersMappers
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.RxResult

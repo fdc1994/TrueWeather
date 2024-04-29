@@ -1,7 +1,7 @@
 package com.example.domain.data.mappers
 
-import com.example.domain.data.LocationData
-import com.example.domain.data.WeatherLocation
+import com.example.domain.data.objects.LocationData
+import com.example.domain.data.objects.WeatherLocation
 import com.example.network.data.LocationDataDTO
 import com.example.network.data.WeatherLocationDTO
 

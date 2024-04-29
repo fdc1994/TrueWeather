@@ -1,4 +1,4 @@
-package com.example.domain.data
+package com.example.domain.data.objects
 
 import java.io.Serializable
 

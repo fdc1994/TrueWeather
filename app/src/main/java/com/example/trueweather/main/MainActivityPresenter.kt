@@ -1,7 +1,7 @@
 package com.example.trueweather.main
 
-import com.example.domain.data.WeatherForecast
-import com.example.domain.data.managers.WeatherForecastRepository
+import com.example.domain.data.objects.WeatherForecast
+import com.example.domain.data.repositories.WeatherForecastRepository
 import com.example.trueweather.platform.BaseTrueWeatherPresenter
 import com.example.trueweather.utils.NetworkConnectivityManager
 import io.reactivex.Single
@@ -48,6 +48,8 @@ class MainActivityPresenter @Inject constructor(
                     listOf()
                 )
             }
+
+
     }
 }
 
