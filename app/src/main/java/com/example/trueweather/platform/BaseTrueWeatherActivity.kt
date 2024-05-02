@@ -1,5 +1,6 @@
 package com.example.trueweather.platform
 
+import android.Manifest
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.ProgressBar
 import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import com.example.trueweather.R
 import com.example.trueweather.utils.lazyFindViewById
 import io.reactivex.disposables.CompositeDisposable
@@ -54,5 +56,14 @@ abstract class BaseTrueWeatherActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
+    }
+
+
+    fun requestPermissions(requestCode: Int) {
+        ActivityCompat.requestPermissions(
+            this as AppCompatActivity,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            requestCode
+        )
     }
 }

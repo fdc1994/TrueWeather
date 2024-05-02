@@ -10,6 +10,13 @@ sealed class RxResult<out T> {
             is Error -> null
         }
     }
+
+    fun isSuccess(): Boolean {
+        return when (this) {
+            is Success -> true
+            is Error -> false
+        }
+    }
 }
 
 enum class ErrorType {

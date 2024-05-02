@@ -1,5 +1,6 @@
 package com.example.domain.data.repositories
 
+import com.example.domain.data.LocalizationManager
 import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.mappers.WeatherForecastMappers
 import com.example.network.data.WeatherForecastDTO
@@ -19,6 +20,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     private val ipmaService: IPMAService,
     private val weatherForecastDataStore: WeatherForecastDataStore,
     private val weatherForecastMappers: WeatherForecastMappers,
+    private val localizationManager: LocalizationManager,
     private val userPreferencesDataStore: UserPreferencesDataStore,
     private val timestampUtil: TimestampUtil
 ) : WeatherForecastRepository {
@@ -38,24 +40,36 @@ class WeatherForecastRepositoryImpl @Inject constructor(
             userPreferencesDataStore.getUserPreferences().flatMap { userPreferences ->
                 val weatherForecastListDTO = mutableListOf<WeatherForecastDTO>()
                 val weatherForecastList = mutableListOf<WeatherForecast>()
-                Single.concat(userPreferences.locationsList.map { location ->
-                    ipmaService.getWeatherData(location)
-                        .doOnSuccess { weatherForecastDto ->
-                            weatherForecastListDTO.add(weatherForecastDto)
-                            weatherForecastList.add(weatherForecastMappers.mapWeatherResponse(weatherForecastDto))
-                        }
-                }).toList().flatMap { _ ->
-                    with(weatherForecastDataStore) {
-                        clear()
-                        if (weatherForecastListDTO.isNotEmpty()) {
-                            saveWeatherForecast(weatherForecastListDTO.toList()) // Save DTOs for persistence
+                if (localizationManager.checkPermissions()) {
+                    localizationManager.getLastKnownLocation().flatMap { lastKnownLocation ->
+                        ipmaService.getWeatherData(lastKnownLocation).doOnSuccess {
+                            weatherForecastListDTO.add(it)
+                            weatherForecastList.add(weatherForecastMappers.mapWeatherResponse(it))
                         }
                     }
-                    Single.just(weatherForecastList)
+                } else {
+                    Single.just(Unit)
+                }.flatMap {
+                    Single.concat(userPreferences.locationsList.map { location ->
+                        ipmaService.getWeatherData(location)
+                            .doOnSuccess { weatherForecastDto ->
+                                weatherForecastListDTO.add(weatherForecastDto)
+                                weatherForecastList.add(weatherForecastMappers.mapWeatherResponse(weatherForecastDto))
+                            }
+                    }).toList().flatMap { _ ->
+                        with(weatherForecastDataStore) {
+                            clear()
+                            if (weatherForecastListDTO.isNotEmpty()) {
+                                saveWeatherForecast(weatherForecastListDTO.toList()) // Save DTOs for persistence
+                            }
+                        }
+                        Single.just(weatherForecastList)
+                    }
                 }
             }
         }
     }
+
 
     private fun getPersistenceInformation(): Single<List<WeatherForecast>> {
         return userPreferencesDataStore.getUserPreferences().flatMap { userPreferences ->

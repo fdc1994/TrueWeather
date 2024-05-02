@@ -10,7 +10,7 @@ interface OsmService {
     @GET("reverse")
     fun reverseGeocode(
         @Query("format") format: String = "json",
-        @Query("lat") latitude: Long,
-        @Query("lon") longitude: Long
+        @Query("lat") latitude: Double,
+        @Query("lon") longitude: Double
     ): Single<OsmResponseDTO>
 }

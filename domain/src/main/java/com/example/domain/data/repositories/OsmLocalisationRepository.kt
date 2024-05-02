@@ -16,7 +16,7 @@ class OsmLocalisationRepositoryImpl @Inject constructor(
     private val osmResponseMappers: OsmLocalisationMappers
 ): OsmLocalisationRepository {
     override fun getLocation(lat: Long, long: Long): Single<OsmResponse> {
-        return osmService.reverseGeocode(latitude =  lat, longitude = long).map {
+        return osmService.reverseGeocode(latitude =  lat.toDouble(), longitude = long.toDouble()).map {
             osmResponseMappers.mapOsmLocalisationResponse(it)
         }
     }

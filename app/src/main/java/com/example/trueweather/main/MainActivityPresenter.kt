@@ -2,6 +2,9 @@ package com.example.trueweather.main
 
 import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.repositories.WeatherForecastRepository
+import com.example.domain.data.utils.ErrorType
+import com.example.domain.data.utils.RxResult
+import com.example.domain.data.LocalizationManager
 import com.example.trueweather.platform.BaseTrueWeatherPresenter
 import com.example.trueweather.utils.NetworkConnectivityManager
 import io.reactivex.Single
@@ -11,6 +14,7 @@ import javax.inject.Inject
 
 class MainActivityPresenter @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
+    private val localizationManager: LocalizationManager,
     private val networkConnectivityManager: NetworkConnectivityManager
 ) : MainActivityMVP.Presenter, BaseTrueWeatherPresenter() {
     private val hasValidConnection: Boolean
@@ -32,10 +36,12 @@ class MainActivityPresenter @Inject constructor(
             }.subscribe({ weatherForecastList ->
                             view?.hideLoading()
                             if (weatherForecastList.isNotEmpty()) {
-                                view?.showWeather(weatherForecastList)
+                                view?.showWeather(RxResult.Success(weatherForecastList))
+                            } else {
+                                RxResult.Error(ErrorType.GENERIC_ERROR)
                             }
                         }, { throwable ->
-                            view?.hideLoading()
+                            view?.showError(RxResult.Error(ErrorType.NETWORK_ERROR))
                         })
         }
     }
@@ -48,8 +54,6 @@ class MainActivityPresenter @Inject constructor(
                     listOf()
                 )
             }
-
-
     }
 }
 

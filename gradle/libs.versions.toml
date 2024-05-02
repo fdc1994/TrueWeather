@@ -19,6 +19,7 @@ okhttpLoggingInterceptor = "3.9.1"
 hilt = "2.48"
 datastoreCore = "1.1.0"
 android-joda = "2.12.7"
+google-gms = "21.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +43,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-datastore-rxJava2support = { group = "androidx.datastore", name = "datastore-preferences-rxjava2", version.ref = "datastoreCore" }
 androidx-datastore-rxJava3support = { group = "androidx.datastore", name = "datastore-preferences-rxjava3", version.ref = "datastoreCore" }
 joda-datetime = { group = "net.danlew", name = "android.joda", version.ref = "android-joda" }
+google-gms = { group="com.google.android.gms", name="play-services-location", version.ref = "google-gms"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

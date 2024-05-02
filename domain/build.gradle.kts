@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.rxAndroid)
     implementation(libs.hiltAndroid)
     implementation(libs.joda.datetime)
+    implementation(libs.google.gms)
     kapt(libs.hiltCompiler)
 }
 

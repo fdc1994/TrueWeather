@@ -1,5 +1,7 @@
 package com.example.domain.data.di
 
+import com.example.domain.data.LocalizationManager
+import com.example.domain.data.LocalizationManagerImpl
 import com.example.domain.data.repositories.DistrictIdentifiersRepository
 import com.example.domain.data.repositories.DistrictIdentifiersRepositoryImpl
 import com.example.domain.data.repositories.WeatherForecastRepository
@@ -44,4 +46,8 @@ interface GlobalDomainModule {
     @Binds
     @Singleton
     fun bindOsmLocalisationMappers(impl: OsmLocalisationMappersImpl): OsmLocalisationMappers
+
+    @Binds
+    @Singleton
+    fun bindLocalizationManager(impl: LocalizationManagerImpl): LocalizationManager
 }

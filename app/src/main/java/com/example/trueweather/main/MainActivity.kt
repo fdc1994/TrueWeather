@@ -6,6 +6,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.repositories.WeatherForecastRepository
+import com.example.domain.data.utils.RxResult
 import com.example.trueweather.R
 import com.example.trueweather.platform.BaseTrueWeatherActivity
 import com.example.trueweather.utils.lazyFindViewById
@@ -42,7 +43,15 @@ class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
         hideProgress()
     }
 
-    override fun showWeather(weatherInfo: List<WeatherForecast>) {
-       textView.text = weatherInfo.toString()
+    override fun showWeather(weatherInfo: RxResult.Success<List<WeatherForecast>>) {
+        if(weatherInfo.isSuccess()) {
+            val data = weatherInfo.getValueOrNull()
+            textView.text = data.toString()
+        }
+
+    }
+
+    override fun showError(error: RxResult.Error) {
+        textView.text = "Error: ${error.errorType}"
     }
 }
