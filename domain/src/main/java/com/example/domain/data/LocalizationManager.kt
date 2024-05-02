@@ -53,10 +53,14 @@ class LocalizationManagerImpl @Inject constructor(
             osmService.reverseGeocode(latitude = location.latitude, longitude = location.longitude)
                 .map { osmLocalizationMapper.mapOsmLocalisationResponse(it) }
                 .flatMap {
-                    it.address?.city?.let {
+                    it.address.city?.let {
                         mapAddressNameToGlobalId(it)
                     } ?: return@flatMap null
+                }.doOnError {
+                    it
                 }
+
+                .onErrorReturnItem("222222")
         }
     }
 

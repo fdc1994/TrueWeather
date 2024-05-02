@@ -7,10 +7,12 @@ interface SplashActivityMVP {
         fun showLoading()
         fun hideLoading()
         fun showInitResult(result: RxResult<Boolean>)
+        fun askForLocalizationPermissions()
 
     }
 
     interface Presenter {
         fun onAttachView(view: View)
+        fun resumeLoadAfterPermissions()
     }
 }

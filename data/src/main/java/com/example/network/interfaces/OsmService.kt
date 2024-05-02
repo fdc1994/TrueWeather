@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface OsmService {
 
-    @GET("reverse")
+    @GET("reverse.php")
     fun reverseGeocode(
         @Query("format") format: String = "json",
         @Query("lat") latitude: Double,

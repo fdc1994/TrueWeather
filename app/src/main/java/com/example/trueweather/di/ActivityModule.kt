@@ -3,6 +3,8 @@ package com.example.trueweather.di
 import android.app.Activity
 import com.example.trueweather.main.MainActivityMVP
 import com.example.trueweather.main.MainActivityPresenter
+import com.example.trueweather.splash.SplashActivityMVP
+import com.example.trueweather.splash.SplashActivityPresenter
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +17,10 @@ import dagger.hilt.components.SingletonComponent
 interface ActivityModule {
     @Binds
     @ActivityScoped
-    fun bindPresenter(impl: MainActivityPresenter): MainActivityMVP.Presenter
+    fun bindSplashActivityPresenter(impl: SplashActivityPresenter): SplashActivityMVP.Presenter
+
+    @Binds
+    @ActivityScoped
+    fun bindMainActivityPresenter(impl: MainActivityPresenter): MainActivityMVP.Presenter
 
 }

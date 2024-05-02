@@ -2,6 +2,7 @@ package com.example.trueweather.platform
 
 import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -10,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.trueweather.R
 import com.example.trueweather.utils.lazyFindViewById
 import io.reactivex.disposables.CompositeDisposable
@@ -27,6 +29,7 @@ abstract class BaseTrueWeatherActivity : AppCompatActivity() {
 
     private val progressBar : ProgressBar by lazyFindViewById<ProgressBar>(R.id.progress_bar)
 
+    abstract fun handlePermissionResult(isGranted: Boolean): Unit
 
     override fun setContentView(layoutResID: Int) {
         coordinatorLayout = layoutInflater.inflate(R.layout.base_activity_layout, null) as CoordinatorLayout
@@ -58,12 +61,39 @@ abstract class BaseTrueWeatherActivity : AppCompatActivity() {
         compositeDisposable.clear()
     }
 
+    fun AppCompatActivity.requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                Companion.LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // Permission is already granted, handle accordingly
+            // For example, you can perform location-related operations directly here
+        }
+    }
 
-    fun requestPermissions(requestCode: Int) {
-        ActivityCompat.requestPermissions(
-            this as AppCompatActivity,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            requestCode
-        )
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+               handlePermissionResult(true)
+            } else {
+                handlePermissionResult(false)
+            }
+        }
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 }

@@ -19,11 +19,14 @@ class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
     @Inject
     lateinit var weatherForecastRepository: WeatherForecastRepository
 
-
     @Inject
     lateinit var presenter: MainActivityMVP.Presenter
 
     private val textView by lazyFindViewById<TextView>(R.id.main_view)
+    override fun handlePermissionResult(isGranted: Boolean) {
+        TODO("Not yet implemented")
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

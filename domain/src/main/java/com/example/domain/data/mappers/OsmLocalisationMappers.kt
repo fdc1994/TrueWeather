@@ -10,26 +10,18 @@ interface OsmLocalisationMappers {
     fun mapOsmLocalisationResponse(response: OsmResponseDTO): OsmResponse
 }
 
-class OsmLocalisationMappersImpl @Inject constructor(): OsmLocalisationMappers {
+class OsmLocalisationMappersImpl @Inject constructor() : OsmLocalisationMappers {
     override fun mapOsmLocalisationResponse(response: OsmResponseDTO): OsmResponse {
         with(response) {
             return OsmResponse(
-                latitude = this.latitude,
-                longitude = this.longitude,
-                displayName = this.displayName,
-                address = this.address?.toOsmAddress()
+                placeId, licence, osmType, osmId, lat, lon, category, type, placeRank, importance, addressType, name, displayName, address.toOsmAddress(), boundingbox
             )
         }
-
     }
 
     private fun OsmAddressDTO.toOsmAddress(): OsmAddress {
         return OsmAddress(
-            road = this.road,
-            city = this.city,
-            state = this.state,
-            country = this.country,
-            postcode = this.postcode,
+            locality, hamlet, town, city, county, iso3166Level6, postcode, country, countryCode
         )
     }
 }
