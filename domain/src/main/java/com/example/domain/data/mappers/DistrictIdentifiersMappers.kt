@@ -4,12 +4,13 @@ import com.example.domain.data.objects.LocationData
 import com.example.domain.data.objects.WeatherLocation
 import com.example.network.data.LocationDataDTO
 import com.example.network.data.WeatherLocationDTO
+import javax.inject.Inject
 
 interface DistrictIdentifiersMappers {
     fun mapDistrictIdentifiersResponse(districtIdentifiers: WeatherLocationDTO): WeatherLocation
 }
 
-class DistrictIdentifiersMappersImpl : DistrictIdentifiersMappers {
+class DistrictIdentifiersMappersImpl @Inject constructor() : DistrictIdentifiersMappers {
     override fun mapDistrictIdentifiersResponse(districtIdentifiers: WeatherLocationDTO): WeatherLocation {
         return districtIdentifiers.toWeatherLocation()
     }
