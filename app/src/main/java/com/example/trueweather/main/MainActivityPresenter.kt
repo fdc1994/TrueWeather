@@ -14,7 +14,6 @@ import javax.inject.Inject
 
 class MainActivityPresenter @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
-    private val localizationManager: LocalizationManager,
     private val networkConnectivityManager: NetworkConnectivityManager
 ) : MainActivityMVP.Presenter, BaseTrueWeatherPresenter() {
     private val hasValidConnection: Boolean

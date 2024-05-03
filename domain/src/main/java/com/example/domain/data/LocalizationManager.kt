@@ -53,14 +53,11 @@ class LocalizationManagerImpl @Inject constructor(
             osmService.reverseGeocode(latitude = location.latitude, longitude = location.longitude)
                 .map { osmLocalizationMapper.mapOsmLocalisationResponse(it) }
                 .flatMap {
-                    it.address.city?.let {
+                    it.address?.county?.let {
                         mapAddressNameToGlobalId(it)
                     } ?: return@flatMap null
-                }.doOnError {
-                    it
                 }
-
-                .onErrorReturnItem("222222")
+                .onErrorReturnItem("")
         }
     }
 
@@ -74,8 +71,8 @@ class LocalizationManagerImpl @Inject constructor(
     private fun mapAddressNameToGlobalId(city: String): Single<String?> {
         return districtIdentifiersRepository.getDistrictIdentifiersList().map {
             if (it.isSuccess()) {
-                return@map it.getValueOrNull()?.data?.find { it.local == city }?.globalIdLocal.toString()
-            } else return@map null
+                return@map it.getValueOrNull()?.data?.find { it.local == city }?.globalIdLocal.toString() ?: ""
+            } else return@map ""
         }
     }
 }
