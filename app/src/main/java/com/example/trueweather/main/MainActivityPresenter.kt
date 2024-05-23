@@ -4,7 +4,6 @@ import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.repositories.WeatherForecastRepository
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.RxResult
-import com.example.domain.data.LocalizationManager
 import com.example.trueweather.platform.BaseTrueWeatherPresenter
 import com.example.trueweather.utils.NetworkConnectivityManager
 import io.reactivex.Single

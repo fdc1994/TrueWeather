@@ -29,7 +29,7 @@ abstract class BaseTrueWeatherActivity : AppCompatActivity() {
 
     private val progressBar : ProgressBar by lazyFindViewById<ProgressBar>(R.id.progress_bar)
 
-    abstract fun handlePermissionResult(isGranted: Boolean): Unit
+    open fun handlePermissionResult(isGranted: Boolean): Unit = Unit
 
     override fun setContentView(layoutResID: Int) {
         coordinatorLayout = layoutInflater.inflate(R.layout.base_activity_layout, null) as CoordinatorLayout

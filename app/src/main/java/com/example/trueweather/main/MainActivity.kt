@@ -8,8 +8,9 @@ import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.repositories.WeatherForecastRepository
 import com.example.domain.data.utils.RxResult
 import com.example.trueweather.R
+import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.platform.BaseTrueWeatherActivity
-import com.example.trueweather.utils.lazyFindViewById
+import com.example.trueweather.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,10 +23,7 @@ class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
     @Inject
     lateinit var presenter: MainActivityMVP.Presenter
 
-    private val textView by lazyFindViewById<TextView>(R.id.main_view)
-    override fun handlePermissionResult(isGranted: Boolean) {
-        TODO("Not yet implemented")
-    }
+    private val binding by viewBinding(ActivityMainBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +47,12 @@ class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
     override fun showWeather(weatherInfo: RxResult.Success<List<WeatherForecast>>) {
         if(weatherInfo.isSuccess()) {
             val data = weatherInfo.getValueOrNull()
-            textView.text = data.toString()
+            binding.mainView.text = data.toString()
         }
 
     }
 
     override fun showError(error: RxResult.Error) {
-        textView.text = "Error: ${error.errorType}"
+        binding.mainView.text = "Error: ${error.errorType}"
     }
 }
