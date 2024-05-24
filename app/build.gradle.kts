@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.viewModel)
     implementation(project(":domain"))
     implementation(project(":data"))
     testImplementation(libs.junit)
