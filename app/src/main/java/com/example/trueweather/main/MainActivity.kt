@@ -12,6 +12,7 @@ import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.utils.ErrorType
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.domain.data.utils.ResultWrapper
+import com.example.domain.data.utils.collectWhenResumed
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,18 +40,16 @@ class MainActivity : AppCompatActivity() {
             viewModel.updatePermissionState(true)
         }
 
-        lifecycleScope.launch {
-            viewModel.weatherState.collect { state ->
-                when (state) {
-                    is ResultWrapper.Loading -> showLoading()
-                    is ResultWrapper.Success -> {
-                        hideLoading()
-                        showWeather(state.data)
-                    }
-                    is ResultWrapper.Error -> {
-                        hideLoading()
-                        showError(state.errorType)
-                    }
+        collectWhenResumed(viewModel.weatherState) {
+            when(it) {
+                is ResultWrapper.Loading -> showLoading()
+                is ResultWrapper.Success -> {
+                    hideLoading()
+                    showWeather(it.data)
+                }
+                is ResultWrapper.Error -> {
+                    hideLoading()
+                    showError(it.errorType)
                 }
             }
         }

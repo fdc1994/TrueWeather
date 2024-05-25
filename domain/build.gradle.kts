@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.retrofitGSON)
     implementation(libs.rxJava)
     implementation(libs.adapterRxJava)
+    implementation(libs.androidx.lifecycle)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

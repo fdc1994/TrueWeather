@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.viewModel)
     implementation(libs.androidx.viewModelKtx)
+    implementation(libs.androidx.lifecycle)
     implementation(project(":domain"))
     implementation(project(":data"))
     testImplementation(libs.junit)
