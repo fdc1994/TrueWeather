@@ -38,6 +38,7 @@ androidx-viewModelKtx = { group = "androidx.lifecycle", name = "lifecycle-viewmo
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofitGSON = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit-GSON" }
 rxJava = { group = "io.reactivex.rxjava2", name = "rxjava", version.ref = "rxJava" }

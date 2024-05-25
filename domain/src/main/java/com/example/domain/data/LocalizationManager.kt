@@ -14,6 +14,7 @@ import com.example.network.interfaces.OsmService
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -41,10 +42,12 @@ class LocalizationManagerImpl @Inject constructor(
         return withContext(Dispatchers.IO) {
             if (checkPermissions()) {
                 try {
-                    val location: Location? = fusedLocationClient.lastLocation.result
+                    val location: Location? = fusedLocationClient.lastLocation.await()
                     location?.let {
                         val response = osmService.reverseGeocode(latitude = it.latitude, longitude = it.longitude)
-                        osmLocalizationMapper.mapOsmLocalisationResponse(response).address?.county?.let { county -> mapAddressNameToDistrictIdentifier(county) }
+                        osmLocalizationMapper.mapOsmLocalisationResponse(response).address?.county?.let { county ->
+                            mapAddressNameToDistrictIdentifier(county)
+                        }
                     }
                 } catch (e: Exception) {
                     null

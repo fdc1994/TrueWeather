@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.play.services)
     implementation(project(":data"))
     implementation(libs.retrofit)
     implementation(libs.retrofitGSON)
