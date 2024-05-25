@@ -2,6 +2,15 @@ package com.example.domain.data.objects
 
 import java.io.Serializable
 
+data class WeatherResult(
+    val resultList: List<WeatherResultList>
+)
+data class WeatherResultList(
+    val weatherForecast: WeatherForecast? = null,
+    val address: LocationData? = null,
+    val status: WeatherFetchStatus
+)
+
 data class WeatherForecast(
     val owner: String,
     val country: String,
@@ -41,3 +50,10 @@ data class LocationData(
     val local: String,
     val longitude: String
 ): Serializable
+
+enum class WeatherFetchStatus {
+    SUCCESS,
+    PERMISSION_ERROR,
+    NETWORK_ERROR,
+    OTHER_ERROR
+}

@@ -7,57 +7,48 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.core.content.ContextCompat
 import com.example.domain.data.mappers.OsmLocalisationMappers
+import com.example.domain.data.objects.LocationData
 import com.example.domain.data.repositories.DistrictIdentifiersRepository
 import com.example.network.interfaces.OsmService
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.Single
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface LocalizationManager {
-    fun getLastKnownLocation(): Single<String?>
+    suspend fun getLastKnownLocation(): LocationData?
+    suspend fun mapAddressNameToDistrictIdentifier(city: String): LocationData?
+    suspend fun mapGlobalIdToDistrictIdentifier(globalId: Int): LocationData?
     fun checkPermissions(): Boolean
 }
 
 class LocalizationManagerImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val context: Context,
     private val osmService: OsmService,
     private val osmLocalizationMapper: OsmLocalisationMappers,
     private val districtIdentifiersRepository: DistrictIdentifiersRepository
 ) : LocalizationManager {
 
-    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+    private val fusedLocationClient by lazy {
         LocationServices.getFusedLocationProviderClient(context)
     }
 
     @SuppressLint("MissingPermission")
-    override fun getLastKnownLocation(): Single<String?> {
-        return Single.create { emitter ->
+    override suspend fun getLastKnownLocation(): LocationData? {
+        return withContext(Dispatchers.IO) {
             if (checkPermissions()) {
-                fusedLocationClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        if (location != null) {
-                            emitter.onSuccess(location)
-                        } else {
-                            emitter.onError(Exception("Last known location is null"))
-                        }
+                try {
+                    val location: Location? = fusedLocationClient.lastLocation.result
+                    location?.let {
+                        val response = osmService.reverseGeocode(latitude = it.latitude, longitude = it.longitude)
+                        osmLocalizationMapper.mapOsmLocalisationResponse(response).address?.county?.let { county -> mapAddressNameToDistrictIdentifier(county) }
                     }
-                    .addOnFailureListener { e: Exception ->
-                        emitter.onError(e)
-                    }
-            } else {
-                emitter.onError(Exception("Location permission not granted"))
-            }
-        }.flatMap { location ->
-            osmService.reverseGeocode(latitude = location.latitude, longitude = location.longitude)
-                .map { osmLocalizationMapper.mapOsmLocalisationResponse(it) }
-                .flatMap {
-                    it.address?.county?.let {
-                        mapAddressNameToGlobalId(it)
-                    } ?: return@flatMap null
+                } catch (e: Exception) {
+                    null
                 }
-                .onErrorReturnItem("")
+            } else {
+                null
+            }
         }
     }
 
@@ -68,11 +59,17 @@ class LocalizationManagerImpl @Inject constructor(
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun mapAddressNameToGlobalId(city: String): Single<String?> {
-        return districtIdentifiersRepository.getDistrictIdentifiersList().map {
-            if (it.isSuccess()) {
-                return@map it.getValueOrNull()?.data?.find { it.local == city }?.globalIdLocal.toString() ?: ""
-            } else return@map ""
+    override suspend fun mapAddressNameToDistrictIdentifier(city: String): LocationData? {
+        return withContext(Dispatchers.IO) {
+            val response = districtIdentifiersRepository.getDistrictIdentifiersList()
+            response?.data?.find { it.local == city }
+        }
+    }
+
+    override suspend fun mapGlobalIdToDistrictIdentifier(globalId: Int): LocationData? {
+        return withContext(Dispatchers.IO) {
+            val response = districtIdentifiersRepository.getDistrictIdentifiersList()
+            response?.data?.find { it.globalIdLocal == globalId }
         }
     }
 }

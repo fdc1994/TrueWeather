@@ -8,16 +8,14 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 interface OsmLocalisationRepository {
-    fun getLocation(lat: Long, long: Long): Single<OsmResponse>
+    suspend fun getLocation(lat: Long, long: Long): OsmResponse
 }
 
 class OsmLocalisationRepositoryImpl @Inject constructor(
     private val osmService: OsmService,
     private val osmResponseMappers: OsmLocalisationMappers
 ): OsmLocalisationRepository {
-    override fun getLocation(lat: Long, long: Long): Single<OsmResponse> {
-        return osmService.reverseGeocode(latitude =  lat.toDouble(), longitude = long.toDouble()).map {
-            osmResponseMappers.mapOsmLocalisationResponse(it)
-        }
+    override suspend fun getLocation(lat: Long, long: Long): OsmResponse {
+        return osmResponseMappers.mapOsmLocalisationResponse(osmService.reverseGeocode(latitude =  lat.toDouble(), longitude = long.toDouble()))
     }
 }

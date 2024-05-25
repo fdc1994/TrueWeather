@@ -1,91 +1,114 @@
 package com.example.domain.data.repositories
 
 import com.example.domain.data.LocalizationManager
-import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.mappers.WeatherForecastMappers
-import com.example.network.data.WeatherForecastDTO
+import com.example.domain.data.objects.LocationData
+import com.example.domain.data.objects.WeatherFetchStatus
+import com.example.domain.data.objects.WeatherResult
+import com.example.domain.data.objects.WeatherResultList
 import com.example.network.interfaces.IPMAService
 import com.example.network.persistence.UserPreferencesDataStore
-import com.example.network.persistence.WeatherForecastDataStore
 import com.example.network.utils.TimestampUtil
-import io.reactivex.Single
-import org.joda.time.DateTime
 import javax.inject.Inject
 
 interface WeatherForecastRepository {
-    fun getWeatherForecast(globalIdLocal: String? = null, hasValidInternetConnection: Boolean): Single<List<WeatherForecast>>
+    suspend fun getWeatherForecast(hasValidInternetConnection: Boolean): WeatherResult
 }
 
 class WeatherForecastRepositoryImpl @Inject constructor(
     private val ipmaService: IPMAService,
-    private val weatherForecastDataStore: WeatherForecastDataStore,
     private val weatherForecastMappers: WeatherForecastMappers,
     private val localizationManager: LocalizationManager,
-    private val userPreferencesDataStore: UserPreferencesDataStore,
-    private val timestampUtil: TimestampUtil
 ) : WeatherForecastRepository {
 
-    override fun getWeatherForecast(globalIdLocal: String?, hasValidInternetConnection: Boolean): Single<List<WeatherForecast>> {
+    override suspend fun getWeatherForecast(hasValidInternetConnection: Boolean): WeatherResult {
         return if (hasValidInternetConnection) {
-            makeNetworkCall(globalIdLocal)
-        } else getPersistenceInformation()
+            makeNetworkCall()
+        } else WeatherResult(
+            listOf(
+                WeatherResultList(
+                    status = WeatherFetchStatus.NETWORK_ERROR
+                )
+            )
+        )
     }
 
-    private fun makeNetworkCall(globalIdLocal: String?): Single<List<WeatherForecast>> {
-        return if (!globalIdLocal.isNullOrEmpty()) {
-            ipmaService.getWeatherData(globalIdLocal).map { weatherForecastDto ->
-                listOf(weatherForecastMappers.mapWeatherResponse(weatherForecastDto))
+    private suspend fun makeNetworkCall(): WeatherResult {
+        val weatherResultList = mutableListOf<WeatherResultList>()
+        getCurrentLocationDataOrError(weatherResultList)
+        getSavedLocationsWeatherForecast(weatherResultList, mutableListOf(233232,232323))
+        return WeatherResult(weatherResultList)
+    }
+
+    private suspend fun getCurrentLocationDataOrError(weatherResult: MutableList<WeatherResultList>) {
+        if (localizationManager.checkPermissions()) {
+            val currentLocationData = localizationManager.getLastKnownLocation()
+            if (currentLocationData?.globalIdLocal != null) {
+                weatherResult.add(
+                    fetchForecast(currentLocationData)
+                )
+            } else {
+                weatherResult.add(
+                    WeatherResultList(
+                        status = WeatherFetchStatus.NETWORK_ERROR
+                    )
+                )
             }
         } else {
-            userPreferencesDataStore.getUserPreferences().flatMap { userPreferences ->
-                val weatherForecastListDTO = mutableListOf<WeatherForecastDTO>()
-                val weatherForecastList = mutableListOf<WeatherForecast>()
-                if (localizationManager.checkPermissions()) {
-                    localizationManager.getLastKnownLocation().flatMap { lastKnownLocation ->
-                        ipmaService.getWeatherData(lastKnownLocation).doOnSuccess {
-                            weatherForecastListDTO.add(it)
-                            weatherForecastList.add(weatherForecastMappers.mapWeatherResponse(it))
-                        }
-                    }
-                } else {
-                    Single.just(Unit)
-                }.flatMap {
-                    Single.concat(userPreferences.locationsList.map { location ->
-                        ipmaService.getWeatherData(location)
-                            .doOnSuccess { weatherForecastDto ->
-                                weatherForecastListDTO.add(weatherForecastDto)
-                                weatherForecastList.add(weatherForecastMappers.mapWeatherResponse(weatherForecastDto))
-                            }
-                    }).toList().flatMap { _ ->
-                        with(weatherForecastDataStore) {
-                            clear()
-                            if (weatherForecastListDTO.isNotEmpty()) {
-                                saveWeatherForecast(weatherForecastListDTO.toList()) // Save DTOs for persistence
-                            }
-                        }
-                        Single.just(weatherForecastList)
-                    }
-                }
+            weatherResult.add(
+                WeatherResultList(
+                    status = WeatherFetchStatus.PERMISSION_ERROR
+                )
+            )
+        }
+    }
+
+    private suspend fun getSavedLocationsWeatherForecast(weatherResult: MutableList<WeatherResultList>, locationsIds: List<Int>) {
+        locationsIds.forEach {
+            val locationData = localizationManager.mapGlobalIdToDistrictIdentifier(it)
+            if(locationData?.globalIdLocal != null) {
+                weatherResult.add(
+                    fetchForecast(locationData)
+                )
+            }
+            else {
+                weatherResult.add(
+                    WeatherResultList(status = WeatherFetchStatus.OTHER_ERROR)
+                )
             }
         }
     }
 
+
+    private suspend fun fetchForecast(
+        locationData: LocationData?
+    ): WeatherResultList {
+        val currentLocationForecastDto = ipmaService.getWeatherData()
+        val currentLocationForecast = weatherForecastMappers.mapWeatherResponse(currentLocationForecastDto)
+        return WeatherResultList(
+            currentLocationForecast,
+            locationData,
+            WeatherFetchStatus.SUCCESS
+        )
+    }
+
+    /**
 
     private fun getPersistenceInformation(): Single<List<WeatherForecast>> {
-        return userPreferencesDataStore.getUserPreferences().flatMap { userPreferences ->
-            weatherForecastDataStore.getWeatherForecast().map { weatherForecastList ->
-                val filteredList = weatherForecastList.filter { weatherForecast ->
-                    userPreferences.locationsList.find { weatherForecast.globalIdLocal.toString() == it } != null
-                }
-                filteredList.mapNotNull {
-                    weatherForecastMappers.mapWeatherResponse(it).takeIf { weatherResponse ->
-                        weatherResponse.data.filter {
-                            !timestampUtil.exceedsTimestamp(DateTime.parse(it.forecastDate).millis, DateTime.now().plusDays(5).millis)
-                        }.isNotEmpty()
-                    }
-                }
-            }
-        }
+    return userPreferencesDataStore.getUserPreferences().flatMap { userPreferences ->
+    weatherForecastDataStore.getWeatherForecast().map { weatherForecastList ->
+    val filteredList = weatherForecastList.filter { weatherForecast ->
+    userPreferences.locationsList.find { weatherForecast.globalIdLocal.toString() == it } != null
     }
-
+    filteredList.mapNotNull {
+    weatherForecastMappers.mapWeatherResponse(it).takeIf { weatherResponse ->
+    weatherResponse.data.filter {
+    !timestampUtil.exceedsTimestamp(DateTime.parse(it.forecastDate).millis, DateTime.now().plusDays(5).millis)
+    }.isNotEmpty()
+    }
+    }
+    }
+    }
+    }
+     **/
 }
