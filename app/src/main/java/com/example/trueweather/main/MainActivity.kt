@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.domain.data.objects.WeatherForecast
+import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.ErrorType
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.domain.data.utils.ResultWrapper
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         // Implement hide loading UI
     }
 
-    private fun showWeather(weatherForecastList: List<WeatherForecast>) {
+    private fun showWeather(weatherForecastList: WeatherResult) {
         // Implement show weather UI
     }
 

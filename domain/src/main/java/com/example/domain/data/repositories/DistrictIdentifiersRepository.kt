@@ -1,45 +1,38 @@
 package com.example.domain.data.repositories
 
-import com.example.domain.data.objects.WeatherLocation
-import com.example.domain.data.mappers.DistrictIdentifiersMappers
 import com.example.network.data.WeatherLocationDTO
 import com.example.network.interfaces.IPMAService
-import com.example.trueweather.persistence.DistrictIdentifiersDataStore
+import com.example.network.persistence.DistrictIdentifiersDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import javax.inject.Inject
 
 interface DistrictIdentifiersRepository {
-    suspend fun getDistrictIdentifiersList(): WeatherLocation?
+    suspend fun getDistrictIdentifiersList(): WeatherLocationDTO?
 }
 
 class DistrictIdentifiersRepositoryImpl @Inject constructor(
     private val ipmaService: IPMAService,
-    private val districtIdentifiersDataStore: com.example.trueweather.persistence.DistrictIdentifiersDataStore,
-    private val districtIdentifiersMappers: DistrictIdentifiersMappers
+    private val districtIdentifiersDataStore: DistrictIdentifiersDataStore
 ) : DistrictIdentifiersRepository {
 
-    override suspend fun getDistrictIdentifiersList(): WeatherLocation? {
+    override suspend fun getDistrictIdentifiersList(): WeatherLocationDTO? {
         return withContext(Dispatchers.IO) {
             try {
                 val districtIdentifiers = districtIdentifiersDataStore.getDistrictIdentifiers()
                 if (districtIdentifiers?.data?.isEmpty() == true) {
                     val districtIdentifiersRemote = ipmaService.getDistrictIdentifiers()
                     districtIdentifiersDataStore.saveDistrictIdentifiers(districtIdentifiersRemote)
-                    mapData(districtIdentifiersRemote)
+                    districtIdentifiersRemote
                 } else {
                     if (districtIdentifiers != null) {
-                        mapData(districtIdentifiers)
+                        districtIdentifiers
                     } else null
                 }
             } catch (e: Exception) {
                 null
             }
         }
-    }
-
-    private fun mapData(it: WeatherLocationDTO): WeatherLocation {
-        return districtIdentifiersMappers.mapDistrictIdentifiersResponse(it)
     }
 }

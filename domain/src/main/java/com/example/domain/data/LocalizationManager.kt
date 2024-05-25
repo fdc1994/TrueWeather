@@ -6,11 +6,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.core.content.ContextCompat
+import com.example.domain.data.mappers.DistrictIdentifiersMappers
 import com.example.domain.data.mappers.OsmLocalisationMappers
 import com.example.domain.data.objects.LocationData
 import com.example.domain.data.repositories.DistrictIdentifiersRepository
 import com.example.network.interfaces.OsmService
 import com.google.android.gms.location.LocationServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -23,10 +25,11 @@ interface LocalizationManager {
 }
 
 class LocalizationManagerImpl @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val osmService: OsmService,
     private val osmLocalizationMapper: OsmLocalisationMappers,
-    private val districtIdentifiersRepository: DistrictIdentifiersRepository
+    private val districtIdentifiersRepository: DistrictIdentifiersRepository,
+    private val districtIdentifiersMappers: DistrictIdentifiersMappers
 ) : LocalizationManager {
 
     private val fusedLocationClient by lazy {
@@ -62,14 +65,16 @@ class LocalizationManagerImpl @Inject constructor(
     override suspend fun mapAddressNameToDistrictIdentifier(city: String): LocationData? {
         return withContext(Dispatchers.IO) {
             val response = districtIdentifiersRepository.getDistrictIdentifiersList()
-            response?.data?.find { it.local == city }
+            val districtIdentifiers = response?.let { districtIdentifiersMappers.mapDistrictIdentifiersResponse(it) }
+            districtIdentifiers?.data?.find { it.local == city }
         }
     }
 
     override suspend fun mapGlobalIdToDistrictIdentifier(globalId: Int): LocationData? {
         return withContext(Dispatchers.IO) {
             val response = districtIdentifiersRepository.getDistrictIdentifiersList()
-            response?.data?.find { it.globalIdLocal == globalId }
+            val districtIdentifiers = response?.let { districtIdentifiersMappers.mapDistrictIdentifiersResponse(it) }
+            districtIdentifiers?.data?.find { it.globalIdLocal == globalId }
         }
     }
 }

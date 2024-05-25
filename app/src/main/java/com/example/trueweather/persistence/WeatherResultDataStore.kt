@@ -10,6 +10,7 @@ import com.example.domain.data.objects.WeatherResultList
 import com.example.network.utils.TimestampUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.concurrent.TimeUnit
@@ -25,7 +26,7 @@ interface WeatherResultDataStore {
 }
 
 class WeatherResultDataStoreImpl @Inject constructor(
-    private val context: Context,
+    @ApplicationContext private val context: Context,
     private val timestampUtil: TimestampUtil
 ) : WeatherResultDataStore {
 
