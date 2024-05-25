@@ -1,58 +1,78 @@
 package com.example.trueweather.main
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.TextView
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.domain.data.objects.WeatherForecast
-import com.example.domain.data.repositories.WeatherForecastRepository
-import com.example.domain.data.utils.RxResult
-import com.example.trueweather.R
+import com.example.domain.data.utils.ErrorType
 import com.example.trueweather.databinding.ActivityMainBinding
-import com.example.trueweather.platform.BaseTrueWeatherActivity
-import com.example.trueweather.utils.viewBinding
+import com.example.domain.data.utils.ResultWrapper
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity: BaseTrueWeatherActivity(), MainActivityMVP.View {
+class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var weatherForecastRepository: WeatherForecastRepository
+    private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainActivityViewModel by viewModels()
+    private val hasPermission = false
 
-    @Inject
-    lateinit var presenter: MainActivityMVP.Presenter
-
-    private val binding by viewBinding(ActivityMainBinding::inflate)
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            viewModel.updatePermissionState(isGranted)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-        presenter.onAttachView(this)
-    }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    override fun showLoading() {
-        showProgress()
-    }
-
-    override fun hideLoading() {
-        hideProgress()
-    }
-
-    override fun showWeather(weatherInfo: RxResult.Success<List<WeatherForecast>>) {
-        if(weatherInfo.isSuccess()) {
-            val data = weatherInfo.getValueOrNull()
-            binding.mainView.text = data.toString()
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission()
+        } else {
+            viewModel.updatePermissionState(true)
         }
 
+        lifecycleScope.launch {
+            viewModel.weatherState.collect { state ->
+                when (state) {
+                    is ResultWrapper.Loading -> showLoading()
+                    is ResultWrapper.Success -> {
+                        hideLoading()
+                        showWeather(state.data)
+                    }
+                    is ResultWrapper.Error -> {
+                        hideLoading()
+                        showError(state.errorType)
+                    }
+                }
+            }
+        }
     }
 
-    override fun showError(error: RxResult.Error) {
-        binding.mainView.text = "Error: ${error.errorType}"
+    private fun requestLocationPermission() {
+        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun showLoading() {
+        // Implement loading UI
+    }
+
+    private fun hideLoading() {
+        // Implement hide loading UI
+    }
+
+    private fun showWeather(weatherForecastList: List<WeatherForecast>) {
+        // Implement show weather UI
+    }
+
+    private fun showError(errorType: ErrorType) {
+        // Implement show error UI
     }
 }
