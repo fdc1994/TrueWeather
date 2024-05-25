@@ -1,70 +1,64 @@
 package com.example.network.persistence
 
 import android.content.Context
-import androidx.datastore.preferences.core.MutablePreferences
-import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.rxjava2.RxPreferenceDataStoreBuilder
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.network.data.UserPreferences
+import com.example.network.persistence.UserPreferencesDataStoreImpl.Companion.DATASTORE_NAME
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.reactivex.Completable
-import io.reactivex.Single
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
+
 interface UserPreferencesDataStore {
-    fun getUserPreferences(): Single<UserPreferences>
-    fun saveUserPreferences(userPreferences: UserPreferences): Single<Boolean>
-    fun clear(): Completable
+    suspend fun getUserPreferences(): UserPreferences
+    suspend fun saveUserPreferences(userPreferences: UserPreferences): Boolean
+    suspend fun clear()
 }
 
-class UserPreferencesDataStoreImpl@Inject constructor(
+class UserPreferencesDataStoreImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : UserPreferencesDataStore {
 
-    private val dataStore = RxPreferenceDataStoreBuilder(
-        context,
-        DATASTORE_NAME
-    ).build()
     private val gson = GsonBuilder().create()
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getUserPreferences(): Single<UserPreferences> {
-        return dataStore.data().firstOrError()
-            .map { preferences ->
-                val listString = preferences[PREFS_USER_PREFERENCES]
-                if (listString.isNullOrEmpty()) {
+
+    override suspend fun getUserPreferences(): UserPreferences {
+        val preferences = context.dataStore.data.map { preferences ->
+            val listString = preferences[PREFS_USER_PREFERENCES]
+            if (listString.isNullOrEmpty()) {
+                UserPreferences(listOf())
+            } else {
+                val userPreferences = gson.fromJson(listString, UserPreferences::class.java)
+                if (userPreferences.locationsList.isEmpty()) {
+                    clear()
                     UserPreferences(listOf())
                 } else {
-                    val userPreferences = gson.fromJson(listString, UserPreferences::class.java)
-                    if (userPreferences.locationsList.isEmpty()) preferences.toMutablePreferences().clear()
                     userPreferences
                 }
             }
-            .onErrorReturnItem(UserPreferences(listOf()))
+        }.first()
+        return preferences
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun saveUserPreferences(userPreferences: UserPreferences): Single<Boolean> {
-        val updateResult: Single<Preferences> = dataStore.updateDataAsync { prefsIn ->
-            val mutablePreferences: MutablePreferences = prefsIn.toMutablePreferences()
-            mutablePreferences.set(PREFS_USER_PREFERENCES, gson.toJson(userPreferences))
-            Single.just(mutablePreferences)
+    override suspend fun saveUserPreferences(userPreferences: UserPreferences): Boolean {
+        context.dataStore.edit { preferences ->
+            preferences[PREFS_USER_PREFERENCES] = gson.toJson(userPreferences)
         }
-        return Single.just(updateResult.blockingGet() !== null)
+        return true
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun clear(): Completable {
-        return dataStore.data()
-            .first(null)
-            .flatMapCompletable { preferences ->
-                Completable.fromAction { preferences.toMutablePreferences().clear() }
-            }
+    override suspend fun clear() {
+        context.dataStore.edit { preferences ->
+            preferences.clear()
+        }
     }
 
     companion object {
-        private const val DATASTORE_NAME = "user_preferences_data_store"
+        const val DATASTORE_NAME = "user_preferences_data_store"
         private val PREFS_USER_PREFERENCES = stringPreferencesKey("prefs_user_preferences")
     }
 }
