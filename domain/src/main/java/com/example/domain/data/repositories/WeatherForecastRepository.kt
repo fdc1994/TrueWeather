@@ -22,7 +22,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     override suspend fun getWeatherForecast(): WeatherResult {
         val weatherResultList = mutableListOf<WeatherResultList>()
         getCurrentLocationDataOrError(weatherResultList)
-        getSavedLocationsWeatherForecast(weatherResultList, mutableListOf(233232,232323))
+        getSavedLocationsWeatherForecast(weatherResultList, mutableListOf(1010500,1020500))
         return WeatherResult(weatherResultList)
     }
 
@@ -69,7 +69,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     private suspend fun fetchForecast(
         locationData: LocationData?
     ): WeatherResultList {
-        val currentLocationForecastDto = ipmaService.getWeatherData()
+        val currentLocationForecastDto = ipmaService.getWeatherData(locationData!!.globalIdLocal.toString())
         val currentLocationForecast = weatherForecastMappers.mapWeatherResponse(currentLocationForecastDto)
         return WeatherResultList(
             currentLocationForecast,
