@@ -53,6 +53,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
                     if (weatherResult.resultList.isEmpty()) {
                         clear()
                     }
+                    //TODO: Add time validation to fetched data
                 }
             }
         }.first()

@@ -24,6 +24,10 @@ class TimestampUtil @Inject constructor() {
     fun exceedsPeriod(timestamp: Long, period: Long, timeUnit: TimeUnit): Boolean {
         return exceedsTimestamp(timestamp, timeUnit.toMillis(period))
     }
+
+    fun isAfterToday(timestamp: Long) {
+
+    }
 }
 
 class DateTimeDeserializer : JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
