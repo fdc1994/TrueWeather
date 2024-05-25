@@ -4,8 +4,8 @@ import com.example.trueweather.persistence.DistrictIdentifiersDataStore
 import com.example.trueweather.persistence.DistrictIdentifiersDataStoreImpl
 import com.example.trueweather.persistence.UserPreferencesDataStore
 import com.example.trueweather.persistence.UserPreferencesDataStoreImpl
-import com.example.trueweather.persistence.WeatherForecastDataStore
-import com.example.trueweather.persistence.WeatherForecastDataStoreImpl
+import com.example.trueweather.persistence.WeatherResultDataStore
+import com.example.trueweather.persistence.WeatherResultDataStoreImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,7 +22,7 @@ interface GlobalNetworkModule {
 
     @Binds
     @Singleton
-    fun bindWeatheForecastDataStore(impl: WeatherForecastDataStoreImpl): WeatherForecastDataStore
+    fun bindWeatheForecastDataStore(impl: WeatherResultDataStoreImpl): WeatherResultDataStore
 
     @Binds
     @Singleton

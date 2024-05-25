@@ -17,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val weatherForecastRepository: WeatherForecastRepository,
+    private val
     private val networkConnectivityManager: NetworkConnectivityManager
 ) : ViewModel() {
 
@@ -57,11 +58,10 @@ class MainActivityViewModel @Inject constructor(
     }
 
     private suspend fun setupData(): List<WeatherForecast> {
-        return try {
-            listOf()
-           // weatherForecastRepository.getWeatherForecast(hasValidInternetConnection = hasValidConnection)
-        } catch (e: Exception) {
-            listOf()
+        val weatherResult = if(hasValidConnection) {
+            weatherForecastRepository.getWeatherForecast()
+        } else {
+
         }
     }
 }
