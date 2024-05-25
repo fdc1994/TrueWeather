@@ -1,11 +1,11 @@
-package com.example.network.persistence
+package com.example.trueweather.persistence
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.network.data.UserPreferences
-import com.example.network.persistence.UserPreferencesDataStoreImpl.Companion.DATASTORE_NAME
+import com.example.trueweather.persistence.UserPreferencesDataStoreImpl.Companion.DATASTORE_NAME
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first

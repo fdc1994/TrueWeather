@@ -4,7 +4,7 @@ import com.example.domain.data.objects.WeatherLocation
 import com.example.domain.data.mappers.DistrictIdentifiersMappers
 import com.example.network.data.WeatherLocationDTO
 import com.example.network.interfaces.IPMAService
-import com.example.network.persistence.DistrictIdentifiersDataStore
+import com.example.trueweather.persistence.DistrictIdentifiersDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -16,7 +16,7 @@ interface DistrictIdentifiersRepository {
 
 class DistrictIdentifiersRepositoryImpl @Inject constructor(
     private val ipmaService: IPMAService,
-    private val districtIdentifiersDataStore: DistrictIdentifiersDataStore,
+    private val districtIdentifiersDataStore: com.example.trueweather.persistence.DistrictIdentifiersDataStore,
     private val districtIdentifiersMappers: DistrictIdentifiersMappers
 ) : DistrictIdentifiersRepository {
 

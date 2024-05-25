@@ -1,10 +1,10 @@
-package com.example.network.persistence
+package com.example.trueweather.persistence
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.network.data.WeatherForecastDTO
+import com.example.domain.data.objects.WeatherForecast
 import com.example.network.utils.TimestampUtil
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -17,8 +17,8 @@ private val Context.dataStore by preferencesDataStore(name = WeatherForecastData
 
 interface WeatherForecastDataStore {
     suspend fun isValid(): Boolean
-    suspend fun getWeatherForecast(): List<WeatherForecastDTO>
-    suspend fun saveWeatherForecast(weatherForecastList: List<WeatherForecastDTO?>): Boolean
+    suspend fun getWeatherForecast(): List<WeatherForecast>
+    suspend fun saveWeatherForecast(weatherForecastList: List<WeatherForecast?>): Boolean
     suspend fun clear()
 }
 
@@ -37,15 +37,15 @@ class WeatherForecastDataStoreImpl @Inject constructor(
         return preferences
     }
 
-    override suspend fun getWeatherForecast(): List<WeatherForecastDTO> {
+    override suspend fun getWeatherForecast(): List<WeatherForecast> {
         val preferences = context.dataStore.data.map { preferences ->
             val weatherForecastListString = preferences[PREFS_WEATHER_FORECAST_LIST]
             if (weatherForecastListString.isNullOrEmpty()) {
                 emptyList() // If the weather forecast list is empty or null, return an empty list
             } else {
-                gson.fromJson<List<WeatherForecastDTO>>(
+                gson.fromJson<List<WeatherForecast>>(
                     weatherForecastListString,
-                    object : TypeToken<List<WeatherForecastDTO>>() {}.type
+                    object : TypeToken<List<WeatherForecast>>() {}.type
                 ).also { weatherForecastList ->
                     if (weatherForecastList.isEmpty()) {
                         clear()
@@ -56,7 +56,7 @@ class WeatherForecastDataStoreImpl @Inject constructor(
         return preferences
     }
 
-    override suspend fun saveWeatherForecast(weatherForecastList: List<WeatherForecastDTO?>): Boolean {
+    override suspend fun saveWeatherForecast(weatherForecastList: List<WeatherForecast?>): Boolean {
         context.dataStore.edit { preferences ->
             preferences[PREFS_WEATHER_FORECAST_LIST] = gson.toJson(weatherForecastList)
         }

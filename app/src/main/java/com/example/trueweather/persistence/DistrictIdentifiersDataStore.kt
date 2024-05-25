@@ -1,13 +1,14 @@
-package com.example.network.persistence
+package com.example.trueweather.persistence
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.domain.data.objects.WeatherLocation
 import com.example.network.data.WeatherLocationDTO
 import com.example.network.utils.DateTimeDeserializer
-import com.example.network.persistence.DistrictIdentifiersDataStoreImpl.Companion.DATASTORE_NAME
+import com.example.trueweather.persistence.DistrictIdentifiersDataStoreImpl.Companion.DATASTORE_NAME
 import com.example.network.utils.TimestampUtil
 import com.google.gson.GsonBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,8 +23,8 @@ private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
 
 interface DistrictIdentifiersDataStore {
     suspend fun isValid(): Boolean
-    suspend fun getDistrictIdentifiers(): WeatherLocationDTO?
-    suspend fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Boolean
+    suspend fun getDistrictIdentifiers(): WeatherLocation?
+    suspend fun saveDistrictIdentifiers(identifiers: WeatherLocation): Boolean
     suspend fun clear()
 }
 
@@ -46,13 +47,13 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
         return preferences
     }
 
-    override suspend fun getDistrictIdentifiers(): WeatherLocationDTO? {
+    override suspend fun getDistrictIdentifiers(): WeatherLocation? {
         val preferences = context.dataStore.data.map { preferences ->
             val listString = preferences[PREFS_IDENTIFIERS_LIST]
             if (listString.isNullOrEmpty()) {
                 null
             } else {
-                val weatherLocation = gson.fromJson(listString, WeatherLocationDTO::class.java)
+                val weatherLocation = gson.fromJson(listString, WeatherLocation::class.java)
                 if (weatherLocation.data.isEmpty()) {
                     clear()
                     null
@@ -64,7 +65,7 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
         return preferences
     }
 
-    override suspend fun saveDistrictIdentifiers(identifiers: WeatherLocationDTO): Boolean {
+    override suspend fun saveDistrictIdentifiers(identifiers: WeatherLocation): Boolean {
         context.dataStore.edit { preferences ->
             preferences[PREFS_IDENTIFIERS_LIST] = gson.toJson(identifiers)
             preferences[PREFS_LAST_TIMESTAMP] = System.currentTimeMillis()

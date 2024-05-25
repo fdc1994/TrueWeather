@@ -1,11 +1,11 @@
-package com.example.network.di
+package com.example.trueweather.di
 
-import com.example.network.persistence.DistrictIdentifiersDataStore
-import com.example.network.persistence.DistrictIdentifiersDataStoreImpl
-import com.example.network.persistence.UserPreferencesDataStore
-import com.example.network.persistence.UserPreferencesDataStoreImpl
-import com.example.network.persistence.WeatherForecastDataStore
-import com.example.network.persistence.WeatherForecastDataStoreImpl
+import com.example.trueweather.persistence.DistrictIdentifiersDataStore
+import com.example.trueweather.persistence.DistrictIdentifiersDataStoreImpl
+import com.example.trueweather.persistence.UserPreferencesDataStore
+import com.example.trueweather.persistence.UserPreferencesDataStoreImpl
+import com.example.trueweather.persistence.WeatherForecastDataStore
+import com.example.trueweather.persistence.WeatherForecastDataStoreImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

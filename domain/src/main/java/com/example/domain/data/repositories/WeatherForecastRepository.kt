@@ -7,7 +7,7 @@ import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.objects.WeatherResultList
 import com.example.network.interfaces.IPMAService
-import com.example.network.persistence.UserPreferencesDataStore
+import com.example.trueweather.persistence.UserPreferencesDataStore
 import com.example.network.utils.TimestampUtil
 import javax.inject.Inject
 

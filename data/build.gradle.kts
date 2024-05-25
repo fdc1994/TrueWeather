@@ -38,7 +38,6 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore.rxJava2support)
     implementation(libs.google.gms)
     implementation(libs.joda.datetime)
     testImplementation(libs.junit)
