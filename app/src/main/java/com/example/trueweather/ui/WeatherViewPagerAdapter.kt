@@ -5,12 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
 import com.example.trueweather.utils.WeatherResultDiffCallback
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -22,6 +25,8 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
         val currentTemperature: TextView = itemView.findViewById(R.id.currentTemperature)
         val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
         val futureWeatherRecyclerView: RecyclerView = itemView.findViewById(R.id.futureWeatherRecyclerView)
+        val appBarLayout: AppBarLayout = itemView.findViewById(R.id.appBarLayout)
+        val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,6 +47,7 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
         holder.futureWeatherRecyclerView.adapter = locationWeather?.weatherForecast?.data?.let {
             FutureWeatherAdapter(it.subList(1, it.size))
         }
+        holder.toolbar.title = locationWeather?.address?.local
     }
 
     override fun getItemCount(): Int {
