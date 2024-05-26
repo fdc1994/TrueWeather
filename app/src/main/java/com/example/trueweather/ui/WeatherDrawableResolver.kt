@@ -6,7 +6,7 @@ import com.example.trueweather.R
 
 object WeatherDrawableResolver {
     fun getWeatherDrawable(weatherId: Int): Int? {
-        if(TimestampUtil.isEvening()) {
+        if(!TimestampUtil.isEvening()) {
             return when(weatherId) {
                 1 -> R.drawable.weather_icon_day_01
                 2 -> R.drawable.weather_icon_day_02
