@@ -55,5 +55,6 @@ enum class WeatherFetchStatus {
     SUCCESS,
     PERMISSION_ERROR,
     NETWORK_ERROR,
+    NOT_IN_COUNTRY_ERROR,
     OTHER_ERROR
 }

@@ -36,7 +36,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
             } else {
                 weatherResult.add(
                     WeatherResultList(
-                        status = WeatherFetchStatus.NETWORK_ERROR
+                        status = WeatherFetchStatus.NOT_IN_COUNTRY_ERROR
                     )
                 )
             }
