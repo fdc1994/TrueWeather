@@ -26,5 +26,5 @@ interface GlobalNetworkModule {
 
     @Binds
     @Singleton
-    fun userPreferencesDataStore(impl: UserPreferencesDataStoreImpl): UserPreferencesDataStore
+    fun binduserPreferencesDataStore(impl: UserPreferencesDataStoreImpl): UserPreferencesDataStore
 }

@@ -11,10 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
 import com.example.trueweather.utils.WeatherResultDiffCallback
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
     RecyclerView.Adapter<WeatherViewPagerAdapter.ViewHolder>() {
-
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
         val locationInput: TextView = itemView.findViewById(R.id.location)
@@ -33,7 +34,8 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
         val locationWeather = weatherResult?.resultList?.get(position)
         holder.locationInput.setText(locationWeather?.address?.local)
         holder.currentTemperature.text = locationWeather?.weatherForecast?.data?.first()?.tMax
-        holder.weatherImageView.setImageResource(R.drawable.weather_icon_day_01)
+        WeatherDrawableResolver.getWeatherDrawable(locationWeather?.weatherForecast?.data?.first()?.idWeatherType ?: -1)
+        ?.let { holder.weatherImageView.setImageResource(it) }
         // holder.currentWeatherDescription.text = locationWeather?.weatherForecast?.data?.first()?.description
 
         holder.futureWeatherRecyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)

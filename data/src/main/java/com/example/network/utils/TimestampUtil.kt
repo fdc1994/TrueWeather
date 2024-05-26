@@ -13,7 +13,7 @@ import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class TimestampUtil @Inject constructor() {
+object TimestampUtil{
 
     private val currentTimeMillis: Long
         get() = DateTime.now().millis

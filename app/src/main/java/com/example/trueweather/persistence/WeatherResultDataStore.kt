@@ -26,8 +26,7 @@ interface WeatherResultDataStore {
 }
 
 class WeatherResultDataStoreImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val timestampUtil: TimestampUtil
+    @ApplicationContext private val context: Context
 ) : WeatherResultDataStore {
 
     private val gson = GsonBuilder().create()
@@ -35,7 +34,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
     override suspend fun isValid(): Boolean {
         val preferences = context.dataStore.data.map { preferences ->
             val timeStamp = preferences[PREFS_LAST_TIMESTAMP]?.toLong() ?: 0L
-            timeStamp != 0L && !timestampUtil.exceedsTimestamp(timeStamp, TTL)
+            timeStamp != 0L && !TimestampUtil.exceedsTimestamp(timeStamp, TTL)
         }.first()
         return preferences
     }
@@ -59,7 +58,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
                         val validResultList = weatherResult.resultList.mapNotNull { result ->
                             result.weatherForecast?.let { weatherForecast ->
                                 val validData = weatherForecast.data.filter { forecast ->
-                                    !timestampUtil.isAfterToday(forecast.forecastDate)
+                                    !TimestampUtil.isAfterToday(forecast.forecastDate)
                                 }
                                 if (validData.isNotEmpty()) {
                                     result.copy(weatherForecast = weatherForecast.copy(data = validData))

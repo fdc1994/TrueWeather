@@ -29,8 +29,7 @@ interface DistrictIdentifiersDataStore {
 
 
 class DistrictIdentifiersDataStoreImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
-    private val timestampUtil: TimestampUtil
+    @ApplicationContext private val context: Context
 ) : DistrictIdentifiersDataStore {
 
     private val ttl = TimeUnit.DAYS.toMillis(30)
@@ -41,7 +40,7 @@ class DistrictIdentifiersDataStoreImpl @Inject constructor(
     override suspend fun isValid(): Boolean {
         val preferences = context.dataStore.data.map { preferences ->
             val timeStamp = preferences[PREFS_LAST_TIMESTAMP] ?: 0L
-            if (timeStamp == 0L) false else !timestampUtil.exceedsTimestamp(timeStamp, ttl)
+            if (timeStamp == 0L) false else !TimestampUtil.exceedsTimestamp(timeStamp, ttl)
         }.first()
         return preferences
     }

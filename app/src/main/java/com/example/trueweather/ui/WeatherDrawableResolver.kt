@@ -2,17 +2,11 @@ package com.example.trueweather.ui
 
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.R
-import javax.inject.Inject
 
-interface WeatherDrawableResolver{
-    fun getWeatherDrawable(weatherId: Int): Int?
-}
 
-class WeatherDrawableResolverImpl @Inject constructor(
-    private val timestampUtil: TimestampUtil
-):WeatherDrawableResolver {
-    override fun getWeatherDrawable(weatherId: Int): Int? {
-        if(timestampUtil.isEvening()) {
+object WeatherDrawableResolver {
+    fun getWeatherDrawable(weatherId: Int): Int? {
+        if(TimestampUtil.isEvening()) {
             return when(weatherId) {
                 1 -> R.drawable.weather_icon_day_01
                 2 -> R.drawable.weather_icon_day_02

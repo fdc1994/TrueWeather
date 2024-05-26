@@ -47,11 +47,5 @@ object NetworkModule {
             .build()
             .create(OsmService::class.java)
     }
-
-    @Provides
-    @Singleton
-    fun provideTimeStampUtil(): TimestampUtil {
-        return TimestampUtil()
-    }
 }
 
