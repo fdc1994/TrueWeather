@@ -30,6 +30,7 @@ class TimestampUtil @Inject constructor() {
     }
 
     fun isAfterToday(date: String): Boolean { return DateTime.parse(date).isAfter(currentDate) }
+    fun isEvening(): Boolean { return DateTime.now().hourOfDay().get() >= 18 }
 }
 
 class DateTimeDeserializer : JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
