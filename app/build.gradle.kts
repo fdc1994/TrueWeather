@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.viewModel)
     implementation(libs.androidx.viewModelKtx)
     implementation(libs.androidx.lifecycle)

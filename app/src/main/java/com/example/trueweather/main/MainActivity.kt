@@ -14,6 +14,8 @@ import com.example.domain.data.utils.ErrorType
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.domain.data.utils.ResultWrapper
 import com.example.domain.data.utils.collectWhenResumed
+import com.example.domain.data.utils.collectWhenStarted
+import com.example.trueweather.ui.WeatherViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -21,7 +23,11 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private var viewPagerAdapter : WeatherViewPagerAdapter = WeatherViewPagerAdapter(null)
+
     private val viewModel: MainActivityViewModel by viewModels()
+
     private val hasPermission = false
 
     private val requestPermissionLauncher =
@@ -41,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.updatePermissionState(true)
         }
 
-        collectWhenResumed(viewModel.weatherState) {
+        collectWhenStarted(viewModel.weatherState) {
             when(it) {
                 is ResultWrapper.Loading -> showLoading()
                 is ResultWrapper.Success -> {
@@ -68,8 +74,9 @@ class MainActivity : AppCompatActivity() {
         // Implement hide loading UI
     }
 
-    private fun showWeather(weatherForecastList: WeatherResult) {
-        // Implement show weather UI
+    private fun showWeather(weatherResult: WeatherResult) {
+        binding.viewPager.adapter = viewPagerAdapter
+        viewPagerAdapter.updateWeatherResult(weatherResult)
     }
 
     private fun showError(errorType: ErrorType) {
