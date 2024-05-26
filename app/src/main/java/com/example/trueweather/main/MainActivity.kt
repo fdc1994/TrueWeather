@@ -2,11 +2,16 @@ package com.example.trueweather.main
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.view.WindowManager
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.objects.WeatherResult
@@ -15,6 +20,8 @@ import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.domain.data.utils.ResultWrapper
 import com.example.domain.data.utils.collectWhenResumed
 import com.example.domain.data.utils.collectWhenStarted
+import com.example.network.utils.TimestampUtil
+import com.example.trueweather.R
 import com.example.trueweather.ui.WeatherViewPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -46,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             viewModel.updatePermissionState(true)
         }
+        setTranslucentStatusBar()
 
         collectWhenStarted(viewModel.weatherState) {
             when(it) {
@@ -59,6 +67,15 @@ class MainActivity : AppCompatActivity() {
                     showError(it.errorType)
                 }
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(TimestampUtil.isEvening()) {
+            binding.lottieAnimationView.setAnimation("animation_night.json")
+        } else {
+            binding.lottieAnimationView.setAnimation("animation_day.json")
         }
     }
 
@@ -81,5 +98,23 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(errorType: ErrorType) {
         // Implement show error UI
+    }
+
+    internal fun setTranslucentStatusBar() {
+        if (Build.VERSION.SDK_INT in 24..29) {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.decorView.systemUiVisibility =
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+        } else if (Build.VERSION.SDK_INT >= 30) {
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+            // Making status bar overlaps with the activity
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+        }
     }
 }

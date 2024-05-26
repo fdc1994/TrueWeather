@@ -23,6 +23,7 @@ android-joda = "2.12.7"
 google-gms = "21.2.0"
 lifecycle = "2.4.0"
 coroutines= "1.6.4"
+lottie= "4.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,10 +51,9 @@ hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version.ref 
 hiltCompiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastoreCore" }
-androidx-datastore-rxJava2support = { group = "androidx.datastore", name = "datastore-preferences-rxjava2", version.ref = "datastoreCore" }
-androidx-datastore-rxJava3support = { group = "androidx.datastore", name = "datastore-preferences-rxjava3", version.ref = "datastoreCore" }
 joda-datetime = { group = "net.danlew", name = "android.joda", version.ref = "android-joda" }
 google-gms = { group="com.google.android.gms", name="play-services-location", version.ref = "google-gms"}
+airbnb-lottie = { group="com.airbnb.android", name="lottie", version.ref = "lottie"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.joda.datetime)
+    implementation(libs.airbnb.lottie)
     implementation(project(":domain"))
     implementation(project(":data"))
     testImplementation(libs.junit)

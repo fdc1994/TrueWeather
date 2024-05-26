@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
+    <!-- Lottie Animation View -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieAnimationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="your_animation.json"
+        android:scaleType="centerCrop"
+        app:lottie_loop="true"
+        android:visibility="visible"/>
+
+    <!-- ViewPager -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
