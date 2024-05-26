@@ -9,6 +9,7 @@ import com.google.gson.JsonSerializer
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
 import java.lang.reflect.Type
+import java.util.Date
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -16,6 +17,9 @@ class TimestampUtil @Inject constructor() {
 
     private val currentTimeMillis: Long
         get() = DateTime.now().millis
+
+    private val currentDate: DateTime?
+        get() = DateTime.now().toDateTime()
 
     fun exceedsTimestamp(timestamp: Long, period: Long): Boolean {
         return currentTimeMillis - timestamp > period
@@ -25,9 +29,7 @@ class TimestampUtil @Inject constructor() {
         return exceedsTimestamp(timestamp, timeUnit.toMillis(period))
     }
 
-    fun isAfterToday(timestamp: Long) {
-
-    }
+    fun isAfterToday(date: String): Boolean { return DateTime.parse(date).isAfter(currentDate) }
 }
 
 class DateTimeDeserializer : JsonDeserializer<DateTime>, JsonSerializer<DateTime> {

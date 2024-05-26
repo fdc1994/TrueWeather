@@ -41,7 +41,10 @@ class WeatherResultDataStoreImpl @Inject constructor(
     }
 
     override suspend fun getWeatherForecast(): WeatherResult {
-        val preferences = context.dataStore.data.map { preferences ->
+
+        var filteredResult = WeatherResult(mutableListOf())
+
+        context.dataStore.data.map { preferences ->
             val weatherForecastListString = preferences[PREFS_WEATHER_FORECAST_LIST]
             if (weatherForecastListString.isNullOrEmpty()) {
                 WeatherResult(mutableListOf(WeatherResultList(status = WeatherFetchStatus.OTHER_ERROR)))
@@ -52,12 +55,27 @@ class WeatherResultDataStoreImpl @Inject constructor(
                 ).also { weatherResult ->
                     if (weatherResult.resultList.isEmpty()) {
                         clear()
+                    } else {
+                        val validResultList = weatherResult.resultList.mapNotNull { result ->
+                            result.weatherForecast?.let { weatherForecast ->
+                                val validData = weatherForecast.data.filter { forecast ->
+                                    !timestampUtil.isAfterToday(forecast.forecastDate)
+                                }
+                                if (validData.isNotEmpty()) {
+                                    result.copy(weatherForecast = weatherForecast.copy(data = validData))
+                                } else {
+                                    null
+                                }
+                            }
+                        }
+                        filteredResult = weatherResult.copy(resultList = validResultList)
+                        saveWeatherForecast(filteredResult)
                     }
-                    //TODO: Add time validation to fetched data
                 }
             }
         }.first()
-        return preferences
+
+        return filteredResult
     }
 
     override suspend fun saveWeatherForecast(weatherForecastList: WeatherResult): Boolean {
