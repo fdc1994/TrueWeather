@@ -3,6 +3,7 @@ package com.example.trueweather.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,7 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
     RecyclerView.Adapter<WeatherViewPagerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
         val locationInput: TextView = itemView.findViewById(R.id.location)
         val currentTemperature: TextView = itemView.findViewById(R.id.currentTemperature)
         val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
@@ -31,6 +33,7 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
         val locationWeather = weatherResult?.resultList?.get(position)
         holder.locationInput.setText(locationWeather?.address?.local)
         holder.currentTemperature.text = locationWeather?.weatherForecast?.data?.first()?.tMax
+        holder.weatherImageView.setImageResource(R.drawable.weather_icon_day_01)
         // holder.currentWeatherDescription.text = locationWeather?.weatherForecast?.data?.first()?.description
 
         holder.futureWeatherRecyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)
