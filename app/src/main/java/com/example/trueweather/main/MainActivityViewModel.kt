@@ -61,7 +61,7 @@ class MainActivityViewModel @Inject constructor(
     private suspend fun setupData(): WeatherResult {
         val weatherResult = if(hasValidConnection) {
             weatherForecastRepository.getWeatherForecast().also {
-                weatherResultDataStore.saveWeatherForecast(it)
+                weatherResultDataStore.saveWeatherForecast(it.copy(resultList = it.resultList.subList(1, it.resultList.size)))
             }
         } else {
             weatherResultDataStore.getWeatherForecast()

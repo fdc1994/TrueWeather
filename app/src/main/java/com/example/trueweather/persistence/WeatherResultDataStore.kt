@@ -8,6 +8,7 @@ import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.objects.WeatherResultList
 import com.example.network.utils.TimestampUtil
+import com.example.trueweather.utils.NetworkConnectivityManager
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,7 +27,8 @@ interface WeatherResultDataStore {
 }
 
 class WeatherResultDataStoreImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val networkConnectivityManager: NetworkConnectivityManager
 ) : WeatherResultDataStore {
 
     private val gson = GsonBuilder().create()
@@ -58,7 +60,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
                         val validResultList = weatherResult.resultList.mapNotNull { result ->
                             result.weatherForecast?.let { weatherForecast ->
                                 val validData = weatherForecast.data.filter { forecast ->
-                                    !TimestampUtil.isAfterToday(forecast.forecastDate)
+                                    !TimestampUtil.isBeforeToday(forecast.forecastDate)
                                 }
                                 if (validData.isNotEmpty()) {
                                     result.copy(weatherForecast = weatherForecast.copy(data = validData))
@@ -66,6 +68,10 @@ class WeatherResultDataStoreImpl @Inject constructor(
                                     null
                                 }
                             }
+                        }.toMutableList()
+
+                        if(!networkConnectivityManager.hasInternetConnection()) {
+                            validResultList.add(0, WeatherResultList(null, null, WeatherFetchStatus.NO_INTERNET_ERROR))
                         }
                         filteredResult = weatherResult.copy(resultList = validResultList)
                         saveWeatherForecast(filteredResult)

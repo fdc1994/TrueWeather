@@ -7,6 +7,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import org.joda.time.DateTime
+import org.joda.time.LocalDate
 import org.joda.time.format.ISODateTimeFormat
 import java.lang.reflect.Type
 import java.util.Date
@@ -18,8 +19,8 @@ object TimestampUtil{
     private val currentTimeMillis: Long
         get() = DateTime.now().millis
 
-    private val currentDate: DateTime?
-        get() = DateTime.now().toDateTime()
+    private val currentDate: LocalDate
+        get() = DateTime.now().toLocalDate()
 
     fun exceedsTimestamp(timestamp: Long, period: Long): Boolean {
         return currentTimeMillis - timestamp > period
@@ -29,7 +30,7 @@ object TimestampUtil{
         return exceedsTimestamp(timestamp, timeUnit.toMillis(period))
     }
 
-    fun isAfterToday(date: String): Boolean { return DateTime.parse(date).isAfter(currentDate) }
+    fun isBeforeToday(date: String): Boolean { return DateTime.parse(date).toLocalDate().isBefore(currentDate) }
     fun isEvening(): Boolean { return DateTime.now().hourOfDay().get() >= 18 }
 }
 
