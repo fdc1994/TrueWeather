@@ -21,7 +21,7 @@ class DistrictIdentifiersRepositoryImpl @Inject constructor(
         return withContext(Dispatchers.IO) {
             try {
                 val districtIdentifiers = districtIdentifiersDataStore.getDistrictIdentifiers()
-                if (districtIdentifiers?.data?.isEmpty() == true) {
+                if (districtIdentifiers?.data.isNullOrEmpty()) {
                     val districtIdentifiersRemote = ipmaService.getDistrictIdentifiers()
                     districtIdentifiersDataStore.saveDistrictIdentifiers(districtIdentifiersRemote)
                     districtIdentifiersRemote
