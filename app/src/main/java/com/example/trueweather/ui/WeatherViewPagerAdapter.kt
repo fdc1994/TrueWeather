@@ -1,57 +1,58 @@
 package com.example.trueweather.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
+import com.example.trueweather.ui.viewholders.ErrorViewHolder
+import com.example.trueweather.ui.viewholders.SuccessViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
-import com.google.android.material.appbar.AppBarLayout
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
-    RecyclerView.Adapter<WeatherViewPagerAdapter.ViewHolder>() {
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
-        val locationInput: TextView = itemView.findViewById(R.id.location)
-        val currentTemperature: TextView = itemView.findViewById(R.id.currentTemperature)
-        val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
-        val futureWeatherRecyclerView: RecyclerView = itemView.findViewById(R.id.futureWeatherRecyclerView)
-        val appBarLayout: AppBarLayout = itemView.findViewById(R.id.appBarLayout)
-        val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
-    }
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.weather_page_layout, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val locationWeather = weatherResult?.resultList?.get(position)
-        holder.locationInput.setText(locationWeather?.address?.local)
-        holder.currentTemperature.text = locationWeather?.weatherForecast?.data?.first()?.tMax
-        WeatherDrawableResolver.getWeatherDrawable(locationWeather?.weatherForecast?.data?.first()?.idWeatherType ?: -1)
-        ?.let { holder.weatherImageView.setImageResource(it) }
-        // holder.currentWeatherDescription.text = locationWeather?.weatherForecast?.data?.first()?.description
-
-        holder.futureWeatherRecyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)
-        holder.futureWeatherRecyclerView.adapter = locationWeather?.weatherForecast?.data?.let {
-            FutureWeatherAdapter(it.subList(1, it.size))
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ViewType.VIEW_TYPE_SUCCESS.ordinal -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.weather_page_layout, parent, false)
+                SuccessViewHolder(view)
+            } else -> {
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.weather_error_page_layout, parent, false)
+                ErrorViewHolder(view)
+            }
         }
-        holder.toolbar.title = locationWeather?.address?.local
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val locationWeather = weatherResult?.resultList?.get(position)
+        when (holder) {
+            is SuccessViewHolder -> {
+                holder.bind(locationWeather)
+            }
+            is ErrorViewHolder -> {
+                holder.bind(locationWeather)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return weatherResult?.resultList?.size ?: 0
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val status = weatherResult?.resultList?.get(position)?.status ?: WeatherFetchStatus.OTHER_ERROR
+        return when (status) {
+            WeatherFetchStatus.SUCCESS,
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> ViewType.VIEW_TYPE_SUCCESS.ordinal
+            WeatherFetchStatus.PERMISSION_ERROR -> ViewType.VIEW_TYPE_PERMISSION_ERROR.ordinal
+            WeatherFetchStatus.NETWORK_ERROR -> ViewType.VIEW_TYPE_NETWORK_ERROR.ordinal
+            WeatherFetchStatus.NO_INTERNET_ERROR -> ViewType.VIEW_TYPE_NO_INTERNET_ERROR.ordinal
+            WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> ViewType.VIEW_TYPE_NOT_IN_COUNTRY_ERROR.ordinal
+            WeatherFetchStatus.OTHER_ERROR -> ViewType.VIEW_TYPE_GENERIC_ERROR.ordinal
+        }
     }
 
     // Method to update the data using DiffUtil
@@ -64,6 +65,15 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
 
         weatherResult = newWeatherResult
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    private enum class ViewType {
+        VIEW_TYPE_SUCCESS,
+        VIEW_TYPE_PERMISSION_ERROR,
+        VIEW_TYPE_NOT_IN_COUNTRY_ERROR,
+        VIEW_TYPE_NETWORK_ERROR,
+        VIEW_TYPE_NO_INTERNET_ERROR,
+        VIEW_TYPE_GENERIC_ERROR
     }
 }
 
