@@ -40,13 +40,16 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorMessageTextView: TextView = itemView.findViewById(R.id.errorMessage)
     private val retryButton: AppCompatButton = itemView.findViewById(R.id.retryButton)
+    private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
+
 
     fun bind(locationWeather: WeatherResultList?) {
         toolbar.title = locationWeather?.address?.local
         when(locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
                 errorMessageTextView.text = "Para ter acesso à sua localização deve permitir o Acesso no sistema"
+                errorImageView.setImageResource(R.drawable.baseline_back_hand_24)
                 retryButton.run {
                     text = "Conceder Permissões"
                 }
@@ -54,25 +57,29 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             WeatherFetchStatus.NETWORK_ERROR -> {
                 errorMessageTextView.text = "Não foi possível obter informação para esta localização"
+                errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
-                    text = "Conceder Permissões"
+                    text = "Tentar de novo"
                 }
 
             }
             WeatherFetchStatus.NO_INTERNET_ERROR -> {
                 errorMessageTextView.text = "Não foi possível estabelecer conexão com a internet"
+                errorImageView.setImageResource(R.drawable.baseline_cell_wifi_24)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
             }
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> {
                 errorMessageTextView.text = "Não foi possível determinar a sua localização em Portugal.\nA localização atual apenas funciona em Portugal."
+                errorImageView.setImageResource(R.drawable.baseline_airplanemode_active_24)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
             }
             else -> {
                 errorMessageTextView.text = "Ocorreu um erro inesperado. Por favor tente novamente mais tarde."
+                errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
