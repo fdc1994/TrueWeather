@@ -14,22 +14,28 @@ import com.example.trueweather.ThemeManager
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
-    private val currentTemperature: TextView = itemView.findViewById(R.id.currentTemperature)
+    private val maxTemperatureTv: TextView = itemView.findViewById(R.id.maxTemp)
+    private val minTemperatureTv: TextView = itemView.findViewById(R.id.minTemp)
     private val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
     private val futureWeatherRecyclerView: RecyclerView = itemView.findViewById(R.id.futureWeatherRecyclerView)
     private val headerFutureDay: TextView = itemView.findViewById(R.id.header_future_day)
     private val headerFutureTemperature: TextView = itemView.findViewById(R.id.header_future_temperature)
-    private val appBarLayout: AppBarLayout = itemView.findViewById(R.id.appBarLayout)
+    private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
     fun bind(locationWeather: WeatherResultList?) {
         toolbar.title = locationWeather?.address?.local
-        currentTemperature.text = locationWeather?.weatherForecast?.data?.first()?.tMax
-        WeatherDrawableResolver.getWeatherDrawable(locationWeather?.weatherForecast?.data?.first()?.idWeatherType ?: -1)
-            ?.let { weatherImageView.setImageResource(it) }
+
+        with(locationWeather?.weatherForecast?.data?.first()) {
+            minTemperatureTv.text = "${this?.tMin}ºC"
+            maxTemperatureTv.text = "${this?.tMax}ºC"
+            WeatherDrawableResolver.getWeatherDrawable(this?.idWeatherType ?: -1)?.let { weatherImageView.setImageResource(it) }
+            currentWeatherDescription.text = this?.weatherDescription
+        }
 
         futureWeatherRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
         futureWeatherRecyclerView.adapter = locationWeather?.weatherForecast?.data?.let {
@@ -41,10 +47,11 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
     private fun setTheme() {
         val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
-        currentTemperature.setTextColor(themedColor)
         currentWeatherDescription.setTextColor(themedColor)
         headerFutureDay.setTextColor(themedColor)
         headerFutureTemperature.setTextColor(themedColor)
+        appBarLayout.setCollapsedTitleTextColor(themedColor)
+        appBarLayout.setExpandedTitleColor(themedColor)
     }
 }
 
@@ -52,6 +59,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorMessageTextView: TextView = itemView.findViewById(R.id.errorMessage)
     private val retryButton: AppCompatButton = itemView.findViewById(R.id.retryButton)
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
+    private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
 
@@ -97,4 +105,12 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
         }
     }
+
+    private fun setTheme() {
+        val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
+        errorMessageTextView.setTextColor(themedColor)
+        appBarLayout.setCollapsedTitleTextColor(themedColor)
+        appBarLayout.setExpandedTitleColor(themedColor)
+    }
 }
+

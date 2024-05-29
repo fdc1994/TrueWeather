@@ -49,29 +49,64 @@
             android:padding="16dp">
 
             <!-- Location and Current Weather Section -->
+            <TextView
+                android:id="@+id/currentWeatherDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Partly cloudy"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:padding="8dp" />
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/currentTemperature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="22°C"
-                    android:textSize="32sp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="8dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="7">
 
-                <TextView
-                    android:id="@+id/currentWeatherDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Partly cloudy"
-                    android:textSize="18sp"
-                    android:layout_gravity="center_horizontal"
-                    android:padding="8dp" />
+                    <TextView
+                        android:id="@+id/minTemp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:text="18°C"
+                        android:layout_weight="3"
+                        android:textAlignment="center"
+                        android:textSize="32sp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="32sp"
+                        android:textColor="#0000FF" /> <!-- Blue color for min temp -->
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_weight="4"
+                        android:layout_height="8dp"
+                        android:background="@drawable/temp_gradient"
+                        />
+
+                    <TextView
+                        android:id="@+id/maxTemp"
+                        android:layout_width="0dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_height="wrap_content"
+                        android:text="25°C"
+                        android:textAlignment="center"
+                        android:layout_weight="3"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="32sp"
+                        android:textSize="32sp"
+                        android:textColor="#FFA500" /> <!-- Orange color for max temp -->
+                </LinearLayout>
             </LinearLayout>
 
             <!--  Forecast Section -->

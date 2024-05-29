@@ -25,6 +25,7 @@ data class WeatherData(
     val tMax: String,
     val predWindDir: String,
     val idWeatherType: Int,
+    val weatherDescription: String,
     val classWindSpeed: Int,
     val classPrecInt: Int?,
     val longitude: String,

@@ -4,6 +4,7 @@ import com.example.domain.data.objects.WeatherData
 import com.example.domain.data.objects.WeatherForecast
 import com.example.network.data.WeatherDataDTO
 import com.example.network.data.WeatherForecastDTO
+import com.example.network.data.WeatherType
 import javax.inject.Inject
 
 interface WeatherForecastMappers {
@@ -32,6 +33,7 @@ class WeatherForecastMappersImpl @Inject constructor() : WeatherForecastMappers 
         this.tMax,
         this.predWindDir,
         this.idWeatherType,
+        WeatherType.fromId(this.idWeatherType).descWeatherTypePT,
         this.classWindSpeed,
         this.classPrecInt,
         this.longitude,
