@@ -5,4 +5,75 @@
         <!-- Support library compatibility -->
         <item name="windowActionBarOverlay">true</item>
     </style>
+    <!-- Text Styles -->
+    <!-- Caption Text -->
+    <style name="TextCaption">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">12sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- Normal Text -->
+    <style name="TextNormal">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">14sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- Large Text -->
+    <style name="TextLarge">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">24sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- Large Text -->
+    <style name="TextExtraLarge">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">32sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- Bold Text -->
+    <style name="TextBold">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">14sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- Headings -->
+    <!-- H1 -->
+    <style name="TextH1">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">24sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- H2 -->
+    <style name="TextH2">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">20sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- H3 -->
+    <style name="TextH3">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">18sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- H4 -->
+    <style name="TextH4">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">16sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
+    <!-- H5 -->
+    <style name="TextH5">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">14sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
 </resources>
