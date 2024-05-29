@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/splash_logo"
+        android:state_first="true"
+        android:state_selected="true"/>
+
+    <item android:drawable="@drawable/weather_icon_day_01"
+        android:state_first="true"
+        android:state_selected="false"/>
+
+
+    <item android:drawable="@drawable/selected_dot_layout"
+        android:state_first="false"
+        android:state_selected="true"/>
+
+    <item android:drawable="@drawable/default_dot"
+        android:state_selected="false"/>
+</selector>

@@ -3,10 +3,13 @@ package com.example.trueweather.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.media.Image
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +26,7 @@ import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.R
 import com.example.trueweather.ui.WeatherViewPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -92,7 +96,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showWeather(weatherResult: WeatherResult) {
-        binding.viewPager.adapter = viewPagerAdapter
+        if(binding.viewPager.adapter == null) {
+            binding.viewPager.adapter = viewPagerAdapter
+        }
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tabLayout, position ->
+
+        }.attach()
         viewPagerAdapter.updateWeatherResult(weatherResult)
     }
 
@@ -100,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         // Implement show error UI
     }
 
-    internal fun setTranslucentStatusBar() {
+    private fun setTranslucentStatusBar() {
         if (Build.VERSION.SDK_INT in 24..29) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

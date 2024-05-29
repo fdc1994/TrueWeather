@@ -25,4 +25,14 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:tabBackground="@drawable/tab_selector"
+        android:layout_gravity="bottom"
+        app:tabIndicatorHeight="0dp"
+        app:tabGravity="center"
+        android:layout_marginBottom="50dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
