@@ -33,8 +33,8 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTemperatureTv.text = "${this?.tMin}ºC"
             maxTemperatureTv.text = "${this?.tMax}ºC"
-            WeatherDrawableResolver.getWeatherDrawable(this?.idWeatherType ?: -1)?.let { weatherImageView.setImageResource(it) }
-            currentWeatherDescription.text = this?.weatherDescription
+            WeatherDrawableResolver.getWeatherDrawable(this?.weatherType?.id ?: -1)?.let { weatherImageView.setImageResource(it) }
+            currentWeatherDescription.text = this?.weatherType?.descWeatherTypePT
         }
 
         futureWeatherRecyclerView.layoutManager = LinearLayoutManager(itemView.context)

@@ -22,7 +22,7 @@ class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
             dayOfTheWeek.text = weatherData.forecastDate
             minTemp.text = "${weatherData.tMin}ºC"
             maxTemp.text = "${weatherData.tMax}ºC"
-            WeatherDrawableResolver.getWeatherDrawable(weatherData.idWeatherType, overrideTime = true)?.let { weatherIcon.setImageResource(it) }
+            WeatherDrawableResolver.getWeatherDrawable(weatherData.weatherType.id, overrideTime = true)?.let { weatherIcon.setImageResource(it) }
             setTheme()
         }
         private fun setTheme() {

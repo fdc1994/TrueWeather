@@ -18,7 +18,7 @@ data class WeatherDataDTO(
     val predWindDir: String,
     val idWeatherType: Int,
     val classWindSpeed: Int,
-    val classPrecInt: Int?,
+    val classPrecInt: Int,
     val longitude: String,
     val forecastDate: String,
     val latitude: String

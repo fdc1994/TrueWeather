@@ -1,5 +1,8 @@
 package com.example.domain.data.objects
 
+import com.example.network.data.PrecipitationIntensity
+import com.example.network.data.WeatherType
+import com.example.network.data.WindSpeed
 import java.io.Serializable
 
 data class WeatherResult(
@@ -24,10 +27,9 @@ data class WeatherData(
     val tMin: String,
     val tMax: String,
     val predWindDir: String,
-    val idWeatherType: Int,
-    val weatherDescription: String,
-    val classWindSpeed: Int,
-    val classPrecInt: Int?,
+    val weatherType: WeatherType,
+    val classWindSpeed: WindSpeed,
+    val classPrecInt: PrecipitationIntensity,
     val longitude: String,
     val forecastDate: String,
     val latitude: String
