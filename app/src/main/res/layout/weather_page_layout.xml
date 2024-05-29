@@ -16,8 +16,8 @@
             android:id="@+id/collapsingToolbarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimAnimationDuration="200">
 
             <ImageView
@@ -53,10 +53,11 @@
                 android:id="@+id/currentWeatherDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Partly cloudy"
-                android:textSize="25sp"
                 android:layout_gravity="center_horizontal"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:text="Partly cloudy"
+                style="@style/TextLarge"
+                android:textSize="25sp" />
 
 
             <LinearLayout
@@ -68,44 +69,43 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
+                    android:layout_weight="7"
                     android:gravity="center"
-                    android:layout_weight="7">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/minTemp"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="5dp"
-                        android:text="18°C"
                         android:layout_weight="3"
-                        android:textAlignment="center"
-                        android:textSize="32sp"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="20sp"
                         android:autoSizeMaxTextSize="32sp"
-                        android:textColor="#0000FF" /> <!-- Blue color for min temp -->
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeTextType="uniform"
+                        android:text="18°C"
+                        android:textAlignment="center"
+                        android:textColor="#0000FF"
+                        style="@style/TextExtraLarge" /> <!-- Blue color for min temp -->
 
                     <ImageView
                         android:layout_width="0dp"
-                        android:layout_weight="4"
                         android:layout_height="8dp"
-                        android:background="@drawable/temp_gradient"
-                        />
+                        android:layout_weight="4"
+                        android:background="@drawable/temp_gradient" />
 
                     <TextView
                         android:id="@+id/maxTemp"
                         android:layout_width="0dp"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_weight="3"
+                        android:autoSizeMaxTextSize="32sp"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeTextType="uniform"
                         android:text="25°C"
                         android:textAlignment="center"
-                        android:layout_weight="3"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="20sp"
-                        android:autoSizeMaxTextSize="32sp"
-                        android:textSize="32sp"
-                        android:textColor="#FFA500" /> <!-- Orange color for max temp -->
+                        android:textColor="#FFA500"
+                        style="@style/TextExtraLarge" /> <!-- Orange color for max temp -->
                 </LinearLayout>
             </LinearLayout>
 
@@ -113,42 +113,137 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/header_future_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dia"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
                     android:layout_weight="3"
-                    android:textAlignment="center" />
+                    android:text="Dia"
+                    android:textAlignment="center"
+                    style="@style/TextH2"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:layout_weight="2"/>
+                    android:layout_weight="2"
+                    style="" />
 
                 <TextView
                     android:id="@+id/header_future_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
                     android:layout_weight="7"
+                    android:text="Temperatura"
                     android:textAlignment="center"
-                    android:text="Temperatura"/> <!-- Orange color for max temp -->
+                    style="@style/TextH2" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/futureWeatherRecyclerView"
-                android:background="@drawable/rounded_transparent_grey_background"
-                android:layout_marginVertical="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/rounded_transparent_grey_background"
                 android:scrollbars="vertical" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/rounded_transparent_grey_background">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="5dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/header_precipitation"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="start|center"
+                        android:text="Precipitação"
+                        style="@style/TextCaption"
+                        app:drawableStartCompat="@drawable/water_drop_icon"
+                        android:drawablePadding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/precipitation_percentage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:text="20%"
+                        style="@style/TextLarge"
+                        android:drawablePadding="8dp"/>
+                    <TextView
+                        android:id="@+id/precipitation_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        style="@style/TextNormal"
+                        android:text="Muito Forte nas próximas 24h"
+                        android:drawablePadding="8dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:padding="18dp"
+                android:background="@drawable/rounded_transparent_grey_background">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="10dp"
+                    android:paddingHorizontal="5dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/header_wind"
+                        style="@style/TextCaption"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="start|center_vertical"
+                        android:text="Vento"
+                        app:drawableStartCompat="@drawable/wind_icon"
+                        android:drawablePadding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/wind_direction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        android:text="NE"
+                        android:drawableEnd="@drawable/compass_icon"
+                        style="@style/TextLarge"
+                        android:drawablePadding="8dp"/>
+
+                    <TextView
+                        android:id="@+id/wind_intensity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center"
+                        style="@style/TextNormal"
+                        android:text="Muito Forte nas próximas 24h"
+                        android:drawablePadding="8dp"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
