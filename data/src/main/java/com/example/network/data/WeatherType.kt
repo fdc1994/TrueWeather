@@ -35,6 +35,30 @@ enum class WeatherType(val id: Int, val descWeatherTypeEN: String, val descWeath
     RAIN_AND_SNOW2(30, "Rain and snow", "Chuva e Neve");
 
     companion object {
-        fun fromId(id: Int): WeatherType = values().firstOrNull { it.id == id } ?: UNKNOWN
+        fun fromId(id: Int): WeatherType = entries.firstOrNull { it.id == id } ?: UNKNOWN
+    }
+}
+
+enum class PrecipitationIntensity(val classPrecInt: Int, val descClassPrecIntEN: String, val descClassPrecIntPT: String) {
+    UNKNOWN(-99, "--", "---"),
+    NO_PRECIPITATION(0, "No precipitation", "Sem precipitação"),
+    WEAK(1, "Weak", "Fraco"),
+    MODERATE(2, "Moderate", "Moderado"),
+    STRONG(3, "Strong", "Forte");
+
+    companion object {
+        fun fromClassPrecInt(classPrecInt: Int): PrecipitationIntensity = entries.firstOrNull { it.classPrecInt == classPrecInt } ?: UNKNOWN
+    }
+}
+
+enum class WindSpeed(val classWindSpeed: Int, val descClassWindSpeedDailyEN: String, val descClassWindSpeedDailyPT: String) {
+    UNKNOWN(-99, "--", "---"),
+    WEAK(1, "Weak", "Fraco"),
+    MODERATE(2, "Moderate", "Moderado"),
+    STRONG(3, "Strong", "Forte"),
+    VERY_STRONG(4, "Very strong", "Muito forte");
+
+    companion object {
+        fun fromClassWindSpeed(classWindSpeed: Int): WindSpeed = entries.firstOrNull { it.classWindSpeed == classWindSpeed } ?: UNKNOWN
     }
 }

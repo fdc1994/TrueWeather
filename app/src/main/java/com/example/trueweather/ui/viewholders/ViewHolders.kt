@@ -59,7 +59,6 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorMessageTextView: TextView = itemView.findViewById(R.id.errorMessage)
     private val retryButton: AppCompatButton = itemView.findViewById(R.id.retryButton)
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
-    private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
 
@@ -104,13 +103,12 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 }
             }
         }
+        setTheme()
     }
 
     private fun setTheme() {
         val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
         errorMessageTextView.setTextColor(themedColor)
-        appBarLayout.setCollapsedTitleTextColor(themedColor)
-        appBarLayout.setExpandedTitleColor(themedColor)
     }
 }
 
