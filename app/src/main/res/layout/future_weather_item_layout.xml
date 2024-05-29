@@ -1,38 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:orientation="horizontal"
     android:gravity="center"
     android:padding="8dp">
-
     <TextView
-        android:id="@+id/day"
+        android:id="@+id/dayOfWeek"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Monday"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/minMaxTemp"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="18°C / 25°C"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/weatherDescription"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Sunny"
+        android:text="2024-02-20"
+        android:layout_weight="3"
         android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/weatherIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:layout_weight="2"
         android:src="@drawable/weather_icon_day_01"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="7">
+
+        <TextView
+            android:id="@+id/minTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18°C"
+            android:layout_marginEnd="5dp"
+            android:textSize="16sp"
+            android:textColor="#0000FF" /> <!-- Blue color for min temp -->
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+            android:background="@drawable/temp_gradient"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/maxTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="25°C"
+            android:textSize="16sp"
+            android:textColor="#FFA500" /> <!-- Orange color for max temp -->
+    </LinearLayout>
+
 </LinearLayout>

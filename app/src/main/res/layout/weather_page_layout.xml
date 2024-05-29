@@ -55,13 +55,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter location"
-                    android:padding="8dp" />
-
-                <TextView
                     android:id="@+id/currentTemperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,18 +74,43 @@
                     android:padding="8dp" />
             </LinearLayout>
 
-            <!-- Future Weather Forecast Section -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!--  Forecast Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Next Days"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:padding="8dp" />
+                android:orientation="horizontal"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/header_future_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dia"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_weight="3"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_weight="2"/>
+
+                <TextView
+                    android:id="@+id/header_future_temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_weight="7"
+                    android:textAlignment="center"
+                    android:text="Temperatura"/> <!-- Orange color for max temp -->
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/futureWeatherRecyclerView"
                 android:background="@drawable/rounded_transparent_grey_background"
+                android:layout_marginVertical="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scrollbars="vertical" />

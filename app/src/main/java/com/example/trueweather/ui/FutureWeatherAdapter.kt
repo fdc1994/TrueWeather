@@ -12,10 +12,11 @@ class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
     RecyclerView.Adapter<FutureWeatherAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val day: TextView = itemView.findViewById(R.id.day)
-        val minMaxTemp: TextView = itemView.findViewById(R.id.minMaxTemp)
-        val weatherDescription: TextView = itemView.findViewById(R.id.weatherDescription)
         val weatherIcon: ImageView = itemView.findViewById(R.id.weatherIcon)
+        val dayOfTheWeek: TextView = itemView.findViewById(R.id.dayOfWeek)
+        val minTemp: TextView = itemView.findViewById(R.id.minTemp)
+        val maxTemp: TextView = itemView.findViewById(R.id.maxTemp)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,11 +27,9 @@ class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val forecast = forecastList[position]
-        holder.day.text = forecast.forecastDate
-        holder.minMaxTemp.text = "${forecast.tMin} / ${forecast.tMax}"
-        holder.weatherDescription.text = forecast.precipitaProb
-
-        // Set the end drawable
+        holder.dayOfTheWeek.text = forecast.forecastDate
+        holder.minTemp.text = forecast.tMin
+        holder.maxTemp.text = forecast.tMax
         WeatherDrawableResolver.getWeatherDrawable(forecast.idWeatherType, overrideTime = true)?.let { holder.weatherIcon.setImageResource(it) }
     }
 

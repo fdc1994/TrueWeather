@@ -10,21 +10,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResultList
 import com.example.trueweather.R
+import com.example.trueweather.ThemeManager
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
 import com.google.android.material.appbar.AppBarLayout
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
-    private val locationInput: TextView = itemView.findViewById(R.id.location)
     private val currentTemperature: TextView = itemView.findViewById(R.id.currentTemperature)
     private val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
     private val futureWeatherRecyclerView: RecyclerView = itemView.findViewById(R.id.futureWeatherRecyclerView)
+    private val headerFutureDay: TextView = itemView.findViewById(R.id.header_future_day)
+    private val headerFutureTemperature: TextView = itemView.findViewById(R.id.header_future_temperature)
     private val appBarLayout: AppBarLayout = itemView.findViewById(R.id.appBarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
     fun bind(locationWeather: WeatherResultList?) {
-        locationInput.setText(locationWeather?.address?.local)
+        toolbar.title = locationWeather?.address?.local
         currentTemperature.text = locationWeather?.weatherForecast?.data?.first()?.tMax
         WeatherDrawableResolver.getWeatherDrawable(locationWeather?.weatherForecast?.data?.first()?.idWeatherType ?: -1)
             ?.let { weatherImageView.setImageResource(it) }
@@ -34,6 +36,15 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             FutureWeatherAdapter(it.subList(1, it.size))
         }
         toolbar.title = locationWeather?.address?.local
+
+        setTheme()
+    }
+    private fun setTheme() {
+        val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
+        currentTemperature.setTextColor(themedColor)
+        currentWeatherDescription.setTextColor(themedColor)
+        headerFutureDay.setTextColor(themedColor)
+        headerFutureTemperature.setTextColor(themedColor)
     }
 }
 
