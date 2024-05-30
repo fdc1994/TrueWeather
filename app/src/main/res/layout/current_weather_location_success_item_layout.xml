@@ -99,11 +99,11 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/add_button"
+            android:id="@+id/remove_button"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Adicionar"/>
+            android:text="Remover"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

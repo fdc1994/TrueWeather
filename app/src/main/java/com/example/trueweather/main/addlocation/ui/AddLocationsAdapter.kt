@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
-import com.example.trueweather.ui.viewholders.AddLocationsErrorViewHolder
-import com.example.trueweather.ui.viewholders.AddLocationsSuccessViewHolder
+import com.example.trueweather.ui.viewholders.CurrentLocationsErrorViewHolder
+import com.example.trueweather.ui.viewholders.CurrentLocationsSuccessViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
 
 class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
@@ -18,13 +18,13 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
         return when(viewType) {
             ViewType.VIEW_TYPE_SUCCESS.ordinal,
             ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.add_weather_success_item_layout, parent, false)
-                AddLocationsSuccessViewHolder(view)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.current_weather_location_success_item_layout, parent, false)
+                CurrentLocationsSuccessViewHolder(view)
             }
 
             else -> {
-                val view = LayoutInflater.from(parent.context).inflate(R.layout.add_weather_error_item_layout, parent, false)
-                AddLocationsErrorViewHolder(view)
+                val view = LayoutInflater.from(parent.context).inflate(R.layout.current_weather_location_error_item_layout, parent, false)
+                CurrentLocationsErrorViewHolder(view)
             }
         }
     }
@@ -32,8 +32,8 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val locationWeather = weatherResult?.resultList?.get(position)
         when(holder){
-            is AddLocationsSuccessViewHolder -> holder.bind(locationWeather)
-            is AddLocationsErrorViewHolder -> holder.bind(position == 0)
+            is CurrentLocationsSuccessViewHolder -> holder.bind(locationWeather)
+            is CurrentLocationsErrorViewHolder -> holder.bind(position == 0)
         }
     }
 

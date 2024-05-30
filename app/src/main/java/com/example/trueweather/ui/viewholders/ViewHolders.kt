@@ -14,7 +14,6 @@ import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
-import com.example.trueweather.utils.setGone
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -128,14 +127,14 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
 
-class AddLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CurrentLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
     private val locationTextView: TextView = itemView.findViewById(R.id.location)
     private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherIcon)
     private val minTempTextView: TextView = itemView.findViewById(R.id.minTemp)
     private val maxTempTextView: TextView = itemView.findViewById(R.id.maxTemp)
     private val weatherDescriptionTextView: TextView = itemView.findViewById(R.id.weather_description)
-    private val addButton: Button = itemView.findViewById(R.id.add_button)
+    private val removeButton: Button = itemView.findViewById(R.id.add_button)
 
     fun bind(locationWeather: WeatherResultList?) {
         val isCurrentLocation = locationWeather?.status == WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
@@ -152,17 +151,17 @@ class AddLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(it
             currentLocationLabel.visibility = View.GONE
         }
         if(locationWeather?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
-            addButton.visibility = View.GONE
+            removeButton.visibility = View.GONE
         } else {
-            addButton.visibility = View.VISIBLE
-            addButton.setOnClickListener {
+            removeButton.visibility = View.VISIBLE
+            removeButton.setOnClickListener {
 
             }
         }
 
     }
 }
-class AddLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class CurrentLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
     fun bind(isFirstLocation: Boolean) {
         if (isFirstLocation) {
