@@ -2,8 +2,8 @@ package com.example.trueweather.di
 
 import com.example.network.persistence.DistrictIdentifiersDataStore
 import com.example.network.persistence.DistrictIdentifiersDataStoreImpl
-import com.example.trueweather.persistence.UserPreferencesDataStore
-import com.example.trueweather.persistence.UserPreferencesDataStoreImpl
+import com.example.network.persistence.UserPreferencesDataStore
+import com.example.network.persistence.UserPreferencesDataStoreImpl
 import com.example.trueweather.persistence.WeatherResultDataStore
 import com.example.trueweather.persistence.WeatherResultDataStoreImpl
 import dagger.Binds
@@ -22,9 +22,9 @@ interface GlobalNetworkModule {
 
     @Binds
     @Singleton
-    fun bindWeatheForecastDataStore(impl: WeatherResultDataStoreImpl): WeatherResultDataStore
+    fun bindWeatherForecastDataStore(impl: WeatherResultDataStoreImpl): WeatherResultDataStore
 
     @Binds
     @Singleton
-    fun binduserPreferencesDataStore(impl: UserPreferencesDataStoreImpl): UserPreferencesDataStore
+    fun bindUserPreferencesDataStore(impl: UserPreferencesDataStoreImpl): UserPreferencesDataStore
 }

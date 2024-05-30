@@ -21,7 +21,7 @@ import javax.inject.Inject
 interface LocalizationManager {
     suspend fun getLastKnownLocation(): LocationData?
     suspend fun mapAddressNameToDistrictIdentifier(city: String): LocationData?
-    suspend fun mapGlobalIdToDistrictIdentifier(globalId: Int): LocationData?
+    suspend fun mapGlobalIdToDistrictIdentifier(globalId: String): LocationData?
     fun checkPermissions(): Boolean
 }
 
@@ -73,11 +73,11 @@ class LocalizationManagerImpl @Inject constructor(
         }
     }
 
-    override suspend fun mapGlobalIdToDistrictIdentifier(globalId: Int): LocationData? {
+    override suspend fun mapGlobalIdToDistrictIdentifier(globalId: String): LocationData? {
         return withContext(Dispatchers.IO) {
             val response = districtIdentifiersRepository.getDistrictIdentifiersList()
             val districtIdentifiers = response?.let { districtIdentifiersMappers.mapDistrictIdentifiersResponse(it) }
-            districtIdentifiers?.data?.find { it.globalIdLocal == globalId }
+            districtIdentifiers?.data?.find { it.globalIdLocal.toString() == globalId }
         }
     }
 }

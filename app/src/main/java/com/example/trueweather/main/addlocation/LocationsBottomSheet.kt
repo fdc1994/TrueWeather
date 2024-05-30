@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.collectWhenCreated
@@ -30,7 +31,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
         collectWhenCreated(viewModel.locationsState) {
             when(it) {
                 LocationsBottomSheetViewModel.LocationsState.Error -> showError()
-                LocationsBottomSheetViewModel.LocationsState.Loading -> showLoading()
+                LocationsBottomSheetViewModel.LocationsState.Loading -> showGlobalLoading()
                 is LocationsBottomSheetViewModel.LocationsState.UserLocationsSuccess -> showUserLocations(it.userLocationsResult)
                 is LocationsBottomSheetViewModel.LocationsState.SearchLocationsSuccess -> showSearchedLocations(it.searchLocationsSuccess)
             }
@@ -39,11 +40,12 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
     }
 
     private fun showUserLocations(weatherResult: WeatherResult) {
-
+        showLocations(false)
+        Toast.makeText(context, weatherResult.resultList.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun showSearchedLocations(weatherResult: WeatherResult) {
-
+        showLocations(true)
     }
 
     private fun showError() {
@@ -52,7 +54,22 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
         binding.locationsView.setGone(true)
     }
 
-    private fun showLoading() {
+    private fun hideError() {
+        showGlobalLoading()
+    }
+
+    private fun showLocationsLoading() {
+        binding.progressBar.setGone(false)
+        binding.locationsView.setGone(true)
+    }
+
+    private fun showLocations(isSearchLocations: Boolean) {
+        binding.progressBar.setGone(true)
+        binding.locationsView.setGone(false)
+        if(isSearchLocations) binding.saveButton.setGone(true) else binding.saveButton.setGone(false)
+    }
+
+    private fun showGlobalLoading() {
         binding.progressBar.setGone(false)
         binding.locationsView.setGone(true)
         binding.errorView.setGone(true)

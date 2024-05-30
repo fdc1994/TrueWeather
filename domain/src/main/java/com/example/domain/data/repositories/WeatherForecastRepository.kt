@@ -6,7 +6,10 @@ import com.example.domain.data.objects.LocationData
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.objects.WeatherResultList
+import com.example.network.data.UserPreferences
 import com.example.network.interfaces.IPMAService
+import com.example.network.persistence.DistrictIdentifiersDataStore
+import com.example.network.persistence.UserPreferencesDataStore
 import javax.inject.Inject
 
 interface WeatherForecastRepository {
@@ -17,12 +20,13 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     private val ipmaService: IPMAService,
     private val weatherForecastMappers: WeatherForecastMappers,
     private val localizationManager: LocalizationManager,
+    private val userpreferencesDataStore: UserPreferencesDataStore
 ) : WeatherForecastRepository {
 
     override suspend fun getWeatherForecast(): WeatherResult {
         val weatherResultList = mutableListOf<WeatherResultList>()
         getCurrentLocationDataOrError(weatherResultList)
-        getSavedLocationsWeatherForecast(weatherResultList, mutableListOf(1010500,1020500))
+        getSavedLocationsWeatherForecast(weatherResultList)
         return WeatherResult(weatherResultList)
     }
 
@@ -49,8 +53,11 @@ class WeatherForecastRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun getSavedLocationsWeatherForecast(weatherResult: MutableList<WeatherResultList>, locationsIds: List<Int>) {
-        locationsIds.forEach {
+    private suspend fun getSavedLocationsWeatherForecast(weatherResult: MutableList<WeatherResultList>) {
+        userpreferencesDataStore.saveUserPreferences(UserPreferences(mutableListOf("1010500","1020500")))
+        val locationIds = userpreferencesDataStore.getUserPreferences().locationsList
+
+        locationIds.forEach {
             val locationData = localizationManager.mapGlobalIdToDistrictIdentifier(it)
             if(locationData?.globalIdLocal != null) {
                 weatherResult.add(
