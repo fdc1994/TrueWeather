@@ -8,9 +8,11 @@ import com.google.gson.JsonSerializationContext
 import com.google.gson.JsonSerializer
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.ISODateTimeFormat
 import java.lang.reflect.Type
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -30,8 +32,17 @@ object TimestampUtil{
         return exceedsTimestamp(timestamp, timeUnit.toMillis(period))
     }
 
+    fun getDayOfWeekInPortuguese(dateTime: DateTime): String {
+        val formatter = DateTimeFormat.forPattern("EEEE").withLocale(Locale("pt", "PT"))
+        return formatter.print(dateTime)
+    }
+
     fun isBeforeToday(date: String): Boolean { return DateTime.parse(date).toLocalDate().isBefore(currentDate) }
-    fun isEvening(): Boolean { return DateTime.now().hourOfDay().get() >= 18 }
+    fun isEvening(): Boolean {
+        val currentHour = DateTime.now().hourOfDay().get()
+        return currentHour >= 18 || currentHour < 6
+    }
+
 }
 
 class DateTimeDeserializer : JsonDeserializer<DateTime>, JsonSerializer<DateTime> {

@@ -3,43 +3,37 @@ package com.example.trueweather.main
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.media.Image
 import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.ErrorType
-import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.domain.data.utils.ResultWrapper
-import com.example.domain.data.utils.collectWhenResumed
 import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
-import com.example.trueweather.R
+import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var viewPagerAdapter : WeatherViewPagerAdapter = WeatherViewPagerAdapter(null)
+    private var viewPagerAdapter: WeatherViewPagerAdapter = WeatherViewPagerAdapter(null)
 
     private val viewModel: MainActivityViewModel by viewModels()
 
     private val hasPermission = false
+
+    private var isEvening = false
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
@@ -52,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             requestLocationPermission()
         } else {
             viewModel.updatePermissionState(true)
@@ -60,12 +55,13 @@ class MainActivity : AppCompatActivity() {
         setTranslucentStatusBar()
 
         collectWhenStarted(viewModel.weatherState) {
-            when(it) {
+            when (it) {
                 is ResultWrapper.Loading -> showLoading()
                 is ResultWrapper.Success -> {
                     hideLoading()
                     showWeather(it.data)
                 }
+
                 is ResultWrapper.Error -> {
                     hideLoading()
                     showError(it.errorType)
@@ -76,11 +72,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(TimestampUtil.isEvening()) {
+        if(isEvening == TimestampUtil.isEvening()) return
+        isEvening = TimestampUtil.isEvening()
+        if (isEvening) {
             binding.lottieAnimationView.setAnimation("animation_night.json")
         } else {
             binding.lottieAnimationView.setAnimation("animation_day.json")
         }
+        viewPagerAdapter.notifyDataSetChanged()
     }
 
     private fun requestLocationPermission() {
@@ -96,7 +95,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showWeather(weatherResult: WeatherResult) {
-        if(binding.viewPager.adapter == null) {
+        if (binding.viewPager.adapter == null) {
             binding.viewPager.adapter = viewPagerAdapter
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tabLayout, position ->

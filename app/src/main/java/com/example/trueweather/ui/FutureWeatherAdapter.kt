@@ -6,8 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherData
+import com.example.network.utils.TimestampUtil
 import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
+import org.joda.time.DateTime
+import java.sql.Time
 
 class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
     RecyclerView.Adapter<FutureWeatherAdapter.ViewHolder>() {
@@ -19,7 +22,7 @@ class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
         private val maxTemp: TextView = itemView.findViewById(R.id.maxTemp)
 
         fun bind(weatherData: WeatherData) {
-            dayOfTheWeek.text = weatherData.forecastDate
+            dayOfTheWeek.text = TimestampUtil.getDayOfWeekInPortuguese(DateTime.parse(weatherData.forecastDate))
             minTemp.text = "${weatherData.tMin}ºC"
             maxTemp.text = "${weatherData.tMax}ºC"
             WeatherDrawableResolver.getWeatherDrawable(weatherData.weatherType.id, overrideTime = true)?.let { weatherIcon.setImageResource(it) }
