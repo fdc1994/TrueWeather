@@ -1,6 +1,7 @@
 package com.example.trueweather.ui.viewholders
 
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
@@ -121,6 +122,30 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setTheme() {
         val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
         errorMessageTextView.setTextColor(themedColor)
+    }
+}
+
+class AddLocationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
+    private val locationTextView: TextView = itemView.findViewById(R.id.location)
+    private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherIcon)
+    private val minTempTextView: TextView = itemView.findViewById(R.id.minTemp)
+    private val maxTempTextView: TextView = itemView.findViewById(R.id.maxTemp)
+    private val weatherDescriptionTextView: TextView = itemView.findViewById(R.id.weather_description)
+    private val addButton: Button = itemView.findViewById(R.id.add_button)
+
+    fun bind(locationWeather: WeatherResultList?, isFirstLocation: Boolean) {
+        with(locationWeather?.weatherForecast?.data?.first()) {
+            minTempTextView.text = "${this?.tMin}ºC"
+            maxTempTextView.text = "${this?.tMax}ºC"
+            WeatherDrawableResolver.getWeatherDrawable(this?.weatherType?.id ?: -1)?.let { weatherImageView.setImageResource(it) }
+            weatherDescriptionTextView.text = this?.weatherType?.descWeatherTypePT
+        }
+        locationTextView.text = locationWeather?.address?.local
+        if(isFirstLocation) currentLocationLabel.visibility = View.VISIBLE else View.GONE
+        addButton.setOnClickListener {
+
+        }
     }
 }
 
