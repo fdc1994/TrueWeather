@@ -95,14 +95,14 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
             WeatherFetchStatus.NO_INTERNET_ERROR -> {
                 errorMessageTextView.text = "Não foi possível estabelecer conexão com a internet"
-                errorImageView.setImageResource(R.drawable.baseline_cell_wifi_24)
+                errorImageView.setImageResource(R.drawable.wifi_off_icon)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
             }
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> {
                 errorMessageTextView.text = "Não foi possível determinar a sua localização em Portugal.\nA localização atual apenas funciona em Portugal."
-                errorImageView.setImageResource(R.drawable.baseline_airplanemode_active_24)
+                errorImageView.setImageResource(R.drawable.unavailable_location_icon)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
