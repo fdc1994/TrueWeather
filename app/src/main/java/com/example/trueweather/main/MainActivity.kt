@@ -19,7 +19,6 @@ import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.main.addlocation.LocationsBottomSheet
-import com.example.trueweather.main.addlocation.LocationsBottomSheetViewModel
 import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint

@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         app:lottie_autoPlay="true"
         app:lottie_repeatMode="restart"
-        app:lottie_fileName="your_animation.json"
+        app:lottie_fileName="animation_day.json"
         android:scaleType="centerCrop"
         app:lottie_loop="true"
         android:visibility="visible"/>
