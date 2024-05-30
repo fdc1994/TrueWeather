@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.collectWhenCreated
 import com.example.trueweather.databinding.LocationsBottomSheetLayoutBinding
@@ -20,11 +21,11 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
 
     private val viewModel: LocationsBottomSheetViewModel by viewModels()
     private lateinit var binding: LocationsBottomSheetLayoutBinding
-    private lateinit var recyclerViewAdapter: AddLocationsAdapter
+    private var recyclerViewAdapter: AddLocationsAdapter = AddLocationsAdapter(null)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = LocationsBottomSheetLayoutBinding.inflate(layoutInflater)
 
         return binding.root
@@ -39,16 +40,12 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
                 is LocationsBottomSheetViewModel.LocationsState.SearchLocationsSuccess -> showSearchedLocations(it.searchLocationsSuccess)
             }
         }
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = recyclerViewAdapter
         super.onViewCreated(view, savedInstanceState)
     }
 
     private fun showUserLocations(weatherResult: WeatherResult) {
-        with(binding.recyclerView) {
-            if(adapter == null) {
-                recyclerViewAdapter = AddLocationsAdapter(weatherResult)
-            }
-            this.adapter = recyclerViewAdapter
-        }
         recyclerViewAdapter.updateWeatherResult(weatherResult)
         showLocations(false)
     }

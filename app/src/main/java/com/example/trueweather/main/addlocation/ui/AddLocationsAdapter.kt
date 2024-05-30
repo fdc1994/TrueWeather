@@ -9,7 +9,8 @@ import com.example.trueweather.R
 import com.example.trueweather.ui.viewholders.AddLocationsViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
 
-class AddLocationsAdapter(private var weatherResult: WeatherResult?) : RecyclerView.Adapter<AddLocationsViewHolder>() {
+class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
+    RecyclerView.Adapter<AddLocationsViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddLocationsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.add_weather_item_layout, parent, false)
