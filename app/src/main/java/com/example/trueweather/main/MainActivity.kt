@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.updatePermissionState(true)
         }
         setTranslucentStatusBar()
+        setAddLocationButton()
 
         collectWhenStarted(viewModel.weatherState) {
             when (it) {
@@ -106,6 +107,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun showError(errorType: ErrorType) {
         // Implement show error UI
+    }
+
+    private fun setAddLocationButton() {
+        binding.addButton.setOnClickListener {
+
+        }
     }
 
     private fun setTranslucentStatusBar() {

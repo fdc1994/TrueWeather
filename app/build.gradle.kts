@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.viewpager2)
     implementation(libs.androidx.viewModel)
     implementation(libs.androidx.viewModelKtx)
+    implementation(libs.androidx.framentKtx)
     implementation(libs.androidx.lifecycle)
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
