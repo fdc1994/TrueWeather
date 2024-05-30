@@ -33,7 +33,7 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
         val locationWeather = weatherResult?.resultList?.get(position)
         when(holder){
             is CurrentLocationsSuccessViewHolder -> holder.bind(locationWeather)
-            is CurrentLocationsErrorViewHolder -> holder.bind(position == 0)
+            is CurrentLocationsErrorViewHolder -> holder.bind(position == 0, locationWeather?.address?.local)
         }
     }
 

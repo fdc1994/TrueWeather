@@ -88,7 +88,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
         val status = if (!networkConnectivityManager.hasInternetConnection()) {
             WeatherFetchStatus.NO_INTERNET_ERROR
         } else if (validData.isNotEmpty()) {
-            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE
         } else {
             WeatherFetchStatus.OTHER_ERROR
         }

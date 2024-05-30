@@ -162,12 +162,18 @@ class CurrentLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolde
     }
 }
 class CurrentLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val errorLabel: TextView = itemView.findViewById(R.id.error_label)
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
-    fun bind(isFirstLocation: Boolean) {
+    fun bind(isFirstLocation: Boolean, local: String?) {
         if (isFirstLocation) {
             currentLocationLabel.visibility = View.VISIBLE
         } else {
             currentLocationLabel.visibility = View.GONE
+            if(!local.isNullOrEmpty()) {
+                errorLabel.text = "Não foi possível obter a localização para $local"
+            } else {
+                errorLabel.text =" Não foi possível obter esta localização"
+            }
         }
     }
 }
