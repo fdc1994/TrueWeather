@@ -32,7 +32,7 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val locationWeather = weatherResult?.resultList?.get(position)
         when(holder){
-            is AddLocationsSuccessViewHolder -> holder.bind(locationWeather, position == 0)
+            is AddLocationsSuccessViewHolder -> holder.bind(locationWeather)
             is AddLocationsErrorViewHolder -> holder.bind(position == 0)
         }
     }
@@ -55,6 +55,7 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
         val status = weatherResult?.resultList?.get(position)?.status ?: WeatherFetchStatus.OTHER_ERROR
         return when (status) {
             WeatherFetchStatus.SUCCESS -> ViewType.VIEW_TYPE_SUCCESS.ordinal
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal
             WeatherFetchStatus.PERMISSION_ERROR,
             WeatherFetchStatus.NETWORK_ERROR,

@@ -56,6 +56,7 @@ data class LocationData(
 
 enum class WeatherFetchStatus {
     SUCCESS,
+    SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE,
     SUCCESS_FROM_PERSISTENCE,
     PERMISSION_ERROR,
     NETWORK_ERROR,

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.repositories.WeatherForecastRepository
+import com.example.trueweather.persistence.WeatherResultDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LocationsBottomSheetViewModel @Inject constructor(
-    private val weatherForecastRepository: WeatherForecastRepository
+    private val weatherForecastRepository: WeatherForecastRepository,
+    private val weatherForecastDataStore: WeatherResultDataStore
 ): ViewModel() {
 
     private val _locationsState = MutableStateFlow<LocationsState>(LocationsState.Loading)
@@ -26,7 +28,7 @@ class LocationsBottomSheetViewModel @Inject constructor(
     private fun loadData() {
         viewModelScope.launch {
             try {
-                val weatherForecast = weatherForecastRepository.getWeatherForecast()
+                val weatherForecast = weatherForecastDataStore.getWeatherForecast()
                 _locationsState.emit(LocationsState.UserLocationsSuccess(weatherForecast))
             } catch (e: Exception) {
                 _locationsState.emit(LocationsState.Error)

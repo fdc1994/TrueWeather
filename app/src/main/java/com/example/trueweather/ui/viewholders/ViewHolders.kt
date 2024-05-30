@@ -137,7 +137,8 @@ class AddLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(it
     private val weatherDescriptionTextView: TextView = itemView.findViewById(R.id.weather_description)
     private val addButton: Button = itemView.findViewById(R.id.add_button)
 
-    fun bind(locationWeather: WeatherResultList?, isFirstLocation: Boolean) {
+    fun bind(locationWeather: WeatherResultList?) {
+        val isCurrentLocation = locationWeather?.status == WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTempTextView.text = "${this?.tMin}ºC"
             maxTempTextView.text = "${this?.tMax}ºC"
@@ -145,7 +146,7 @@ class AddLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(it
             weatherDescriptionTextView.text = this?.weatherType?.descWeatherTypePT
         }
         locationTextView.text = locationWeather?.address?.local
-        if (isFirstLocation) {
+        if (isCurrentLocation) {
             currentLocationLabel.visibility = View.VISIBLE
         } else {
             currentLocationLabel.visibility = View.GONE

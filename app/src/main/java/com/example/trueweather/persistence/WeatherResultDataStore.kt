@@ -57,20 +57,18 @@ class WeatherResultDataStoreImpl @Inject constructor(
                     if (weatherResult.resultList.isEmpty()) {
                         clear()
                     } else {
-                        val validResultList = weatherResult.resultList.mapNotNull { result ->
-                            result.weatherForecast?.let { weatherForecast ->
-                                val validData = weatherForecast.data.filter { forecast ->
-                                    !TimestampUtil.isBeforeToday(forecast.forecastDate)
-                                }
-                                if (validData.isNotEmpty()) {
-                                    result.copy(weatherForecast = weatherForecast.copy(data = validData))
-                                } else {
-                                    null
-                                }
+                        val validResultList = weatherResult.resultList.mapIndexedNotNull { index, result ->
+                            val validData = result.weatherForecast?.data?.filter { forecast ->
+                                !TimestampUtil.isBeforeToday(forecast.forecastDate)
+                            }
+                            if (validData?.isNotEmpty() == true || index == 0) {
+                                result.copy(weatherForecast = result.weatherForecast?.copy(data = validData ?: mutableListOf()))
+                            } else {
+                                null
                             }
                         }.toMutableList()
 
-                        if(!networkConnectivityManager.hasInternetConnection()) {
+                        if(!networkConnectivityManager.hasInternetConnection() && validResultList.size == 0) {
                             validResultList.add(0, WeatherResultList(null, null, WeatherFetchStatus.NO_INTERNET_ERROR))
                         }
                         filteredResult = weatherResult.copy(resultList = validResultList)

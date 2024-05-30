@@ -46,12 +46,14 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
         val status = weatherResult?.resultList?.get(position)?.status ?: WeatherFetchStatus.OTHER_ERROR
         return when (status) {
             WeatherFetchStatus.SUCCESS,
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> ViewType.VIEW_TYPE_SUCCESS.ordinal
             WeatherFetchStatus.PERMISSION_ERROR -> ViewType.VIEW_TYPE_PERMISSION_ERROR.ordinal
             WeatherFetchStatus.NETWORK_ERROR -> ViewType.VIEW_TYPE_NETWORK_ERROR.ordinal
             WeatherFetchStatus.NO_INTERNET_ERROR -> ViewType.VIEW_TYPE_NO_INTERNET_ERROR.ordinal
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> ViewType.VIEW_TYPE_NOT_IN_COUNTRY_ERROR.ordinal
             WeatherFetchStatus.OTHER_ERROR -> ViewType.VIEW_TYPE_GENERIC_ERROR.ordinal
+
         }
     }
 
