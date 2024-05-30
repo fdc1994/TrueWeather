@@ -10,6 +10,7 @@ import com.example.network.data.UserPreferences
 import com.example.network.interfaces.IPMAService
 import com.example.network.persistence.DistrictIdentifiersDataStore
 import com.example.network.persistence.UserPreferencesDataStore
+import com.example.network.utils.TimestampUtil
 import javax.inject.Inject
 
 interface WeatherForecastRepository {
@@ -78,10 +79,18 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     ): WeatherResultList {
         val currentLocationForecastDto = ipmaService.getWeatherData(locationData!!.globalIdLocal.toString())
         val currentLocationForecast = weatherForecastMappers.mapWeatherResponse(currentLocationForecastDto)
-        return WeatherResultList(
-            currentLocationForecast,
-            locationData,
+        val validData = currentLocationForecast.data.filter {
+            !TimestampUtil.isBeforeToday(it.forecastDate)
+        }
+        val status = if(validData.isEmpty()) {
+            WeatherFetchStatus.OTHER_ERROR
+        } else {
             WeatherFetchStatus.SUCCESS
+        }
+        return WeatherResultList(
+            currentLocationForecast.copy(data = validData),
+            locationData,
+            status
         )
     }
 }

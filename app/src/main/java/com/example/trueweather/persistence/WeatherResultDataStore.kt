@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.domain.data.objects.WeatherData
 import com.example.domain.data.objects.WeatherFetchStatus
+import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.objects.WeatherResultList
 import com.example.network.utils.TimestampUtil
@@ -57,12 +59,13 @@ class WeatherResultDataStoreImpl @Inject constructor(
                     if (weatherResult.resultList.isEmpty()) {
                         clear()
                     } else {
-                        val validResultList = weatherResult.resultList.mapIndexedNotNull { index, result ->
-                            val status = getStatus(index)
-                            val validData = result.weatherForecast?.data?.filter { forecast ->
-                                !TimestampUtil.isBeforeToday(forecast.forecastDate)
+                        val validResultList = weatherResult.resultList.mapIndexed() { index, result ->
+                            val (validData, status) = if(index == 0) {
+                                handleCurrentLocationPersistence(result)
+                            } else {
+                                handleRemoteUserPreferencesPersistence(result)
                             }
-                            result.copy(weatherForecast = result.weatherForecast?.copy(data = validData ?: mutableListOf()), status = status)
+                            result.copy(weatherForecast = result.weatherForecast?.copy(data = validData), status = status)
                         }.toMutableList()
 
                         if(!networkConnectivityManager.hasInternetConnection() && validResultList.size == 0) {
@@ -78,12 +81,32 @@ class WeatherResultDataStoreImpl @Inject constructor(
         return filteredResult
     }
 
-    private fun getStatus(index: Int) = if (index == 0 && !networkConnectivityManager.hasInternetConnection()) {
-        WeatherFetchStatus.NO_INTERNET_ERROR
-    } else if (index == 0) {
-        WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
-    } else {
-        WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE
+    private fun handleRemoteUserPreferencesPersistence(result: WeatherResultList): Pair<List<WeatherData>, WeatherFetchStatus> {
+        val validData = result.weatherForecast?.data?.filter { forecast ->
+            !TimestampUtil.isBeforeToday(forecast.forecastDate)
+        } ?: mutableListOf()
+        val status = if (!networkConnectivityManager.hasInternetConnection()) {
+            WeatherFetchStatus.NO_INTERNET_ERROR
+        } else if (validData.isNotEmpty()) {
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
+        } else {
+            WeatherFetchStatus.OTHER_ERROR
+        }
+        return Pair(validData, status)
+    }
+
+    private fun handleCurrentLocationPersistence(result: WeatherResultList): Pair<List<WeatherData>, WeatherFetchStatus> {
+        val validData = result.weatherForecast?.data?.filter { forecast ->
+            !TimestampUtil.isBeforeToday(forecast.forecastDate)
+        } ?: mutableListOf()
+        val status = if (!networkConnectivityManager.hasInternetConnection()) {
+            WeatherFetchStatus.NO_INTERNET_ERROR
+        } else if (validData.isNotEmpty()) {
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
+        } else {
+            WeatherFetchStatus.OTHER_ERROR
+        }
+        return Pair(validData, status)
     }
 
     override suspend fun saveWeatherForecast(weatherForecastList: WeatherResult): Boolean {
