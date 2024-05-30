@@ -60,6 +60,10 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         headerFutureTemperature.setTextColor(themedColor)
         appBarLayout.setCollapsedTitleTextColor(themedColor)
         appBarLayout.setExpandedTitleColor(themedColor)
+        precipitationDescription.setTextColor(themedColor)
+        precipitationPercentage.setTextColor(themedColor)
+        windDirection.setTextColor(themedColor)
+        windIntensity.setTextColor(themedColor)
     }
 }
 
