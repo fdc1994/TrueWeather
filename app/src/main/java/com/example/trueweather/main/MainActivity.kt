@@ -18,6 +18,8 @@ import com.example.domain.data.utils.ResultWrapper
 import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.databinding.ActivityMainBinding
+import com.example.trueweather.main.addlocation.LocationsBottomSheet
+import com.example.trueweather.main.addlocation.LocationsBottomSheetViewModel
 import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if(isEvening == TimestampUtil.isEvening()) return
+        if (isEvening == TimestampUtil.isEvening()) return
         isEvening = TimestampUtil.isEvening()
         if (isEvening) {
             binding.lottieAnimationView.setAnimation("animation_night.json")
@@ -111,7 +113,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setAddLocationButton() {
         binding.addButton.setOnClickListener {
-
+            // Show the custom bottom sheet dialog
+            val locationsBottomSheet = LocationsBottomSheet()
+            locationsBottomSheet.show(supportFragmentManager, locationsBottomSheet.tag)
         }
     }
 
