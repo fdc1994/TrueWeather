@@ -150,7 +150,7 @@ class CurrentLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolde
         } else {
             currentLocationLabel.visibility = View.GONE
         }
-        if(locationWeather?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
+        if(locationWeather?.status == WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE) {
             removeButton.visibility = View.GONE
         } else {
             removeButton.visibility = View.VISIBLE
