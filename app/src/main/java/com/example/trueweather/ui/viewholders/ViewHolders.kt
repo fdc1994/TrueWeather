@@ -14,7 +14,7 @@ import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
-import com.google.android.material.appbar.AppBarLayout
+import com.example.trueweather.utils.setGone
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -54,6 +54,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         setTheme()
     }
+
     private fun setTheme() {
         val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
         currentWeatherDescription.setTextColor(themedColor)
@@ -74,10 +75,9 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
-
     fun bind(locationWeather: WeatherResultList?) {
         toolbar.title = locationWeather?.address?.local
-        when(locationWeather?.status) {
+        when (locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
                 errorMessageTextView.text = "Para ter acesso à sua localização deve permitir o Acesso no sistema"
                 errorImageView.setImageResource(R.drawable.baseline_back_hand_24)
@@ -86,14 +86,15 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 }
                 toolbar.title = "Localização Atual"
             }
+
             WeatherFetchStatus.NETWORK_ERROR -> {
                 errorMessageTextView.text = "Não foi possível obter informação para esta localização"
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
                     text = "Tentar de novo"
                 }
-
             }
+
             WeatherFetchStatus.NO_INTERNET_ERROR -> {
                 errorMessageTextView.text = "Não foi possível estabelecer conexão com a internet"
                 errorImageView.setImageResource(R.drawable.wifi_off_icon)
@@ -101,6 +102,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     text = "Tentar de novo"
                 }
             }
+
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> {
                 errorMessageTextView.text = "Não foi possível determinar a sua localização em Portugal.\nA localização atual apenas funciona em Portugal."
                 errorImageView.setImageResource(R.drawable.unavailable_location_icon)
@@ -108,6 +110,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     text = "Tentar de novo"
                 }
             }
+
             else -> {
                 errorMessageTextView.text = "Ocorreu um erro inesperado. Por favor tente novamente mais tarde."
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
@@ -125,7 +128,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
 
-class AddLocationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AddLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
     private val locationTextView: TextView = itemView.findViewById(R.id.location)
     private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherIcon)
@@ -142,10 +145,31 @@ class AddLocationsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
             weatherDescriptionTextView.text = this?.weatherType?.descWeatherTypePT
         }
         locationTextView.text = locationWeather?.address?.local
-        if(isFirstLocation) currentLocationLabel.visibility = View.VISIBLE else View.GONE
-        addButton.setOnClickListener {
+        if (isFirstLocation) {
+            currentLocationLabel.visibility = View.VISIBLE
+        } else {
+            currentLocationLabel.visibility = View.GONE
+        }
+        if(locationWeather?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
+            addButton.visibility = View.GONE
+        } else {
+            addButton.visibility = View.VISIBLE
+            addButton.setOnClickListener {
 
+            }
+        }
+
+    }
+}
+class AddLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
+    fun bind(isFirstLocation: Boolean) {
+        if (isFirstLocation) {
+            currentLocationLabel.visibility = View.VISIBLE
+        } else {
+            currentLocationLabel.visibility = View.GONE
         }
     }
 }
+
 
