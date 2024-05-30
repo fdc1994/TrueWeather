@@ -27,6 +27,13 @@
         <!-- Add other attributes as needed -->
     </style>
 
+    <!-- Medium Large Text -->
+    <style name="TextMediumLarge">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">28sp</item>
+        <!-- Add other attributes as needed -->
+    </style>
+
     <!-- Large Text -->
     <style name="TextExtraLarge">
         <item name="android:fontFamily">@font/poppins_regular</item>

@@ -23,6 +23,10 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
     private val futureWeatherRecyclerView: RecyclerView = itemView.findViewById(R.id.futureWeatherRecyclerView)
     private val headerFutureDay: TextView = itemView.findViewById(R.id.header_future_day)
+    private val precipitationPercentage: TextView = itemView.findViewById(R.id.precipitation_percentage)
+    private val precipitationDescription: TextView = itemView.findViewById(R.id.precipitation_description)
+    private val windDirection: TextView = itemView.findViewById(R.id.wind_direction)
+    private val windIntensity: TextView = itemView.findViewById(R.id.wind_intensity)
     private val headerFutureTemperature: TextView = itemView.findViewById(R.id.header_future_temperature)
     private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
@@ -35,6 +39,10 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             maxTemperatureTv.text = "${this?.tMax}ºC"
             WeatherDrawableResolver.getWeatherDrawable(this?.weatherType?.id ?: -1)?.let { weatherImageView.setImageResource(it) }
             currentWeatherDescription.text = this?.weatherType?.descWeatherTypePT
+            precipitationDescription.text = "${this?.classPrecInt?.descClassPrecIntPT} nas próximas 24H"
+            precipitationPercentage.text = "${this?.precipitaProb}%"
+            windDirection.text = this?.predWindDir
+            windIntensity.text = "${this?.classWindSpeed?.descClassWindSpeedDailyPT} nas próximas 24H"
         }
 
         futureWeatherRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
