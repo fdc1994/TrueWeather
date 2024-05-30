@@ -14,6 +14,11 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:text="Localizações"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             android:textColor="@color/white"
             android:textAlignment="viewStart"
             style="@style/TextMediumLarge" />
