@@ -134,7 +134,7 @@ class CurrentLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolde
     private val minTempTextView: TextView = itemView.findViewById(R.id.minTemp)
     private val maxTempTextView: TextView = itemView.findViewById(R.id.maxTemp)
     private val weatherDescriptionTextView: TextView = itemView.findViewById(R.id.weather_description)
-    private val removeButton: Button = itemView.findViewById(R.id.add_button)
+    private val removeButton: Button = itemView.findViewById(R.id.remove_button)
 
     fun bind(locationWeather: WeatherResultList?) {
         val isCurrentLocation = locationWeather?.status == WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE

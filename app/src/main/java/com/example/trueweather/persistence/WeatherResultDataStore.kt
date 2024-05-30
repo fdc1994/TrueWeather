@@ -58,13 +58,18 @@ class WeatherResultDataStoreImpl @Inject constructor(
                         clear()
                     } else {
                         val validResultList = weatherResult.resultList.mapIndexedNotNull { index, result ->
+                            val status = if(index == 0) {
+                                WeatherFetchStatus.NO_INTERNET_ERROR
+                            } else {
+                                WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE
+                            }
                             val validData = result.weatherForecast?.data?.filter { forecast ->
                                 !TimestampUtil.isBeforeToday(forecast.forecastDate)
                             }
                             if (validData?.isNotEmpty() == true || index == 0) {
-                                result.copy(weatherForecast = result.weatherForecast?.copy(data = validData ?: mutableListOf()))
+                                result.copy(weatherForecast = result.weatherForecast?.copy(data = validData ?: mutableListOf()), status = status)
                             } else {
-                                null
+                                result.copy(weatherForecast = result.weatherForecast?.copy(data = validData ?: mutableListOf()), status = WeatherFetchStatus.NETWORK_ERROR)
                             }
                         }.toMutableList()
 
