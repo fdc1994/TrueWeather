@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.collectWhenCreated
 import com.example.trueweather.databinding.LocationsBottomSheetLayoutBinding
+import com.example.trueweather.main.addlocation.ui.AddLocationsAdapter
+import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.example.trueweather.utils.setGone
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +20,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
 
     private val viewModel: LocationsBottomSheetViewModel by viewModels()
     private lateinit var binding: LocationsBottomSheetLayoutBinding
+    private lateinit var recyclerViewAdapter: AddLocationsAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,8 +43,14 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
     }
 
     private fun showUserLocations(weatherResult: WeatherResult) {
+        with(binding.recyclerView) {
+            if(adapter == null) {
+                recyclerViewAdapter = AddLocationsAdapter(weatherResult)
+            }
+            this.adapter = recyclerViewAdapter
+        }
+        recyclerViewAdapter.updateWeatherResult(weatherResult)
         showLocations(false)
-        Toast.makeText(context, weatherResult.resultList.toString(), Toast.LENGTH_SHORT).show()
     }
 
     private fun showSearchedLocations(weatherResult: WeatherResult) {
