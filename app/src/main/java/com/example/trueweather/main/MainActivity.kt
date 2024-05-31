@@ -85,7 +85,6 @@ class MainActivity : BaseTrueWeatherActivity() {
         } else {
             binding.lottieAnimationView.setAnimation("animation_day.json")
         }
-        viewPagerAdapter.notifyDataSetChanged()
     }
 
     private fun requestLocationPermission() {
