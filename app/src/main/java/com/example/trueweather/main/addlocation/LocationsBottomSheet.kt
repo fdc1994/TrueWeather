@@ -1,6 +1,10 @@
 package com.example.trueweather.main.addlocation
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +26,10 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
     private val viewModel: LocationsBottomSheetViewModel by viewModels()
     private lateinit var binding: LocationsBottomSheetLayoutBinding
     private var recyclerViewAdapter: AddLocationsAdapter = AddLocationsAdapter(null)
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var runnable: Runnable? = null
+    private val debounceDelay: Long = 500
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,9 +48,31 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
                 is LocationsBottomSheetViewModel.LocationsState.SearchLocationsSuccess -> showSearchedLocations(it.searchLocationsSuccess)
             }
         }
+        setupView()
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun setupView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = recyclerViewAdapter
-        super.onViewCreated(view, savedInstanceState)
+        binding.searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // No-op
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // No-op
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                runnable?.let { handler.removeCallbacks(it) }
+
+                runnable = Runnable {
+                    if(s.toString().isNotEmpty() && s.toString().length > 1) viewModel.searchLocations(s.toString().trim())
+                }
+                handler.postDelayed(runnable!!, debounceDelay)
+            }
+        })
     }
 
     private fun showUserLocations(weatherResult: WeatherResult) {
@@ -52,6 +82,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
 
     private fun showSearchedLocations(weatherResult: WeatherResult) {
         showLocations(true)
+        recyclerViewAdapter.updateWeatherResult(weatherResult)
     }
 
     private fun showError() {

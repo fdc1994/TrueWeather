@@ -15,6 +15,7 @@ import javax.inject.Inject
 
 interface WeatherForecastRepository {
     suspend fun getWeatherForecast(): WeatherResult
+    suspend fun trySearchWeatherForecast(searchQuery: String): WeatherResult
 }
 
 class WeatherForecastRepositoryImpl @Inject constructor(
@@ -28,6 +29,23 @@ class WeatherForecastRepositoryImpl @Inject constructor(
         val weatherResultList = mutableListOf<WeatherResultList>()
         getCurrentLocationDataOrError(weatherResultList)
         getSavedLocationsWeatherForecast(weatherResultList)
+        return WeatherResult(weatherResultList)
+    }
+
+    override suspend fun trySearchWeatherForecast(searchQuery: String): WeatherResult {
+        val weatherResultList = mutableListOf<WeatherResultList>()
+        val districtIdentifiers = localizationManager.mapAddressNameToMultipleDistrictIdentifier(city = searchQuery)
+        if(districtIdentifiers.isNotEmpty()) {
+            districtIdentifiers.forEach {
+                it.let {
+                    if(it?.globalIdLocal != null) {
+                        weatherResultList.add(
+                            fetchForecast(it)
+                        )
+                    }
+                }
+            }
+        }
         return WeatherResult(weatherResultList)
     }
 

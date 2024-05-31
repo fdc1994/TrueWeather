@@ -21,6 +21,7 @@ import javax.inject.Inject
 interface LocalizationManager {
     suspend fun getLastKnownLocation(): LocationData?
     suspend fun mapAddressNameToDistrictIdentifier(city: String): LocationData?
+    suspend fun mapAddressNameToMultipleDistrictIdentifier(city: String): List<LocationData?>
     suspend fun mapGlobalIdToDistrictIdentifier(globalId: String): LocationData?
     fun checkPermissions(): Boolean
 }
@@ -70,6 +71,14 @@ class LocalizationManagerImpl @Inject constructor(
             val response = districtIdentifiersRepository.getDistrictIdentifiersList()
             val districtIdentifiers = response?.let { districtIdentifiersMappers.mapDistrictIdentifiersResponse(it) }
             districtIdentifiers?.data?.find { it.local == city }
+        }
+    }
+
+    override suspend fun mapAddressNameToMultipleDistrictIdentifier(city: String): List<LocationData?> {
+        return withContext(Dispatchers.IO) {
+            val response = districtIdentifiersRepository.getDistrictIdentifiersList()
+            val districtIdentifiers = response?.let { districtIdentifiersMappers.mapDistrictIdentifiersResponse(it) }
+            districtIdentifiers?.data?.filter { it.local.startsWith(city, ignoreCase = true) } ?: mutableListOf()
         }
     }
 

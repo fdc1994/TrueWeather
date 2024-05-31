@@ -25,11 +25,24 @@ class LocationsBottomSheetViewModel @Inject constructor(
         loadData()
     }
 
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
             try {
+                _locationsState.emit(LocationsState.Loading)
                 val weatherForecast = weatherForecastDataStore.getWeatherForecast()
                 _locationsState.emit(LocationsState.UserLocationsSuccess(weatherForecast))
+            } catch (e: Exception) {
+                _locationsState.emit(LocationsState.Error)
+            }
+        }
+    }
+
+    fun searchLocations(searchQuery: String) {
+        viewModelScope.launch {
+            try {
+                _locationsState.emit(LocationsState.Loading)
+                val searchForecast = weatherForecastRepository.trySearchWeatherForecast(searchQuery)
+                _locationsState.emit(LocationsState.SearchLocationsSuccess(searchForecast))
             } catch (e: Exception) {
                 _locationsState.emit(LocationsState.Error)
             }
