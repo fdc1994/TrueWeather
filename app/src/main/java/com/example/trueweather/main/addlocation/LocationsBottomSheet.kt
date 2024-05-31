@@ -8,14 +8,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.collectWhenCreated
 import com.example.trueweather.databinding.LocationsBottomSheetLayoutBinding
 import com.example.trueweather.main.addlocation.ui.AddLocationsAdapter
-import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.example.trueweather.utils.setGone
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +41,13 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
         collectWhenCreated(viewModel.locationsState) {
             when(it) {
                 LocationsBottomSheetViewModel.LocationsState.Error -> showError()
-                LocationsBottomSheetViewModel.LocationsState.Loading -> showGlobalLoading()
+                is LocationsBottomSheetViewModel.LocationsState.Loading -> {
+                    if(it.isFirstLoading) {
+                        showGlobalLoading()
+                    } else {
+                        showSearchLoading()
+                    }
+                }
                 is LocationsBottomSheetViewModel.LocationsState.UserLocationsSuccess -> showUserLocations(it.userLocationsResult)
                 is LocationsBottomSheetViewModel.LocationsState.SearchLocationsSuccess -> showSearchedLocations(it.searchLocationsSuccess)
             }
@@ -69,6 +73,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
 
                 runnable = Runnable {
                     if(s.toString().isNotEmpty() && s.toString().length > 1) viewModel.searchLocations(s.toString().trim())
+                    else if(s.toString().isEmpty()) viewModel.loadData()
                 }
                 handler.postDelayed(runnable!!, debounceDelay)
             }
@@ -87,7 +92,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
 
     private fun showError() {
         binding.errorView.setGone(false)
-        binding.progressBar.setGone(true)
+        binding.progressView.setGone(true)
         binding.locationsView.setGone(true)
     }
 
@@ -95,19 +100,18 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
         showGlobalLoading()
     }
 
-    private fun showLocationsLoading() {
-        binding.progressBar.setGone(false)
-        binding.locationsView.setGone(true)
+    private fun showSearchLoading() {
+        binding.progressView.setGone(false)
     }
 
     private fun showLocations(isSearchLocations: Boolean) {
-        binding.progressBar.setGone(true)
+        binding.progressView.setGone(true)
         binding.locationsView.setGone(false)
         if(isSearchLocations) binding.saveButton.setGone(true) else binding.saveButton.setGone(false)
     }
 
     private fun showGlobalLoading() {
-        binding.progressBar.setGone(false)
+        binding.progressView.setGone(false)
         binding.locationsView.setGone(true)
         binding.errorView.setGone(true)
     }
