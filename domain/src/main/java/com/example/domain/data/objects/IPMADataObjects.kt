@@ -6,12 +6,13 @@ import com.example.network.data.WindSpeed
 import java.io.Serializable
 
 data class WeatherResult(
-    val resultList: List<WeatherResultList>
+    val resultList: List<WeatherResultWrapper>
 )
-data class WeatherResultList(
+data class WeatherResultWrapper(
     val weatherForecast: WeatherForecast? = null,
     val address: LocationData? = null,
-    val status: WeatherFetchStatus
+    val status: WeatherFetchStatus,
+    val isUserSavedLocation: Boolean = false
 )
 
 data class WeatherForecast(

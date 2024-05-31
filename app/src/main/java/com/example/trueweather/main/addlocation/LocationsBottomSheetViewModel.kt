@@ -53,6 +53,10 @@ class LocationsBottomSheetViewModel @Inject constructor(
         }
     }
 
+    fun addLocation() {
+
+    }
+
 
     sealed class LocationsState {
         data class Loading(val isFirstLoading: Boolean = false) : LocationsState()

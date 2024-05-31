@@ -7,15 +7,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
+import com.example.trueweather.main.addlocation.OnLocationClickListener
 import com.example.trueweather.ui.viewholders.ManageLocationsErrorViewHolder
 import com.example.trueweather.ui.viewholders.ManageLocationsSuccessViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
 
-class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AddLocationsAdapter(
+    private var weatherResult: WeatherResult?,
+    private val onLocationClickListener: OnLocationClickListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
+        return when (viewType) {
             ViewType.VIEW_TYPE_SUCCESS.ordinal,
             ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.current_weather_location_success_item_layout, parent, false)
@@ -31,8 +34,8 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val locationWeather = weatherResult?.resultList?.get(position)
-        when(holder){
-            is ManageLocationsSuccessViewHolder -> holder.bind(locationWeather)
+        when (holder) {
+            is ManageLocationsSuccessViewHolder -> holder.bind(locationWeather, onLocationClickListener)
             is ManageLocationsErrorViewHolder -> holder.bind(position == 0, locationWeather?.address?.local)
         }
     }
@@ -40,6 +43,7 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
     override fun getItemCount(): Int {
         return weatherResult?.resultList?.size ?: 0
     }
+
     fun updateWeatherResult(newWeatherResult: WeatherResult?) {
         val diffCallback = WeatherResultDiffCallback(
             weatherResult,
@@ -57,6 +61,7 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
             WeatherFetchStatus.SUCCESS -> ViewType.VIEW_TYPE_SUCCESS.ordinal
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal
+
             WeatherFetchStatus.PERMISSION_ERROR,
             WeatherFetchStatus.NETWORK_ERROR,
             WeatherFetchStatus.NO_INTERNET_ERROR,
@@ -64,7 +69,6 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
             WeatherFetchStatus.OTHER_ERROR -> ViewType.VIEW_TYPE_ERROR.ordinal
         }
     }
-
 
     private enum class ViewType {
         VIEW_TYPE_SUCCESS,

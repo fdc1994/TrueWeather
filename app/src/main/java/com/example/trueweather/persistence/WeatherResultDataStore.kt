@@ -6,9 +6,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.domain.data.objects.WeatherData
 import com.example.domain.data.objects.WeatherFetchStatus
-import com.example.domain.data.objects.WeatherForecast
 import com.example.domain.data.objects.WeatherResult
-import com.example.domain.data.objects.WeatherResultList
+import com.example.domain.data.objects.WeatherResultWrapper
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.utils.NetworkConnectivityManager
 import com.google.gson.GsonBuilder
@@ -50,7 +49,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
         context.dataStore.data.map { preferences ->
             val weatherForecastListString = preferences[PREFS_WEATHER_FORECAST_LIST]
             if (weatherForecastListString.isNullOrEmpty()) {
-                WeatherResult(mutableListOf(WeatherResultList(status = WeatherFetchStatus.OTHER_ERROR)))
+                WeatherResult(mutableListOf(WeatherResultWrapper(status = WeatherFetchStatus.OTHER_ERROR)))
             } else {
                 gson.fromJson<WeatherResult>(
                     weatherForecastListString,
@@ -69,7 +68,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
                         }.toMutableList()
 
                         if(!networkConnectivityManager.hasInternetConnection() && validResultList.size == 0) {
-                            validResultList.add(0, WeatherResultList(null, null, WeatherFetchStatus.NO_INTERNET_ERROR))
+                            validResultList.add(0, WeatherResultWrapper(null, null, WeatherFetchStatus.NO_INTERNET_ERROR))
                         }
                         filteredResult = weatherResult.copy(resultList = validResultList)
                         saveWeatherForecast(filteredResult)
@@ -81,7 +80,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
         return filteredResult
     }
 
-    private fun handleRemoteUserPreferencesPersistence(result: WeatherResultList): Pair<List<WeatherData>, WeatherFetchStatus> {
+    private fun handleRemoteUserPreferencesPersistence(result: WeatherResultWrapper): Pair<List<WeatherData>, WeatherFetchStatus> {
         val validData = result.weatherForecast?.data?.filter { forecast ->
             !TimestampUtil.isBeforeToday(forecast.forecastDate)
         } ?: mutableListOf()
@@ -95,7 +94,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
         return Pair(validData, status)
     }
 
-    private fun handleCurrentLocationPersistence(result: WeatherResultList): Pair<List<WeatherData>, WeatherFetchStatus> {
+    private fun handleCurrentLocationPersistence(result: WeatherResultWrapper): Pair<List<WeatherData>, WeatherFetchStatus> {
         val validData = result.weatherForecast?.data?.filter { forecast ->
             !TimestampUtil.isBeforeToday(forecast.forecastDate)
         } ?: mutableListOf()

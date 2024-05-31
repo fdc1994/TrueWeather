@@ -10,7 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
+import com.example.domain.data.objects.WeatherResultWrapper
 import com.example.domain.data.utils.collectWhenCreated
 import com.example.trueweather.databinding.LocationsBottomSheetLayoutBinding
 import com.example.trueweather.main.addlocation.ui.AddLocationsAdapter
@@ -19,11 +21,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LocationsBottomSheet: BottomSheetDialogFragment() {
+class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener{
 
     private val viewModel: LocationsBottomSheetViewModel by viewModels()
     private lateinit var binding: LocationsBottomSheetLayoutBinding
-    private var recyclerViewAdapter: AddLocationsAdapter = AddLocationsAdapter(null)
+    private var recyclerViewAdapter: AddLocationsAdapter = AddLocationsAdapter(null, this)
 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
@@ -115,4 +117,17 @@ class LocationsBottomSheet: BottomSheetDialogFragment() {
         binding.locationsView.setGone(true)
         binding.errorView.setGone(true)
     }
+
+    override fun onLocationClick(weatherResult: WeatherResultWrapper?) {
+        if(weatherResult?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
+            //This means it is a saved location that should be removed
+        } else {
+            //This means it is a search location that should be added
+        }
+    }
+}
+
+
+interface OnLocationClickListener {
+    fun onLocationClick(weatherResult: WeatherResultWrapper?)
 }

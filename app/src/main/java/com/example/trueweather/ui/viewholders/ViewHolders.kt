@@ -4,15 +4,15 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
-import com.example.domain.data.objects.WeatherResultList
+import com.example.domain.data.objects.WeatherResultWrapper
 import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
+import com.example.trueweather.main.addlocation.OnLocationClickListener
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
 import com.example.trueweather.utils.setGone
@@ -33,7 +33,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
-    fun bind(locationWeather: WeatherResultList?) {
+    fun bind(locationWeather: WeatherResultWrapper?) {
         toolbar.title = locationWeather?.address?.local
 
         with(locationWeather?.weatherForecast?.data?.first()) {
@@ -76,7 +76,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
-    fun bind(locationWeather: WeatherResultList?) {
+    fun bind(locationWeather: WeatherResultWrapper?) {
         toolbar.title = locationWeather?.address?.local
         when (locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
@@ -136,10 +136,28 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
     private val minTempTextView: TextView = itemView.findViewById(R.id.minTemp)
     private val maxTempTextView: TextView = itemView.findViewById(R.id.maxTemp)
     private val weatherDescriptionTextView: TextView = itemView.findViewById(R.id.weather_description)
-    private val removeButton: Button = itemView.findViewById(R.id.remove_button)
+    private val actionButton: Button = itemView.findViewById(R.id.action_button)
 
-    fun bind(locationWeather: WeatherResultList?) {
+    fun bind(locationWeather: WeatherResultWrapper?, onLocationClickListener: OnLocationClickListener) {
         val isCurrentLocation = locationWeather?.status == WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE
+        val isCurrentUserLocation = locationWeather?.status == WeatherFetchStatus.SUCCESS && locationWeather.isUserSavedLocation
+
+        setLocationInfo(locationWeather)
+
+        setLocationLabel(isCurrentLocation, isCurrentUserLocation)
+
+        actionButton.setOnClickListener {
+            onLocationClickListener.onLocationClick(locationWeather)
+        }
+
+        when(locationWeather?.status) {
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> actionButton.setGone(true)
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> handleCurrentLocationButton()
+            else -> handleSearchedLocationButton()
+        }
+    }
+
+    private fun ManageLocationsSuccessViewHolder.setLocationInfo(locationWeather: WeatherResultWrapper?) {
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTempTextView.text = "${this?.tMin}ºC"
             maxTempTextView.text = "${this?.tMax}ºC"
@@ -147,32 +165,31 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
             weatherDescriptionTextView.text = this?.weatherType?.descWeatherTypePT
         }
         locationTextView.text = locationWeather?.address?.local
+    }
+
+    private fun setLocationLabel(isCurrentLocation: Boolean, isCurrentUserLocation: Boolean) {
         if (isCurrentLocation) {
             currentLocationLabel.setGone(false)
+            currentLocationLabel.text = "Localização atual"
+        } else if (isCurrentUserLocation) {
+            currentLocationLabel.setGone(false)
+            currentLocationLabel.text = "Localização já adicionada"
         } else {
             currentLocationLabel.setGone(true)
-        }
-
-        when(locationWeather?.status) {
-            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> removeButton.setGone(true)
-            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> handleCurrentLocationButton()
-            else -> handleSearchedLocationButton()
         }
     }
 
     private fun handleCurrentLocationButton() {
-        removeButton.setGone(false)
-        removeButton.text ="Remover"
-        removeButton.setOnClickListener {
-            Toast.makeText(itemView.context, "Remover Localização", Toast.LENGTH_SHORT).show()
+        with(actionButton) {
+            setGone(false)
+            text ="Remover"
         }
     }
 
     private fun handleSearchedLocationButton() {
-        removeButton.setGone(false)
-        removeButton.text ="Adicionar"
-        removeButton.setOnClickListener {
-            Toast.makeText(itemView.context, "Adicionar Localização", Toast.LENGTH_SHORT).show()
+        with(actionButton) {
+            setGone(false)
+            text ="Adicionar"
         }
     }
 }
