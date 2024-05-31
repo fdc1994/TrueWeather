@@ -15,6 +15,7 @@ import androidx.core.view.WindowCompat
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.ResultWrapper
+import com.example.domain.data.utils.collectWhenResumed
 import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.databinding.ActivityMainBinding
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         setTranslucentStatusBar()
         setAddLocationButton()
 
-        collectWhenStarted(viewModel.weatherState) {
+        collectWhenResumed(viewModel.weatherState) {
             when (it) {
                 is ResultWrapper.Loading -> showLoading()
                 is ResultWrapper.Success -> {
@@ -74,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadData()
         if (isEvening == TimestampUtil.isEvening()) return
         isEvening = TimestampUtil.isEvening()
         if (isEvening) {

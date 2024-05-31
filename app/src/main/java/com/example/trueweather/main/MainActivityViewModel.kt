@@ -31,10 +31,6 @@ class MainActivityViewModel @Inject constructor(
     private val hasValidConnection: Boolean
         get() = networkConnectivityManager.hasInternetConnection()
 
-    init {
-        loadData()
-    }
-
     fun updatePermissionState(isGranted: Boolean) {
         _permissionState.value = isGranted
         if (isGranted) {
@@ -42,7 +38,7 @@ class MainActivityViewModel @Inject constructor(
         }
     }
 
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
             _weatherState.value = ResultWrapper.Loading
             try {
