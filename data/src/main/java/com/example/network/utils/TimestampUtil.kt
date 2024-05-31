@@ -34,7 +34,8 @@ object TimestampUtil{
 
     fun getDayOfWeekInPortuguese(dateTime: DateTime): String {
         val formatter = DateTimeFormat.forPattern("EEEE").withLocale(Locale("pt", "PT"))
-        return formatter.print(dateTime)
+        val dayOfWeek = formatter.print(dateTime)
+        return "${dayOfWeek.substring(0, 3)}."
     }
 
     fun isBeforeToday(date: String): Boolean { return DateTime.parse(date).toLocalDate().isBefore(currentDate) }
