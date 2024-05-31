@@ -6,7 +6,6 @@ import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.repositories.WeatherForecastRepository
 import com.example.trueweather.persistence.WeatherResultDataStore
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,7 +45,6 @@ class LocationsBottomSheetViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _locationsState.emit(LocationsState.Loading(isFirstLoading))
-                delay(5000L)
                 val searchForecast = weatherForecastRepository.trySearchWeatherForecast(searchQuery)
                 _locationsState.emit(LocationsState.SearchLocationsSuccess(searchForecast))
             } catch (e: Exception) {

@@ -80,6 +80,12 @@
             android:layout_gravity="center"
             android:indeterminateTint="@color/white"
             android:visibility="visible"/>
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextLarge"
+            android:text="A carregar informação..."/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

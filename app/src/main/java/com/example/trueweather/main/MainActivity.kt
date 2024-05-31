@@ -18,6 +18,7 @@ import com.example.domain.data.utils.ResultWrapper
 import com.example.domain.data.utils.collectWhenResumed
 import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
+import com.example.trueweather.ThemeManager
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.main.addlocation.LocationsBottomSheet
 import com.example.trueweather.platform.BaseTrueWeatherActivity
@@ -78,8 +79,14 @@ class MainActivity : BaseTrueWeatherActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.loadData()
+        setTheme()
+    }
+
+    private fun setTheme() {
         if (isEvening == TimestampUtil.isEvening()) return
         isEvening = TimestampUtil.isEvening()
+        val color = ThemeManager.getCurrentTextColor()
+        binding.progressText.setTextColor(color)
         if (isEvening) {
             binding.lottieAnimationView.setAnimation("animation_night.json")
         } else {

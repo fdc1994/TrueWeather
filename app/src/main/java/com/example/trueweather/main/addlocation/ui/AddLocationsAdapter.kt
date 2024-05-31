@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
-import com.example.trueweather.ui.viewholders.CurrentLocationsErrorViewHolder
-import com.example.trueweather.ui.viewholders.CurrentLocationsSuccessViewHolder
+import com.example.trueweather.ui.viewholders.ManageLocationsErrorViewHolder
+import com.example.trueweather.ui.viewholders.ManageLocationsSuccessViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
 
 class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
@@ -19,12 +19,12 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
             ViewType.VIEW_TYPE_SUCCESS.ordinal,
             ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.current_weather_location_success_item_layout, parent, false)
-                CurrentLocationsSuccessViewHolder(view)
+                ManageLocationsSuccessViewHolder(view)
             }
 
             else -> {
                 val view = LayoutInflater.from(parent.context).inflate(R.layout.current_weather_location_error_item_layout, parent, false)
-                CurrentLocationsErrorViewHolder(view)
+                ManageLocationsErrorViewHolder(view)
             }
         }
     }
@@ -32,8 +32,8 @@ class AddLocationsAdapter(private var weatherResult: WeatherResult?) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val locationWeather = weatherResult?.resultList?.get(position)
         when(holder){
-            is CurrentLocationsSuccessViewHolder -> holder.bind(locationWeather)
-            is CurrentLocationsErrorViewHolder -> holder.bind(position == 0, locationWeather?.address?.local)
+            is ManageLocationsSuccessViewHolder -> holder.bind(locationWeather)
+            is ManageLocationsErrorViewHolder -> holder.bind(position == 0, locationWeather?.address?.local)
         }
     }
 
