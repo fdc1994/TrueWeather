@@ -20,12 +20,14 @@ import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.main.addlocation.LocationsBottomSheet
+import com.example.trueweather.platform.BaseTrueWeatherActivity
 import com.example.trueweather.ui.WeatherViewPagerAdapter
+import com.example.trueweather.utils.setGone
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseTrueWeatherActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -91,11 +93,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        // Implement loading UI
+        binding.progressView.setGone(false)
     }
 
     private fun hideLoading() {
-        // Implement hide loading UI
+        binding.progressView.setGone(true)
     }
 
     private fun showWeather(weatherResult: WeatherResult) {
