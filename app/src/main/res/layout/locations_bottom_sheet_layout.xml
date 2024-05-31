@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="Localizações"
+            android:text="Gerir Localizações"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -39,7 +39,7 @@
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search"
+                android:hint="Pesquise os distritos..."
                 android:inputType="text" />
 
             <!-- RecyclerView -->
@@ -92,13 +92,6 @@
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 style="@style/TextLarge" />
-
-            <Button
-                android:id="@+id/retryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tentar novamenente" />
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -120,7 +113,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:indeterminateTint="@color/white"
+            android:indeterminateTint="@color/blue_gray"
             android:visibility="visible"/>
     </LinearLayout>
 
