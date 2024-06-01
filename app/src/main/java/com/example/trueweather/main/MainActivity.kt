@@ -1,27 +1,27 @@
 package com.example.trueweather.main
 
 import android.Manifest
-import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
-import androidx.activity.result.contract.ActivityResultContracts
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.utils.ErrorType
 import com.example.domain.data.utils.ResultWrapper
 import com.example.domain.data.utils.collectWhenResumed
-import com.example.domain.data.utils.collectWhenStarted
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.ThemeManager
 import com.example.trueweather.databinding.ActivityMainBinding
 import com.example.trueweather.main.addlocation.LocationsBottomSheet
 import com.example.trueweather.platform.BaseTrueWeatherActivity
+import com.example.trueweather.splash.SplashActivity
 import com.example.trueweather.ui.WeatherViewPagerAdapter
 import com.example.trueweather.utils.setGone
 import com.google.android.material.tabs.TabLayoutMediator
@@ -36,27 +36,13 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
 
     private val viewModel: MainActivityViewModel by viewModels()
 
-    private val hasPermission = false
-
     private var isEvening = false
-
-    private val requestPermissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            viewModel.updatePermissionState(isGranted)
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermission()
-        } else {
-            viewModel.updatePermissionState(true)
-        }
+        checkPermissions()
         setTranslucentStatusBar()
         setAddLocationButton()
 
@@ -76,6 +62,14 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
         }
     }
 
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.loadData()
@@ -92,10 +86,6 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
         } else {
             binding.lottieAnimationView.setAnimation("animation_day.json")
         }
-    }
-
-    private fun requestLocationPermission() {
-        requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
     private fun showLoading() {
@@ -152,6 +142,31 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
     }
 
     override fun onPermissionsRetry() {
-        TODO("Not yet implemented")
+        requestLocationPermission()
+    }
+
+    // Request location permission
+    private fun requestLocationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
+                viewModel.loadData()
+            } else {
+                // Request permission
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), SplashActivity.PERMISSION_REQUEST_CODE)
+            }
+        } else {
+            // Permission already granted for devices below Marshmallow
+            viewModel.loadData()
+        }
+    }
+
+    // Handle permission result
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SplashActivity.PERMISSION_REQUEST_CODE) {
+            if (grantResults.first() == PERMISSION_GRANTED) {
+                viewModel.updatePermissionState(true)
+            } else Toast.makeText(this, "Não foi possível obter a permissão. Por favor conceda através das definições", Toast.LENGTH_LONG).show()
+        }
     }
 }
