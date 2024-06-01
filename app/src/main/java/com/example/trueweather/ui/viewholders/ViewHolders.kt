@@ -153,8 +153,8 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
         when(locationWeather?.status) {
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> actionButton.setGone(true)
-            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> handleCurrentLocationButton()
-            else -> handleSearchedLocationButton()
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> handleCurrentLocationButton(isCurrentUserLocation)
+            else -> handleSearchedLocationButton(isCurrentUserLocation)
         }
     }
 
@@ -180,16 +180,16 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
         }
     }
 
-    private fun handleCurrentLocationButton() {
+    private fun handleCurrentLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
-            setGone(false)
+            if(isCurrentUserLocation) setGone(true) else setGone(false)
             text ="Remover"
         }
     }
 
-    private fun handleSearchedLocationButton() {
+    private fun handleSearchedLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
-            setGone(false)
+            if(isCurrentUserLocation) setGone(true) else setGone(false)
             text ="Adicionar"
         }
     }
