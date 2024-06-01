@@ -3,9 +3,11 @@ package com.example.trueweather.utils
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.IdRes
 import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.isGone
 import androidx.viewbinding.ViewBinding
 

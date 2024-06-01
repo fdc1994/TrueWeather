@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
@@ -77,8 +78,11 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> {
                 toolbarTag.text = "Dados Desatualizados"
                 toolbarTag.setGone(false)
+                toolbarTag.setOnClickListener {
+                    TooltipCompat.setTooltipText(toolbarTag, toolbarTag.tooltipText)
+                }
             }
-            else -> toolbarTag.setGone(true)
+            else -> Unit
         }
     }
 }

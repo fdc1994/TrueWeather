@@ -39,11 +39,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:text="Your Tag"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="5dp"
-                    android:textSize="16sp"
-                    android:visibility="gone"
+                    style="@style/TextMedium"
+                    android:visibility="visible"
+                    android:tooltipText="Conecte-se à internet para atualizar estes dados."
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/rounded_transparent_orange_background" />
             </androidx.appcompat.widget.Toolbar>
 
