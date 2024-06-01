@@ -92,42 +92,43 @@ class LocationsBottomSheetViewModel @Inject constructor(
         return weatherForecastDataStore.saveWeatherForecast(weatherForecastPreferences)
     }
 
-    fun removeLocation(locationId: String, locationName: String?) {
+    fun removeLocation(weatherResultWrapper: WeatherResultWrapper?) {
         viewModelScope.launch {
             try {
                 _locationsState.emit(LocationsState.Loading(isFirstLoading))
-                val userPreferencesLocations = userPreferencesDataStore.getUserPreferences().locationsList
-                val operationResultUserPreferences =
-                    runBlocking {
-                        userPreferencesDataStore.saveUserPreferences(
-                            userPreferencesLocations.toMutableList().subList(0, userPreferencesLocations.lastIndex).apply {
-                                remove(locationId)
-                            })
-                    }
+                val operationResultUserPreferences = deleteUserLocationPersistence(weatherResultWrapper)
+                val operationResultWeatherForecast = deleteWeatherForecastPersistence(weatherResultWrapper)
 
-                val operationResultDeleteForecast = runBlocking { deleteWeatherForecastPersistence(locationId) }
-                if (operationResultUserPreferences && operationResultDeleteForecast) {
-                    _locationsState.emit(LocationsState.IOSuccess(isAdd = false, locationName = locationName))
-                    weatherForecastRepository.getWeatherForecast()
+                if (operationResultUserPreferences && operationResultWeatherForecast) {
+                    _locationsState.emit(LocationsState.IOSuccess(isAdd = false, locationName = weatherResultWrapper?.address?.local))
                     loadData()
                 } else {
-                    _locationsState.emit(LocationsState.IOError(isAdd = false, locationName = locationName))
+                    _locationsState.emit(LocationsState.IOError(isAdd = false, locationName = weatherResultWrapper?.address?.local))
                 }
             } catch (e: Exception) {
-                _locationsState.emit(LocationsState.IOError(isAdd = false, locationName = locationName))
+                _locationsState.emit(LocationsState.IOError(isAdd = false, locationName = weatherResultWrapper?.address?.local))
             }
         }
     }
 
-    private suspend fun deleteWeatherForecastPersistence(locationId: String): Boolean {
+    private suspend fun deleteUserLocationPersistence(weatherResultWrapper: WeatherResultWrapper?): Boolean {
+        val userPreferencesLocations = userPreferencesDataStore.getUserPreferences().locationsList
+        val locationId = weatherResultWrapper?.address?.globalIdLocal.toString()
+        return userPreferencesDataStore.saveUserPreferences(userPreferencesLocations.filter { it != locationId } )
+    }
+
+    private suspend fun deleteWeatherForecastPersistence(weatherResultWrapper: WeatherResultWrapper?): Boolean {
         val persistenceWeatherForecast = weatherForecastDataStore.getWeatherForecast()
+        val locationId = weatherResultWrapper?.address?.globalIdLocal.toString()
+
+        val filteredResultList = persistenceWeatherForecast.resultList.subList(1, persistenceWeatherForecast.resultList.size).filter {
+            it.address?.globalIdLocal.toString() != locationId
+        }.toMutableList()
+
+        filteredResultList.add(0, persistenceWeatherForecast.resultList.first())
+
         return weatherForecastDataStore.saveWeatherForecast(
-            persistenceWeatherForecast.copy(resultList = persistenceWeatherForecast.resultList.subList(
-                0,
-                persistenceWeatherForecast.resultList.lastIndex
-            ).filter {
-                it.address?.globalIdLocal.toString() == locationId
-            })
+            persistenceWeatherForecast.copy(resultList = filteredResultList)
         )
     }
 
