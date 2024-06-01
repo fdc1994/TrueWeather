@@ -55,8 +55,7 @@ class WeatherViewPagerAdapter(
             WeatherFetchStatus.NETWORK_ERROR -> ViewType.VIEW_TYPE_NETWORK_ERROR.ordinal
             WeatherFetchStatus.NO_INTERNET_ERROR -> ViewType.VIEW_TYPE_NO_INTERNET_ERROR.ordinal
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> ViewType.VIEW_TYPE_NOT_IN_COUNTRY_ERROR.ordinal
-            WeatherFetchStatus.OTHER_ERROR -> ViewType.VIEW_TYPE_GENERIC_ERROR.ordinal
-
+            WeatherFetchStatus.OTHER_ERROR, WeatherFetchStatus.OTHER_ERROR_SEARCH -> ViewType.VIEW_TYPE_GENERIC_ERROR.ordinal
         }
     }
 

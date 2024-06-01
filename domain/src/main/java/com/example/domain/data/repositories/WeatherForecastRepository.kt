@@ -39,7 +39,7 @@ class WeatherForecastRepositoryImpl @Inject constructor(
                 it.let {
                     if(it?.globalIdLocal != null) {
                         weatherResultWrapper.add(
-                            fetchForecast(it)
+                            fetchForecast(it, isSearch = true)
                         )
                     }
                 }
@@ -91,7 +91,8 @@ class WeatherForecastRepositoryImpl @Inject constructor(
 
 
     private suspend fun fetchForecast(
-        locationData: LocationData?
+        locationData: LocationData?,
+        isSearch: Boolean = false
     ): WeatherResultWrapper {
         val currentLocationForecastDto = ipmaService.getWeatherData(locationData!!.globalIdLocal.toString())
         val currentLocationForecast = weatherForecastMappers.mapWeatherResponse(currentLocationForecastDto)
@@ -99,7 +100,11 @@ class WeatherForecastRepositoryImpl @Inject constructor(
             !TimestampUtil.isBeforeToday(it.forecastDate)
         }
         val status = if(validData.isEmpty()) {
-            WeatherFetchStatus.OTHER_ERROR
+            if(isSearch) {
+                WeatherFetchStatus.OTHER_ERROR_SEARCH
+            } else {
+                WeatherFetchStatus.OTHER_ERROR
+            }
         } else {
             WeatherFetchStatus.SUCCESS
         }

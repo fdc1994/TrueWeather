@@ -61,12 +61,12 @@ class AddLocationsAdapter(
             WeatherFetchStatus.SUCCESS -> ViewType.VIEW_TYPE_SUCCESS.ordinal
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> ViewType.VIEW_TYPE_SUCCESS_FROM_PERSISTENCE.ordinal
-
             WeatherFetchStatus.PERMISSION_ERROR,
             WeatherFetchStatus.NETWORK_ERROR,
             WeatherFetchStatus.NO_INTERNET_ERROR,
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR,
-            WeatherFetchStatus.OTHER_ERROR -> ViewType.VIEW_TYPE_ERROR.ordinal
+            WeatherFetchStatus.OTHER_ERROR,
+            WeatherFetchStatus.OTHER_ERROR_SEARCH -> ViewType.VIEW_TYPE_ERROR.ordinal
         }
     }
 

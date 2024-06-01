@@ -107,7 +107,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
             WeatherFetchStatus.NETWORK_ERROR -> {
-                errorMessageTextView.text = "Não foi possível obter informação para esta localização"
+                errorMessageTextView.text = "Ocorreu um erro ao obter informação para esta localização"
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
                     text = "Tentar de novo"
@@ -226,18 +226,24 @@ class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(i
     private val actionButton: TextView = itemView.findViewById(R.id.action_button)
     fun bind(isFirstLocation: Boolean, weatherResultWrapper: WeatherResultWrapper?, onLocationClickListener: OnLocationClickListener) {
         val local = weatherResultWrapper?.address?.local
-        if (isFirstLocation) {
+        val isSearch = weatherResultWrapper?.status == WeatherFetchStatus.OTHER_ERROR_SEARCH
+        if (isFirstLocation && !isSearch) {
             currentLocationLabel.visibility = View.VISIBLE
             actionButton.setGone(true)
+            currentLocationLabel.text = "Ocorreu um erro ao obter a informação para a localização atual"
         } else {
             currentLocationLabel.visibility = View.GONE
             if (!local.isNullOrEmpty()) {
-                errorLabel.text = "Não foi possível obter a informação para $local"
+                errorLabel.text = "Ocorreu um erro ao obter a informação para $local"
             } else {
-                errorLabel.text = " Não foi possível obter a informação para esta localização"
+                errorLabel.text = " Ocorreu um erro ao obter a informação para esta localização"
             }
             actionButton.run {
-                setGone(false)
+                if(!isSearch) {
+                    setGone(false)
+                } else {
+                    setGone(true)
+                }
                 setOnClickListener {
                     onLocationClickListener.onLocationClick(weatherResultWrapper)
                 }
