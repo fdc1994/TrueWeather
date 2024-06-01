@@ -74,6 +74,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
         binding.recyclerView.adapter = recyclerViewAdapter
         if(networkConnectivityManager.hasInternetConnection()) {
             binding.searchBar.setGone(false)
+            binding.searchBar.isEnabled = true
             binding.offlineDisclaimer.setGone(true)
             binding.searchBar.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
