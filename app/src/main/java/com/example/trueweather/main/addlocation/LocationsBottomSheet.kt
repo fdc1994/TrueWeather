@@ -18,9 +18,11 @@ import com.example.domain.data.objects.WeatherResultWrapper
 import com.example.domain.data.utils.collectWhenCreated
 import com.example.trueweather.databinding.LocationsBottomSheetLayoutBinding
 import com.example.trueweather.main.addlocation.ui.AddLocationsAdapter
+import com.example.trueweather.utils.NetworkConnectivityManager
 import com.example.trueweather.utils.setGone
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener{
@@ -34,6 +36,9 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
     private val debounceDelay: Long = 500
+
+    @Inject
+    lateinit var networkConnectivityManager: NetworkConnectivityManager
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,25 +72,40 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
     private fun setupView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = recyclerViewAdapter
-        binding.searchBar.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // No-op
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // No-op
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                runnable?.let { handler.removeCallbacks(it) }
-
-                runnable = Runnable {
-                    if(s.toString().isNotEmpty() && s.toString().length > 1) viewModel.searchLocations(s.toString().trim())
-                    else if(s.toString().isEmpty()) viewModel.loadData()
+        if(networkConnectivityManager.hasInternetConnection()) {
+            binding.searchBar.setGone(false)
+            binding.offlineDisclaimer.setGone(true)
+            binding.searchBar.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                    // No-op
                 }
-                handler.postDelayed(runnable!!, debounceDelay)
-            }
-        })
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // No-op
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    runnable?.let { handler.removeCallbacks(it) }
+
+                    runnable = Runnable {
+                        if(s.toString().isNotEmpty() && s.toString().length > 1) viewModel.searchLocations(s.toString().trim())
+                        else if(s.toString().isEmpty()) viewModel.loadData()
+                    }
+                    handler.postDelayed(runnable!!, debounceDelay)
+                }
+            })
+        } else {
+            binding.searchBar.isEnabled = false
+            binding.searchBar.setText("")
+            binding.searchBar.setGone(true)
+            binding.offlineDisclaimer.setGone(false)
+        }
+
+    }
+
+    override fun onResume() {
+        setupView()
+        super.onResume()
     }
 
     private fun showUserLocations(weatherResult: WeatherResult) {

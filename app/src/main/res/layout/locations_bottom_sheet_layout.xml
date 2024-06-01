@@ -35,10 +35,20 @@
             android:padding="16dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_bar_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Pesquise os distritos..."
                 app:endIconMode="clear_text">
+
+                <TextView
+                    android:id="@+id/offline_disclaimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    style="@style/TextNormal"
+                    android:textColor="@color/white"
+                    android:text="Não é possível pesquisar localizações sem internet. Por favor restabeleça a sua ligação e tente novamente"/>
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/search_bar"
