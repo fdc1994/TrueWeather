@@ -223,15 +223,24 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorLabel: TextView = itemView.findViewById(R.id.error_label)
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
-    fun bind(isFirstLocation: Boolean, local: String?) {
+    private val actionButton: TextView = itemView.findViewById(R.id.action_button)
+    fun bind(isFirstLocation: Boolean, weatherResultWrapper: WeatherResultWrapper?, onLocationClickListener: OnLocationClickListener) {
+        val local = weatherResultWrapper?.address?.local
         if (isFirstLocation) {
             currentLocationLabel.visibility = View.VISIBLE
+            actionButton.setGone(true)
         } else {
             currentLocationLabel.visibility = View.GONE
             if (!local.isNullOrEmpty()) {
                 errorLabel.text = "Não foi possível obter a informação para $local"
             } else {
                 errorLabel.text = " Não foi possível obter a informação para esta localização"
+            }
+            actionButton.run {
+                setGone(false)
+                setOnClickListener {
+                    onLocationClickListener.onLocationClick(weatherResultWrapper)
+                }
             }
         }
     }

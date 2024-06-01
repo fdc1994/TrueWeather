@@ -144,13 +144,17 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
     }
 
     override fun onLocationClick(weatherResult: WeatherResultWrapper?) {
-        if(weatherResult?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
-            weatherResult.address?.globalIdLocal.let {
-                viewModel.removeLocation(weatherResult)
+        when(weatherResult?.status) {
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE,
+            WeatherFetchStatus.NETWORK_ERROR,
+            WeatherFetchStatus.OTHER_ERROR,
+            WeatherFetchStatus.NO_INTERNET_ERROR -> {
+                weatherResult.address?.globalIdLocal.let {
+                    viewModel.removeLocation(weatherResult)
+                }
             }
-        } else {
-            //This means it is a search location that should be added
-            viewModel.addLocation(weatherResult)
+            else -> viewModel.addLocation(weatherResult)
+
         }
     }
 
