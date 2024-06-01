@@ -12,6 +12,7 @@ import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResultWrapper
 import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
+import com.example.trueweather.main.RetryListener
 import com.example.trueweather.main.addlocation.OnLocationClickListener
 import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
@@ -76,7 +77,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
     private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
-    fun bind(locationWeather: WeatherResultWrapper?) {
+    fun bind(locationWeather: WeatherResultWrapper?, onRetryListener: RetryListener) {
         toolbar.title = locationWeather?.address?.local
         when (locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
@@ -84,6 +85,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 errorImageView.setImageResource(R.drawable.baseline_back_hand_24)
                 retryButton.run {
                     text = "Conceder Permissões"
+                    setOnClickListener { onRetryListener.onPermissionsRetry() }
                 }
                 toolbar.title = "Localização Atual"
             }
@@ -93,6 +95,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
                     text = "Tentar de novo"
+                    setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
@@ -101,6 +104,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 errorImageView.setImageResource(R.drawable.wifi_off_icon)
                 retryButton.run {
                     text = "Tentar de novo"
+                    setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
@@ -109,6 +113,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 errorImageView.setImageResource(R.drawable.unavailable_location_icon)
                 retryButton.run {
                     text = "Tentar de novo"
+                    setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
@@ -117,6 +122,7 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
                     text = "Tentar de novo"
+                    setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
         }

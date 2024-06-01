@@ -7,12 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.trueweather.R
+import com.example.trueweather.main.RetryListener
 import com.example.trueweather.ui.viewholders.ErrorViewHolder
 import com.example.trueweather.ui.viewholders.SuccessViewHolder
 import com.example.trueweather.utils.WeatherResultDiffCallback
 
-class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class WeatherViewPagerAdapter(
+    private var weatherResult: WeatherResult?,
+    private var onRetryListener: RetryListener
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -33,7 +36,7 @@ class WeatherViewPagerAdapter(private var weatherResult: WeatherResult?) :
                 holder.bind(locationWeather)
             }
             is ErrorViewHolder -> {
-                holder.bind(locationWeather)
+                holder.bind(locationWeather, onRetryListener)
             }
         }
     }

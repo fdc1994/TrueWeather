@@ -28,11 +28,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BaseTrueWeatherActivity() {
+class MainActivity : BaseTrueWeatherActivity(), RetryListener {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var viewPagerAdapter: WeatherViewPagerAdapter = WeatherViewPagerAdapter(null)
+    private var viewPagerAdapter: WeatherViewPagerAdapter = WeatherViewPagerAdapter(null, this)
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -144,5 +144,13 @@ class MainActivity : BaseTrueWeatherActivity() {
             // Making status bar overlaps with the activity
             WindowCompat.setDecorFitsSystemWindows(window, false)
         }
+    }
+
+    override fun onLocationsRetry() {
+        viewModel.loadData()
+    }
+
+    override fun onPermissionsRetry() {
+        TODO("Not yet implemented")
     }
 }
