@@ -1,5 +1,6 @@
 package com.example.trueweather.main.addlocation
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,6 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener{
+
+    var onDismissListener: (() -> Unit)? = null
 
     private val viewModel: LocationsBottomSheetViewModel by viewModels()
     private lateinit var binding: LocationsBottomSheetLayoutBinding
@@ -87,11 +90,11 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
 
     private fun showUserLocations(weatherResult: WeatherResult) {
         recyclerViewAdapter.updateWeatherResult(weatherResult)
-        showLocations(false)
+        showLocations()
     }
 
     private fun showSearchedLocations(weatherResult: WeatherResult) {
-        showLocations(true)
+        showLocations()
         recyclerViewAdapter.updateWeatherResult(weatherResult)
     }
 
@@ -109,10 +112,9 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
         binding.progressView.setGone(false)
     }
 
-    private fun showLocations(isSearchLocations: Boolean) {
+    private fun showLocations() {
         binding.progressView.setGone(true)
         binding.locationsView.setGone(false)
-        if(isSearchLocations) binding.saveButton.setGone(true) else binding.saveButton.setGone(false)
     }
 
     private fun showGlobalLoading() {
@@ -150,7 +152,11 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
         } else {
             Toast.makeText(context, "$locationName foi removido suas localizações", Toast.LENGTH_SHORT).show()
         }
+    }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        onDismissListener?.invoke()
+        super.onDismiss(dialog)
     }
 }
 

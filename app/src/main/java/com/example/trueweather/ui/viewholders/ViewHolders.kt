@@ -31,10 +31,11 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val windIntensity: TextView = itemView.findViewById(R.id.wind_intensity)
     private val headerFutureTemperature: TextView = itemView.findViewById(R.id.header_future_temperature)
     private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
-    private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
+    private val collapsingToolbarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
 
     fun bind(locationWeather: WeatherResultWrapper?) {
-        toolbar.title = locationWeather?.address?.local
+        val locationTitle = locationWeather?.address?.local
+        collapsingToolbarLayout.title = locationTitle
 
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTemperatureTv.text = "${this?.tMin}ºC"
@@ -51,7 +52,6 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         futureWeatherRecyclerView.adapter = locationWeather?.weatherForecast?.data?.let {
             FutureWeatherAdapter(it.subList(1, it.size))
         }
-        toolbar.title = locationWeather?.address?.local
 
         setTheme()
     }

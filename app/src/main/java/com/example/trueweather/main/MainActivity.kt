@@ -124,6 +124,9 @@ class MainActivity : BaseTrueWeatherActivity() {
         binding.addButton.setOnClickListener {
             // Show the custom bottom sheet dialog
             val locationsBottomSheet = LocationsBottomSheet()
+            locationsBottomSheet.onDismissListener = {
+                viewModel.loadData()
+            }
             locationsBottomSheet.show(supportFragmentManager, locationsBottomSheet.tag)
         }
     }
