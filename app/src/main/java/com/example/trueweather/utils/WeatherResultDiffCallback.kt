@@ -17,11 +17,16 @@ class WeatherResultDiffCallback(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldResult?.resultList == newResult?.resultList
+        // Compare items by a unique identifier, assuming 'id' is a unique identifier for each item
+        val oldItem = oldResult?.resultList?.get(oldItemPosition)
+        val newItem = newResult?.resultList?.get(newItemPosition)
+        return oldItem?.weatherForecast?.globalIdLocal == newItem?.weatherForecast?.globalIdLocal
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldResult?.resultList?.get(oldItemPosition)?.weatherForecast == newResult?.resultList?.get(newItemPosition)?.weatherForecast
-                && oldResult?.resultList?.get(oldItemPosition)?.address == newResult?.resultList?.get(newItemPosition)?.address
+        // Compare the content of items
+        val oldItem = oldResult?.resultList?.get(oldItemPosition)
+        val newItem = newResult?.resultList?.get(newItemPosition)
+        return oldItem == newItem
     }
 }
