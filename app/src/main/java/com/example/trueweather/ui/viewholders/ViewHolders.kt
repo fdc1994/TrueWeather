@@ -148,6 +148,7 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
         actionButton.setOnClickListener {
             onLocationClickListener.onLocationClick(locationWeather)
+            it.isEnabled = false
         }
 
         when(locationWeather?.status) {

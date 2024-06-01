@@ -16,7 +16,7 @@ private val Context.dataStore by preferencesDataStore(name = DATASTORE_NAME)
 
 interface UserPreferencesDataStore {
     suspend fun getUserPreferences(): UserPreferences
-    suspend fun saveUserPreferences(userPreferences: UserPreferences): Boolean
+    suspend fun saveUserPreferences(locations: List<String>): Boolean
     suspend fun clear()
 }
 
@@ -44,9 +44,9 @@ class UserPreferencesDataStoreImpl @Inject constructor(
         return preferences
     }
 
-    override suspend fun saveUserPreferences(userPreferences: UserPreferences): Boolean {
+    override suspend fun saveUserPreferences(locations: List<String>): Boolean {
         context.dataStore.edit { preferences ->
-            preferences[PREFS_USER_PREFERENCES] = gson.toJson(userPreferences)
+            preferences[PREFS_USER_PREFERENCES] = gson.toJson(UserPreferences(locations))
         }
         return true
     }

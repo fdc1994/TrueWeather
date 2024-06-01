@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.domain.data.objects.WeatherFetchStatus
@@ -52,6 +53,8 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
                 }
                 is LocationsBottomSheetViewModel.LocationsState.UserLocationsSuccess -> showUserLocations(it.userLocationsResult)
                 is LocationsBottomSheetViewModel.LocationsState.SearchLocationsSuccess -> showSearchedLocations(it.searchLocationsSuccess)
+                is LocationsBottomSheetViewModel.LocationsState.IOError -> showErrorToast(it.isAdd, it.locationName)
+                is LocationsBottomSheetViewModel.LocationsState.IOSuccess -> showSuccessToast(it.isAdd, it.locationName)
             }
         }
         setupView()
@@ -120,10 +123,34 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
 
     override fun onLocationClick(weatherResult: WeatherResultWrapper?) {
         if(weatherResult?.status == WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE) {
-            //This means it is a saved location that should be removed
+            weatherResult.address?.globalIdLocal.let {
+                viewModel.removeLocation(it.toString(), weatherResult.address?.local)
+            }
         } else {
             //This means it is a search location that should be added
+            viewModel.addLocation(weatherResult)
         }
+    }
+
+    private fun showErrorToast(isAdd: Boolean, locationName: String?) {
+        binding.progressView.setGone(true)
+        if(isAdd) {
+            val locationExtra = locationName?.let { "ao adicionar $it ás suas localizações.\nPor favor tente mais tarde" }
+            Toast.makeText(context, "Ocorreu um erro $locationExtra", Toast.LENGTH_SHORT).show()
+        } else {
+            val locationExtra = locationName?.let { "ao remover $it das suas localizações.\nPor favor tente mais tarde" }
+            Toast.makeText(context, "Ocorreu um erro $locationExtra", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showSuccessToast(isAdd: Boolean, locationName: String?) {
+        binding.progressView.setGone(true)
+        if(isAdd) {
+            Toast.makeText(context, "$locationName foi adicionado às suas localizações", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "$locationName foi removido suas localizações", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
 

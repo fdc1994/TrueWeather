@@ -72,7 +72,6 @@ class WeatherForecastRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getSavedLocationsWeatherForecast(weatherResult: MutableList<WeatherResultWrapper>) {
-        userPreferencesDataStore.saveUserPreferences(UserPreferences(mutableListOf("1010500", "1020500")))
         val locationIds = userPreferencesDataStore.getUserPreferences().locationsList
 
         locationIds.forEach {

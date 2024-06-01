@@ -22,5 +22,6 @@ class WeatherResultDiffCallback(
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldResult?.resultList?.get(oldItemPosition)?.weatherForecast == newResult?.resultList?.get(newItemPosition)?.weatherForecast
+                && oldResult?.resultList?.get(oldItemPosition)?.address == newResult?.resultList?.get(newItemPosition)?.address
     }
 }
