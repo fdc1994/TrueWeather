@@ -229,9 +229,9 @@ class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(i
         } else {
             currentLocationLabel.visibility = View.GONE
             if (!local.isNullOrEmpty()) {
-                errorLabel.text = "Não foi possível obter a localização para $local"
+                errorLabel.text = "Não foi possível obter a informação para $local"
             } else {
-                errorLabel.text = " Não foi possível obter esta localização"
+                errorLabel.text = " Não foi possível obter a informação para esta localização"
             }
         }
     }
