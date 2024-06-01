@@ -85,7 +85,7 @@ class WeatherResultDataStoreImpl @Inject constructor(
         val validData = result.weatherForecast?.data?.filter { forecast ->
             !TimestampUtil.isBeforeToday(forecast.forecastDate)
         } ?: mutableListOf()
-        val status = if (!networkConnectivityManager.hasInternetConnection()) {
+        val status = if (!networkConnectivityManager.hasInternetConnection() && validData.isEmpty()) {
             WeatherFetchStatus.NO_INTERNET_ERROR
         } else if (validData.isNotEmpty()) {
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE

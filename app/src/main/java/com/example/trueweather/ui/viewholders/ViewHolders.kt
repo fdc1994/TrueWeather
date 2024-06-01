@@ -76,7 +76,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         when (status) {
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> {
-                toolbarTag.text = "Dados Desatualizados"
+                toolbarTag.text = "Desatualizado"
                 toolbarTag.setGone(false)
                 toolbarTag.setOnClickListener {
                     TooltipCompat.setTooltipText(toolbarTag, toolbarTag.tooltipText)
