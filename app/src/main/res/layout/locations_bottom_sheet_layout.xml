@@ -34,13 +34,18 @@
             android:background="@android:color/transparent"
             android:padding="16dp">
 
-            <!-- Search Bar -->
-            <EditText
-                android:id="@+id/search_bar"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Pesquise os distritos..."
-                android:inputType="text" />
+                app:endIconMode="clear_text">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- RecyclerView -->
             <androidx.recyclerview.widget.RecyclerView
