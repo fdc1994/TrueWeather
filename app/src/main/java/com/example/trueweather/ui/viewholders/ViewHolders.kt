@@ -146,9 +146,12 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
         setLocationLabel(isCurrentLocation, isCurrentUserLocation)
 
+        if(!isCurrentUserLocation) {
+            actionButton.isEnabled = true
+        }
         actionButton.setOnClickListener {
             onLocationClickListener.onLocationClick(locationWeather)
-            it.isEnabled = false
+            actionButton.isEnabled = false
         }
 
         when(locationWeather?.status) {
