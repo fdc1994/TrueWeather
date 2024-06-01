@@ -32,7 +32,20 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin" >
+                <TextView
+                    android:id="@+id/toolbar_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="Your Tag"
+                    android:textColor="@android:color/white"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    android:background="@drawable/rounded_transparent_orange_background" />
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

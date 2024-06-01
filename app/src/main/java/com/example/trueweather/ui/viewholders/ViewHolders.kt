@@ -32,6 +32,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val windIntensity: TextView = itemView.findViewById(R.id.wind_intensity)
     private val headerFutureTemperature: TextView = itemView.findViewById(R.id.header_future_temperature)
     private val appBarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
+    private val toolbarTag: TextView = itemView.findViewById(R.id.toolbar_tag)
     private val collapsingToolbarLayout: CollapsingToolbarLayout = itemView.findViewById(R.id.collapsingToolbarLayout)
 
     fun bind(locationWeather: WeatherResultWrapper?) {
@@ -53,7 +54,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         futureWeatherRecyclerView.adapter = locationWeather?.weatherForecast?.data?.let {
             FutureWeatherAdapter(it.subList(1, it.size))
         }
-
+        setWarningTag(locationWeather?.status)
         setTheme()
     }
 
@@ -68,6 +69,17 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         precipitationPercentage.setTextColor(themedColor)
         windDirection.setTextColor(themedColor)
         windIntensity.setTextColor(themedColor)
+    }
+
+    private fun setWarningTag(status: WeatherFetchStatus?) {
+        when (status) {
+            WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE,
+            WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> {
+                toolbarTag.text = "Dados Desatualizados"
+                toolbarTag.setGone(false)
+            }
+            else -> toolbarTag.setGone(true)
+        }
     }
 }
 
@@ -152,7 +164,7 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
         setLocationLabel(isCurrentLocation, isCurrentUserLocation)
 
-        if(!isCurrentUserLocation) {
+        if (!isCurrentUserLocation) {
             actionButton.isEnabled = true
         }
         actionButton.setOnClickListener {
@@ -160,7 +172,7 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
             actionButton.isEnabled = false
         }
 
-        when(locationWeather?.status) {
+        when (locationWeather?.status) {
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> actionButton.setGone(true)
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE -> handleCurrentLocationButton(isCurrentUserLocation)
             else -> handleSearchedLocationButton(isCurrentUserLocation)
@@ -191,18 +203,19 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
     private fun handleCurrentLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
-            if(isCurrentUserLocation) setGone(true) else setGone(false)
-            text ="Remover"
+            if (isCurrentUserLocation) setGone(true) else setGone(false)
+            text = "Remover"
         }
     }
 
     private fun handleSearchedLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
-            if(isCurrentUserLocation) setGone(true) else setGone(false)
-            text ="Adicionar"
+            if (isCurrentUserLocation) setGone(true) else setGone(false)
+            text = "Adicionar"
         }
     }
 }
+
 class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorLabel: TextView = itemView.findViewById(R.id.error_label)
     private val currentLocationLabel: TextView = itemView.findViewById(R.id.current_location_label)
@@ -211,10 +224,10 @@ class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(i
             currentLocationLabel.visibility = View.VISIBLE
         } else {
             currentLocationLabel.visibility = View.GONE
-            if(!local.isNullOrEmpty()) {
+            if (!local.isNullOrEmpty()) {
                 errorLabel.text = "Não foi possível obter a localização para $local"
             } else {
-                errorLabel.text =" Não foi possível obter esta localização"
+                errorLabel.text = " Não foi possível obter esta localização"
             }
         }
     }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- White border layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+    <!-- Orange background layer with padding for the border -->
+    <item android:left="2dp" android:right="2dp" android:top="2dp" android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#80FFA500"/>
+            <corners android:radius="14dp"/>
+        </shape>
+    </item>
+</layer-list>
