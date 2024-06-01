@@ -90,10 +90,12 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
 
     private fun showLoading() {
         binding.progressView.setGone(false)
+        binding.addButton.isEnabled = false
     }
 
     private fun hideLoading() {
         binding.progressView.setGone(true)
+        binding.addButton.isEnabled = true
     }
 
     private fun showWeather(weatherResult: WeatherResult) {
