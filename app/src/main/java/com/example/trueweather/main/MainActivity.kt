@@ -109,6 +109,7 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
     private fun showWeather(weatherResult: WeatherResult) {
         if (binding.viewPager.adapter == null) {
             binding.viewPager.adapter = viewPagerAdapter
+            binding.viewPager.offscreenPageLimit = 1
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tabLayout, position ->
 
