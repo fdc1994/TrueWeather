@@ -82,7 +82,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     TooltipCompat.setTooltipText(toolbarTag, toolbarTag.tooltipText)
                 }
             }
-            else -> Unit
+            else -> toolbarTag.setGone(true)
         }
     }
 }
