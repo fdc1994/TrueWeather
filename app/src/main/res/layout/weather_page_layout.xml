@@ -21,11 +21,12 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:scrimAnimationDuration="200">
 
-            <ImageView
+            <WebView
                 android:id="@+id/weatherImage"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:scaleType="fitCenter"
+                android:background="@android:color/transparent"
                 app:layout_collapseMode="parallax" />
 
             <androidx.appcompat.widget.Toolbar

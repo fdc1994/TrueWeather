@@ -1,6 +1,8 @@
 package com.example.trueweather.ui.viewholders
 
+import android.graphics.Color
 import android.view.View
+import android.webkit.WebView
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,7 +23,7 @@ import com.example.trueweather.utils.setGone
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    private val weatherImageView: ImageView = itemView.findViewById(R.id.weatherImage)
+    private val weatherImageView: WebView = itemView.findViewById(R.id.weatherImage)
     private val maxTemperatureTv: TextView = itemView.findViewById(R.id.maxTemp)
     private val minTemperatureTv: TextView = itemView.findViewById(R.id.minTemp)
     private val currentWeatherDescription: TextView = itemView.findViewById(R.id.currentWeatherDescription)
@@ -43,7 +45,10 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTemperatureTv.text = "${this?.tMin}ºC"
             maxTemperatureTv.text = "${this?.tMax}ºC"
-            WeatherDrawableResolver.getWeatherDrawable(this?.weatherType?.id ?: -1)?.let { weatherImageView.setImageResource(it) }
+            setupSvgAnimation()
+            weatherImageView.setBackgroundColor(Color.TRANSPARENT)
+
+
             currentWeatherDescription.text = this?.weatherType?.descWeatherTypePT
             precipitationDescription.text = "${this?.classPrecInt?.descClassPrecIntPT} nas próximas 24H"
             precipitationPercentage.text = "${this?.precipitaProb}%"
@@ -57,6 +62,32 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
         setWarningTag(locationWeather?.status)
         setTheme()
+    }
+
+    private fun setupSvgAnimation() {
+        val svgFilename = "w_ic_d_28anim.svg"
+        val html = """
+        <html>
+        <head>
+            <style>
+                body {
+                    margin: 0;
+                    padding: 0;
+                    background-color: transparent;
+                }
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain; /* or object-fit: cover; */
+                }
+            </style>
+        </head>
+        <body>
+            <img src="$svgFilename">
+        </body>
+        </html>
+         """
+        weatherImageView.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "utf-8", null)
     }
 
     private fun setTheme() {
@@ -82,6 +113,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     TooltipCompat.setTooltipText(toolbarTag, toolbarTag.tooltipText)
                 }
             }
+
             else -> toolbarTag.setGone(true)
         }
     }
@@ -239,7 +271,7 @@ class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(i
                 errorLabel.text = " Ocorreu um erro ao obter a informação para esta localização"
             }
             actionButton.run {
-                if(!isSearch) {
+                if (!isSearch) {
                     setGone(false)
                 } else {
                     setGone(true)
