@@ -25,7 +25,11 @@ class LocationsBottomSheetViewModel @Inject constructor(
     private val _locationsState = MutableStateFlow<LocationsState>(LocationsState.Loading())
     val locationsState: StateFlow<LocationsState> get() = _locationsState.asStateFlow()
 
-    var isFirstLoading = true
+    private var isFirstLoading = true
+
+    private var hasChange = false
+
+    private var firstResultHash = 0
 
     init {
         loadData()
@@ -60,6 +64,7 @@ class LocationsBottomSheetViewModel @Inject constructor(
     fun addLocation(weatherResultWrapper: WeatherResultWrapper?) {
         viewModelScope.launch {
             try {
+                hasChange = true
                 _locationsState.emit(LocationsState.Loading(isFirstLoading))
 
                 val userPrefsOpResult = saveUserPreferencesLocation(weatherResultWrapper)
@@ -75,6 +80,8 @@ class LocationsBottomSheetViewModel @Inject constructor(
             }
         }
     }
+
+    fun hasChange(): Boolean = hasChange
 
     private suspend fun saveUserPreferencesLocation(weatherResultWrapper: WeatherResultWrapper?): Boolean {
         val userPreferencesLocations = userPreferencesDataStore.getUserPreferences().locationsList
@@ -95,6 +102,7 @@ class LocationsBottomSheetViewModel @Inject constructor(
     fun removeLocation(weatherResultWrapper: WeatherResultWrapper?) {
         viewModelScope.launch {
             try {
+                hasChange = true
                 _locationsState.emit(LocationsState.Loading(isFirstLoading))
                 val operationResultUserPreferences = deleteUserLocationPersistence(weatherResultWrapper)
                 val operationResultWeatherForecast = deleteWeatherForecastPersistence(weatherResultWrapper)

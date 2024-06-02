@@ -180,7 +180,7 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        onDismissListener?.invoke()
+        if(viewModel.hasChange()) onDismissListener?.invoke()
         super.onDismiss(dialog)
     }
 }
