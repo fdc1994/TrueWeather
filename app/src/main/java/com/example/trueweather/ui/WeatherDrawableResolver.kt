@@ -76,4 +76,76 @@ object WeatherDrawableResolver {
             }
         }
     }
+
+    fun getDrawableAnimationFilename(weatherId: Int, overrideTime: Boolean = false): String? {
+        if(!TimestampUtil.isEvening() || overrideTime) {
+            return when(weatherId) {
+                1 -> "w_ic_d_01anim.svg"
+                2 -> "w_ic_d_02anim.svg"
+                3 -> "w_ic_d_03anim.svg"
+                4 -> "w_ic_d_04anim.svg"
+                5 -> "w_ic_d_05anim.svg"
+                6 -> "w_ic_d_06anim.svg"
+                7 -> "w_ic_d_07anim.svg"
+                8 -> "w_ic_d_08anim.svg"
+                9 -> "w_ic_d_09anim.svg"
+                10 -> "w_ic_d_10anim.svg"
+                11 -> "w_ic_d_11anim.svg"
+                12 -> "w_ic_d_12anim.svg"
+                13 -> "w_ic_d_13anim.svg"
+                14 -> "w_ic_d_14anim.svg"
+                15 -> "w_ic_d_15anim.svg"
+                16 -> "w_ic_d_16anim.svg"
+                17 -> "w_ic_d_17anim.svg"
+                18 -> "w_ic_d_18anim.svg"
+                19 -> "w_ic_d_19anim.svg"
+                20 -> "w_ic_d_20anim.svg"
+                21 -> "w_ic_d_21anim.svg"
+                22 -> "w_ic_d_22anim.svg"
+                23 -> "w_ic_d_23anim.svg"
+                24 -> "w_ic_d_24anim.svg"
+                25 -> "w_ic_d_25anim.svg"
+                26 -> "w_ic_d_26anim.svg"
+                27 -> "w_ic_d_27anim.svg"
+                28 -> "w_ic_d_28anim.svg"
+                29 -> "w_ic_d_29anim.svg"
+                30 -> "w_ic_d_30anim.svg"
+                else -> null
+            }
+        } else {
+            return when(weatherId) {
+                1 -> "w_ic_n_01anim.svg"
+                2 -> "w_ic_n_02anim.svg"
+                3 -> "w_ic_n_03anim.svg"
+                4 -> "w_ic_n_04anim.svg"
+                5 -> "w_ic_n_05anim.svg"
+                6 -> "w_ic_n_06anim.svg"
+                7 -> "w_ic_n_07anim.svg"
+                8 -> "w_ic_n_08anim.svg"
+                9 -> "w_ic_n_09anim.svg"
+                10 -> "w_ic_n_10anim.svg"
+                11 -> "w_ic_n_11anim.svg"
+                12 -> "w_ic_n_12anim.svg"
+                13 -> "w_ic_n_13anim.svg"
+                14 -> "w_ic_n_14anim.svg"
+                15 -> "w_ic_n_15anim.svg"
+                16 -> "w_ic_n_16anim.svg"
+                17 -> "w_ic_n_17anim.svg"
+                18 -> "w_ic_n_18anim.svg"
+                19 -> "w_ic_n_19anim.svg"
+                20 -> "w_ic_n_20anim.svg"
+                21 -> "w_ic_n_21anim.svg"
+                22 -> "w_ic_n_22anim.svg"
+                23 -> "w_ic_n_23anim.svg"
+                24 -> "w_ic_n_24anim.svg"
+                25 -> "w_ic_n_25anim.svg"
+                26 -> "w_ic_n_26anim.svg"
+                27 -> "w_ic_n_27anim.svg"
+                28 -> "w_ic_n_28anim.svg"
+                29 -> "w_ic_n_29anim.svg"
+                30 -> "w_ic_n_30anim.svg"
+                else -> null
+            }
+        }
+    }
 }

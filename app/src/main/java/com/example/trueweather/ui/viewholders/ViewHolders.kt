@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResultWrapper
+import com.example.network.data.WeatherType
 import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
 import com.example.trueweather.main.RetryListener
@@ -21,6 +22,7 @@ import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
 import com.example.trueweather.utils.setGone
 import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.google.android.material.appbar.CollapsingToolbarLayout.TitleCollapseMode
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val weatherImageView: WebView = itemView.findViewById(R.id.weatherImage)
@@ -45,7 +47,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         with(locationWeather?.weatherForecast?.data?.first()) {
             minTemperatureTv.text = "${this?.tMin}ºC"
             maxTemperatureTv.text = "${this?.tMax}ºC"
-            setupSvgAnimation()
+            this?.weatherType?.let { setupSvgAnimation(it) }
             weatherImageView.setBackgroundColor(Color.TRANSPARENT)
 
 
@@ -64,8 +66,8 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         setTheme()
     }
 
-    private fun setupSvgAnimation() {
-        val svgFilename = "w_ic_d_28anim.svg"
+    private fun setupSvgAnimation(weatherType: WeatherType) {
+        val svgFilename = WeatherDrawableResolver.getDrawableAnimationFilename(weatherType.id)
         val html = """
         <html>
         <head>
@@ -123,10 +125,8 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val errorMessageTextView: TextView = itemView.findViewById(R.id.errorMessage)
     private val retryButton: AppCompatButton = itemView.findViewById(R.id.retryButton)
     private val errorImageView: ImageView = itemView.findViewById(R.id.error_logo)
-    private val toolbar: Toolbar = itemView.findViewById(R.id.toolbar)
 
     fun bind(locationWeather: WeatherResultWrapper?, onRetryListener: RetryListener) {
-        toolbar.title = locationWeather?.address?.local
         when (locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
                 errorMessageTextView.text = "Para ter acesso à sua localização deve permitir o Acesso no sistema"
@@ -135,7 +135,6 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     text = "Conceder Permissões"
                     setOnClickListener { onRetryListener.onPermissionsRetry() }
                 }
-                toolbar.title = "Localização Atual"
             }
 
             WeatherFetchStatus.NETWORK_ERROR -> {
