@@ -78,6 +78,7 @@ class MainActivity : BaseTrueWeatherActivity(), RetryListener {
 
     private fun setTheme() {
         if (isEvening == TimestampUtil.isEvening()) return
+        else binding.viewPager.adapter?.notifyDataSetChanged()
         isEvening = TimestampUtil.isEvening()
         val color = ThemeManager.getCurrentTextColor()
         binding.progressText.setTextColor(color)
