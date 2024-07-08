@@ -13,6 +13,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.domain.data.utils.collectWhenResumed
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -24,9 +25,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        // Observe navigation state
-        viewModel.navigationState.observe(this, Observer { state ->
-            when (state) {
+        collectWhenResumed(viewModel.navigationState) {
+            when (it) {
                 is SplashActivityViewModel.NavigationState.AskForPermissions -> {
                     // Ask for permissions
                     requestLocationPermission()
@@ -36,8 +36,10 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
+
+                null -> Unit
             }
-        })
+        }
 
         // Load data
         viewModel.loadData()
@@ -45,17 +47,12 @@ class SplashActivity : AppCompatActivity() {
 
     // Request location permission
     private fun requestLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                // Permission already granted
-                viewModel.resumeLoadAfterPermissions()
-            } else {
-                // Request permission
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-            }
-        } else {
-            // Permission already granted for devices below Marshmallow
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Permission already granted
             viewModel.resumeLoadAfterPermissions()
+        } else {
+            // Request permission
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
         }
     }
 
