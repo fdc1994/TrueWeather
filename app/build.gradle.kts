@@ -55,9 +55,6 @@ dependencies {
     implementation(libs.airbnb.lottie)
     implementation(project(":domain"))
     implementation(project(":data"))
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.hiltAndroid)
     kapt(libs.hiltCompiler)
     implementation(libs.retrofit)
@@ -65,6 +62,14 @@ dependencies {
     implementation(libs.rxJava)
     implementation(libs.adapterRxJava)
     implementation(libs.rxAndroid)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
 }
 
 // Allow references to generated code
