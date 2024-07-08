@@ -45,9 +45,6 @@ dependencies {
     implementation(libs.rxJava)
     implementation(libs.adapterRxJava)
     implementation(libs.androidx.lifecycle)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.rxJava)
     implementation(libs.adapterRxJava)
     implementation(libs.rxAndroid)
@@ -55,6 +52,15 @@ dependencies {
     implementation(libs.joda.datetime)
     implementation(libs.google.gms)
     kapt(libs.hiltCompiler)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockk)
 }
 
 // Allow references to generated code
