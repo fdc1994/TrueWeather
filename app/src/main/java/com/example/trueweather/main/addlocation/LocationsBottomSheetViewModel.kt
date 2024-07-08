@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,8 +27,6 @@ class LocationsBottomSheetViewModel @Inject constructor(
     private var isFirstLoading = true
 
     private var hasChange = false
-
-    private var firstResultHash = 0
 
     init {
         loadData()

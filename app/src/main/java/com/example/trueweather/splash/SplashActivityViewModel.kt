@@ -56,9 +56,8 @@ class SplashActivityViewModel @Inject constructor(
         _navigationState.value = NavigationState.NavigateToMain
     }
     sealed class NavigationState {
-        object AskForPermissions : NavigationState()
-        object NavigateToMain : NavigationState()
-        // Add more navigation states as needed
+        data object AskForPermissions : NavigationState()
+        data object NavigateToMain : NavigationState()
     }
 
 }

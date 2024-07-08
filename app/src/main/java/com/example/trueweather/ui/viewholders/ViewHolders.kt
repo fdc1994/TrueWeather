@@ -7,7 +7,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.widget.TooltipCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,6 @@ import com.example.trueweather.ui.FutureWeatherAdapter
 import com.example.trueweather.ui.WeatherDrawableResolver
 import com.example.trueweather.utils.setGone
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.android.material.appbar.CollapsingToolbarLayout.TitleCollapseMode
 
 class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val weatherImageView: WebView = itemView.findViewById(R.id.weatherImage)
@@ -45,17 +43,17 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         collapsingToolbarLayout.title = locationTitle
 
         with(locationWeather?.weatherForecast?.data?.first()) {
-            minTemperatureTv.text = "${this?.tMin}ºC"
-            maxTemperatureTv.text = "${this?.tMax}ºC"
+            minTemperatureTv.text = itemView.context.getString(R.string.temp_placeholder, this?.tMin)
+            maxTemperatureTv.text = itemView.context.getString(R.string.temp_placeholder, this?.tMax)
             this?.weatherType?.let { setupSvgAnimation(it) }
             weatherImageView.setBackgroundColor(Color.TRANSPARENT)
 
 
             currentWeatherDescription.text = this?.weatherType?.descWeatherTypePT
-            precipitationDescription.text = "${this?.classPrecInt?.descClassPrecIntPT} nas próximas 24H"
-            precipitationPercentage.text = "${this?.precipitaProb}%"
+            precipitationDescription.text = itemView.context.getString(R.string.day_hour_weather_placeholder, this?.classPrecInt?.descClassPrecIntPT)
+            precipitationPercentage.text = itemView.context.getString(R.string.precipitation_probability, this?.precipitaProb)
             windDirection.text = this?.predWindDir
-            windIntensity.text = "${this?.classWindSpeed?.descClassWindSpeedDailyPT} nas próximas 24H"
+            windIntensity.text = itemView.context.getString(R.string.wind_intensity_probability_placeholder, this?.classWindSpeed?.descClassWindSpeedDailyPT)
         }
 
         futureWeatherRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
@@ -109,7 +107,7 @@ class SuccessViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         when (status) {
             WeatherFetchStatus.SUCCESS_FROM_PERSISTENCE,
             WeatherFetchStatus.SUCCESS_CURRENT_LOCATION_FROM_PERSISTENCE -> {
-                toolbarTag.text = "Desatualizado"
+                toolbarTag.text = itemView.context.getString(R.string.outdated)
                 toolbarTag.setGone(false)
                 toolbarTag.setOnClickListener {
                     TooltipCompat.setTooltipText(toolbarTag, toolbarTag.tooltipText)
@@ -129,46 +127,46 @@ class ErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(locationWeather: WeatherResultWrapper?, onRetryListener: RetryListener) {
         when (locationWeather?.status) {
             WeatherFetchStatus.PERMISSION_ERROR -> {
-                errorMessageTextView.text = "Para ter acesso à sua localização deve permitir o Acesso no sistema"
+                errorMessageTextView.text = itemView.context.getString(R.string.no_internet_permission_warning_title)
                 errorImageView.setImageResource(R.drawable.baseline_back_hand_24)
                 retryButton.run {
-                    text = "Conceder Permissões"
+                    text = context.getString(R.string.no_internet_permission_warning_cta)
                     setOnClickListener { onRetryListener.onPermissionsRetry() }
                 }
             }
 
             WeatherFetchStatus.NETWORK_ERROR -> {
-                errorMessageTextView.text = "Ocorreu um erro ao obter informação para esta localização"
+                errorMessageTextView.text = itemView.context.getString(R.string.location_error)
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
-                    text = "Tentar de novo"
+                    text = context.getString(R.string.try_again)
                     setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
             WeatherFetchStatus.NO_INTERNET_ERROR -> {
-                errorMessageTextView.text = "Não foi possível estabelecer conexão com a internet"
+                errorMessageTextView.text = itemView.context.getString(R.string.no_internet_error_warning_title)
                 errorImageView.setImageResource(R.drawable.wifi_off_icon)
                 retryButton.run {
-                    text = "Tentar de novo"
+                    text = context.getString(R.string.try_again)
                     setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
             WeatherFetchStatus.NOT_IN_COUNTRY_ERROR -> {
-                errorMessageTextView.text = "Não foi possível determinar a sua localização em Portugal.\nA localização atual apenas funciona em Portugal."
+                errorMessageTextView.text = itemView.context.getString(R.string.not_in_country_warning_title)
                 errorImageView.setImageResource(R.drawable.unavailable_location_icon)
                 retryButton.run {
-                    text = "Tentar de novo"
+                    text = context.getString(R.string.try_again)
                     setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
 
             else -> {
-                errorMessageTextView.text = "Ocorreu um erro inesperado. Por favor tente novamente mais tarde."
+                errorMessageTextView.text = itemView.context.getString(R.string.generic_error_warning_title)
                 errorImageView.setImageResource(R.drawable.baseline_error_outline_24)
                 retryButton.run {
-                    text = "Tentar de novo"
+                    text = context.getString(R.string.try_again)
                     setOnClickListener { onRetryListener.onLocationsRetry() }
                 }
             }
@@ -216,8 +214,8 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
 
     private fun ManageLocationsSuccessViewHolder.setLocationInfo(locationWeather: WeatherResultWrapper?) {
         with(locationWeather?.weatherForecast?.data?.first()) {
-            minTempTextView.text = "${this?.tMin}ºC"
-            maxTempTextView.text = "${this?.tMax}ºC"
+            minTempTextView.text = itemView.context.getString(R.string.temp_placeholder, this?.tMin)
+            maxTempTextView.text = itemView.context.getString(R.string.temp_placeholder, this?.tMax)
             WeatherDrawableResolver.getWeatherDrawable(this?.weatherType?.id ?: -1)?.let { weatherImageView.setImageResource(it) }
             weatherDescriptionTextView.text = this?.weatherType?.descWeatherTypePT
         }
@@ -227,10 +225,10 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
     private fun setLocationLabel(isCurrentLocation: Boolean, isCurrentUserLocation: Boolean) {
         if (isCurrentLocation) {
             currentLocationLabel.setGone(false)
-            currentLocationLabel.text = "Localização atual"
+            currentLocationLabel.text = itemView.context.getString(R.string.current_location)
         } else if (isCurrentUserLocation) {
             currentLocationLabel.setGone(false)
-            currentLocationLabel.text = "Localização já adicionada"
+            currentLocationLabel.text = itemView.context.getString(R.string.location_already_added)
         } else {
             currentLocationLabel.setGone(true)
         }
@@ -239,14 +237,14 @@ class ManageLocationsSuccessViewHolder(itemView: View) : RecyclerView.ViewHolder
     private fun handleCurrentLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
             if (isCurrentUserLocation) setGone(true) else setGone(false)
-            text = "Remover"
+            text = itemView.context.getString(R.string.remove)
         }
     }
 
     private fun handleSearchedLocationButton(isCurrentUserLocation: Boolean) {
         with(actionButton) {
             if (isCurrentUserLocation) setGone(true) else setGone(false)
-            text = "Adicionar"
+            text = context.getString(R.string.add)
         }
     }
 }
@@ -261,13 +259,13 @@ class ManageLocationsErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(i
         if (isFirstLocation && !isSearch) {
             currentLocationLabel.visibility = View.VISIBLE
             actionButton.setGone(true)
-            currentLocationLabel.text = "Ocorreu um erro ao obter a informação para a localização atual"
+            currentLocationLabel.text = itemView.context.getString(R.string.current_location_fetch_error)
         } else {
             currentLocationLabel.visibility = View.GONE
             if (!local.isNullOrEmpty()) {
-                errorLabel.text = "Ocorreu um erro ao obter a informação para $local"
+                errorLabel.text = itemView.context.getString(R.string.specific_location_error_placeholder, local)
             } else {
-                errorLabel.text = " Ocorreu um erro ao obter a informação para esta localização"
+                errorLabel.text = itemView.context.getString(R.string.location_error)
             }
             actionButton.run {
                 if (!isSearch) {

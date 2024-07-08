@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:text="Gerir Localizações"
+            android:text="@string/manage_locations_title"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,7 +38,7 @@
                 android:id="@+id/search_bar_parent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Pesquise os distritos..."
+                android:hint="@string/manage_locations_search_tooltip"
                 app:endIconMode="clear_text">
 
                 <TextView
@@ -48,7 +48,7 @@
                     android:textAlignment="center"
                     style="@style/TextNormal"
                     android:textColor="@color/white"
-                    android:text="Não é possível pesquisar localizações sem internet. Por favor restabeleça a sua ligação e tente novamente"/>
+                    android:text="@string/search_locations_error"/>
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/search_bar"
@@ -97,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:text="Ocorreu um Erro"
+                android:text="@string/general_error"
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 style="@style/TextLarge" />

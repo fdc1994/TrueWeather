@@ -125,10 +125,6 @@ class LocationsBottomSheet: BottomSheetDialogFragment(), OnLocationClickListener
         binding.locationsView.setGone(true)
     }
 
-    private fun hideError() {
-        showGlobalLoading()
-    }
-
     private fun showSearchLoading() {
         binding.progressView.setGone(false)
     }

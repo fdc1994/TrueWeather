@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/rounded_white_background"
     android:padding="8dp"
     android:layout_margin="8dp"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Localização atual"
+        tools:text="Localização atual"
          />
 
     <LinearLayout
@@ -35,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="Porto"
+            tools:text="Porto"
             android:textSize="16sp" />
 
         <ImageView
@@ -58,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:text="18°C"
+                tools:text="18°C"
                 android:textColor="#0000FF"
                 android:textSize="16sp" /> <!-- Blue color for min temp -->
 
@@ -73,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="25°C"
+                tools:text="25°C"
                 android:textColor="#FFA500"
                 android:textSize="16sp" /> <!-- Orange color for max temp -->
         </LinearLayout>
@@ -95,7 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:text="Pouco Nublado"
+            tools:text="Pouco Nublado"
             android:textSize="16sp" />
 
         <Button
@@ -103,7 +104,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Remover"/>
+            tools:text="Remover"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

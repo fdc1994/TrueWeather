@@ -1,4 +1,5 @@
 package com.example.trueweather.ui
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,6 @@ import com.example.network.utils.TimestampUtil
 import com.example.trueweather.R
 import com.example.trueweather.ThemeManager
 import org.joda.time.DateTime
-import java.sql.Time
 
 class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
     RecyclerView.Adapter<FutureWeatherAdapter.ViewHolder>() {
@@ -23,18 +23,18 @@ class FutureWeatherAdapter(private val forecastList: List<WeatherData>) :
 
         fun bind(weatherData: WeatherData) {
             dayOfTheWeek.text = TimestampUtil.getDayOfWeekInPortuguese(DateTime.parse(weatherData.forecastDate))
-            minTemp.text = "${weatherData.tMin}ºC"
-            maxTemp.text = "${weatherData.tMax}ºC"
+            minTemp.text = itemView.context.getString(R.string.temp_placeholder, weatherData.tMin)
+            maxTemp.text = itemView.context.getString(R.string.temp_placeholder, weatherData.tMax)
             WeatherDrawableResolver.getWeatherDrawable(weatherData.weatherType.id, overrideTime = true)?.let { weatherIcon.setImageResource(it) }
             setTheme()
         }
+
         private fun setTheme() {
             val themedColor = itemView.context.getColor(ThemeManager.getCurrentTextColor())
             dayOfTheWeek.setTextColor(themedColor)
             maxTemp.setTextColor(themedColor)
             minTemp.setTextColor(themedColor)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

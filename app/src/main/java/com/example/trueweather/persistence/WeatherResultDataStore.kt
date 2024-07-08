@@ -8,7 +8,6 @@ import com.example.domain.data.objects.WeatherData
 import com.example.domain.data.objects.WeatherFetchStatus
 import com.example.domain.data.objects.WeatherResult
 import com.example.domain.data.objects.WeatherResultWrapper
-import com.example.network.persistence.UserPreferencesDataStore
 import com.example.network.utils.TimestampUtil
 import com.example.trueweather.utils.NetworkConnectivityManager
 import com.google.gson.GsonBuilder

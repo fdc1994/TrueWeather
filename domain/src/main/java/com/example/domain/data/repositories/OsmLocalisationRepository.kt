@@ -3,8 +3,6 @@ package com.example.domain.data.repositories
 import com.example.domain.data.mappers.OsmLocalisationMappers
 import com.example.domain.data.objects.OsmResponse
 import com.example.network.interfaces.OsmService
-
-import io.reactivex.Single
 import javax.inject.Inject
 
 interface OsmLocalisationRepository {

@@ -26,7 +26,6 @@ class MainActivityViewModel @Inject constructor(
     val weatherState: StateFlow<ResultWrapper<WeatherResult>> get() = _weatherState.asStateFlow()
 
     private val _permissionState = MutableStateFlow(false)
-    val permissionState: StateFlow<Boolean> get() = _permissionState.asStateFlow()
 
     private val hasValidConnection: Boolean
         get() = networkConnectivityManager.hasInternetConnection()

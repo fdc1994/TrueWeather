@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/TextLarge"
-            android:text="A carregar informação..."/>
+            android:text="@string/main_loading"/>
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

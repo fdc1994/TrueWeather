@@ -11,10 +11,7 @@ import org.joda.time.LocalDate
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.ISODateTimeFormat
 import java.lang.reflect.Type
-import java.util.Date
 import java.util.Locale
-import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 object TimestampUtil{
 
@@ -26,10 +23,6 @@ object TimestampUtil{
 
     fun exceedsTimestamp(timestamp: Long, period: Long): Boolean {
         return currentTimeMillis - timestamp > period
-    }
-
-    fun exceedsPeriod(timestamp: Long, period: Long, timeUnit: TimeUnit): Boolean {
-        return exceedsTimestamp(timestamp, timeUnit.toMillis(period))
     }
 
     fun getDayOfWeekInPortuguese(dateTime: DateTime): String {

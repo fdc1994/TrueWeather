@@ -1,21 +1,7 @@
 package com.example.trueweather.platform
 
-import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
-import android.util.AttributeSet
-import android.view.View
-import android.widget.FrameLayout
-import android.widget.ProgressBar
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.example.trueweather.R
-import com.example.trueweather.utils.lazyFindViewById
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 
 abstract class BaseTrueWeatherActivity : AppCompatActivity() {
     open fun handlePermissionResult(isGranted: Boolean): Unit = Unit

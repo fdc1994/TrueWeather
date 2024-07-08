@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">TrueWeather</string>
+    <string name="your_tag">Your Tag</string>
+    <string name="main_loading">A carregar informação…</string>
+    <string name="true_weather">True Weather</string>
+    <string name="current_location">Localização atual</string>
+    <string name="current_location_error">Não foi possível obter a localização atual</string>
+    <string name="remove">Remover</string>
+    <string name="manage_locations_title">Gerir Localizações</string>
+    <string name="manage_locations_search_tooltip">Pesquise os distritos…</string>
+    <string name="search_locations_error">Não é possível pesquisar localizações sem internet. Por favor restabeleça a sua ligação e tente novamente</string>
+    <string name="general_error">Ocorreu um Erro</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="retry">Retry</string>
+    <string name="celsius">ºC</string>
+    <string name="temp_placeholder">%1$sºC</string>
+    <string name="day_hour_weather_placeholder">%1$s nas próximas 24H</string>
+    <string name="precipitation_probability">%1$s%%</string>
+    <string name="wind_intensity_probability_placeholder">%1$s nas próximas 24H</string>
+    <string name="outdated">Desatualizado</string>
+    <string name="no_internet_permission_warning_title">Para ter acesso à sua localização deve permitir o Acesso no sistema</string>
+    <string name="no_internet_permission_warning_cta">Conceder Permissões</string>
+    <string name="location_error">Ocorreu um erro ao obter informação para esta localização</string>
+    <string name="try_again">Tentar de novo</string>
+    <string name="no_internet_error_warning_title">Não foi possível estabelecer conexão com a internet</string>
+    <string name="not_in_country_warning_title">Não foi possível determinar a sua localização em Portugal.\nA localização atual apenas funciona em Portugal.</string>
+    <string name="generic_error_warning_title">Ocorreu um erro inesperado. Por favor tente novamente mais tarde.</string>
+    <string name="location_already_added">Localização já adicionada</string>
+    <string name="specific_location_error_placeholder">Ocorreu um erro ao obter a informação para %1$s</string>
+    <string name="current_location_fetch_error">Ocorreu um erro ao obter a informação para a localização atual</string>
+    <string name="add">Adicionar</string>
 </resources>
