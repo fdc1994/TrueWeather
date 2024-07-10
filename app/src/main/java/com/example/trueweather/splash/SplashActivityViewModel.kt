@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.data.LocalizationManager
 import com.example.domain.data.repositories.DistrictIdentifiersRepository
+import com.example.trueweather.utils.NetworkConnectivityManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashActivityViewModel @Inject constructor(
     private val districtIdentifiersRepository: DistrictIdentifiersRepository,
-    private val localizationManager: LocalizationManager
+    private val localizationManager: LocalizationManager,
+    private val networkConnectivityManager: NetworkConnectivityManager
 ) : ViewModel() {
 
     private val _navigationState = MutableStateFlow<NavigationState?>(null)
@@ -23,6 +25,11 @@ class SplashActivityViewModel @Inject constructor(
     fun loadData() {
         if (!localizationManager.checkPermissions()) {
             _navigationState.value = NavigationState.AskForPermissions
+            return
+        }
+
+        if (!networkConnectivityManager.hasInternetConnection()) {
+            _navigationState.value = NavigationState.Error
             return
         }
 
