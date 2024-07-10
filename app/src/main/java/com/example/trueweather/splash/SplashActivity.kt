@@ -1,19 +1,19 @@
 package com.example.trueweather.splash
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
-import com.example.trueweather.R
-import com.example.trueweather.main.MainActivity
-import dagger.hilt.android.AndroidEntryPoint
+
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.os.Bundle
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.domain.data.utils.collectWhenResumed
+import com.example.trueweather.R
+import com.example.trueweather.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -31,11 +31,17 @@ class SplashActivity : AppCompatActivity() {
                     // Ask for permissions
                     requestLocationPermission()
                 }
+
                 is SplashActivityViewModel.NavigationState.NavigateToMain -> {
                     // Navigate to the main activity
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }
+
+                is SplashActivityViewModel.NavigationState.Error -> Toast.makeText(
+                    this, "Ocorreu um erro. Por favor reinicie a aplicação", Toast
+                        .LENGTH_LONG
+                ).show()
 
                 null -> Unit
             }

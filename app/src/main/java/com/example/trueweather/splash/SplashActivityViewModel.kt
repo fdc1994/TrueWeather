@@ -26,29 +26,25 @@ class SplashActivityViewModel @Inject constructor(
             return
         }
 
-        // Fetch district identifiers
         updateCriticalInformationAndStartApp()
     }
 
     fun resumeLoadAfterPermissions() {
-        // Resume loading after permissions are granted
         updateCriticalInformationAndStartApp()
     }
 
     private fun updateCriticalInformationAndStartApp() {
         viewModelScope.launch {
             try {
-                // Fetch district identifiers
                 val identifiers = districtIdentifiersRepository.getDistrictIdentifiersList()
 
-                // Handle result
                 if (identifiers != null) {
                     navigateToMain()
                 } else {
-                    // Handle error
+                    _navigationState.value = NavigationState.Error
                 }
             } catch (e: Exception) {
-                // Handle error
+                _navigationState.value = NavigationState.Error
             }
         }
     }
@@ -60,5 +56,6 @@ class SplashActivityViewModel @Inject constructor(
     sealed class NavigationState {
         data object AskForPermissions : NavigationState()
         data object NavigateToMain : NavigationState()
+        data object Error : NavigationState()
     }
 }
