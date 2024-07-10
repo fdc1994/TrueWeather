@@ -29,4 +29,6 @@
     <string name="specific_location_error_placeholder">Ocorreu um erro ao obter a informação para %1$s</string>
     <string name="current_location_fetch_error">Ocorreu um erro ao obter a informação para a localização atual</string>
     <string name="add">Adicionar</string>
+    <string name="precipitation">Precipitação</string>
+    <string name="wind_intensity">Intensidade do Vento</string>
 </resources>

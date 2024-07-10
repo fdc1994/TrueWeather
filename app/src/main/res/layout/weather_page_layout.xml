@@ -186,6 +186,7 @@
                         android:layout_height="30dp"
                         android:drawablePadding="8dp"
                         android:gravity="start|center"
+                        android:text="@string/precipitation"
                         tools:text="Precipitação"
                         app:drawableStartCompat="@drawable/water_drop_icon" />
 
@@ -225,6 +226,7 @@
                         android:layout_height="30dp"
                         android:drawablePadding="8dp"
                         android:gravity="start|center_vertical"
+                        android:text="@string/wind_intensity"
                         tools:text="Vento"
                         app:drawableStartCompat="@drawable/wind_icon" />
 
